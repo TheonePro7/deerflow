@@ -1,4 +1,4 @@
-import { FilesIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, XIcon } from "lucide-react";
+import { FilesIcon, XIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { GroupImperativeHandle } from "react-resizable-panels";
@@ -16,15 +16,12 @@ import { cn } from "@/lib/utils";
 import {
   ArtifactFileDetail,
   ArtifactFileList,
-  FileTreePanel,
   useArtifacts,
 } from "../artifacts";
 import { useThread } from "../messages/context";
 
 const CLOSE_MODE = { chat: 100, artifacts: 0 };
 const OPEN_MODE = { chat: 60, artifacts: 40 };
-const FILE_TREE_MIN_SIZE = 18;
-const FILE_TREE_DEFAULT_SIZE = 22;
 
 const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
   children,
@@ -46,9 +43,6 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
   } = useArtifacts();
 
   const [autoSelectFirstArtifact, setAutoSelectFirstArtifact] = useState(true);
-  const [fileTreeOpen, setFileTreeOpen] = useState(true);
-
-  const hasArtifacts = (thread.values.artifacts?.length ?? 0) > 0;
   useEffect(() => {
     if (threadIdRef.current !== threadId) {
       threadIdRef.current = threadId;
@@ -107,55 +101,15 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
   }, [artifactPanelOpen]);
 
   return (
-    <div className="flex h-full w-full">
-      {/* File Tree Panel (left sidebar) */}
-      {hasArtifacts && fileTreeOpen && (
-        <div className="flex h-full w-64 shrink-0 border-r">
-          <div className="relative flex h-full w-full flex-col">
-            <div className="absolute top-1 right-1 z-10">
-              <Button
-                size="icon-sm"
-                variant="ghost"
-                onClick={() => setFileTreeOpen(false)}
-              >
-                <PanelLeftCloseIcon className="size-3.5" />
-              </Button>
-            </div>
-            <FileTreePanel
-              files={thread.values.artifacts ?? []}
-              selectedFile={selectedArtifact}
-              onSelect={(filepath) => {
-                selectArtifact(filepath);
-                setArtifactsOpen(true);
-              }}
-              className="h-full"
-            />
-          </div>
-        </div>
-      )}
-      {/* Main content: Chat + Artifacts resizable panels */}
-      <div className="flex min-w-0 flex-1">
-        <ResizablePanelGroup
-          id={`${resizableIdBase}-panels`}
-          orientation="horizontal"
-          defaultLayout={{ chat: 100, artifacts: 0 }}
-          groupRef={layoutRef}
-        >
-          {/* Chat Panel */}
-          <ResizablePanel className="relative" defaultSize={100} id="chat">
-            {/* File tree toggle button when tree is closed */}
-            {hasArtifacts && !fileTreeOpen && (
-              <Button
-                size="icon-sm"
-                variant="ghost"
-                className="absolute top-2 left-2 z-10"
-                onClick={() => setFileTreeOpen(true)}
-              >
-                <PanelLeftOpenIcon className="size-4" />
-              </Button>
-            )}
-            {children}
-          </ResizablePanel>
+    <ResizablePanelGroup
+      id={`${resizableIdBase}-panels`}
+      orientation="horizontal"
+      defaultLayout={{ chat: 100, artifacts: 0 }}
+      groupRef={layoutRef}
+    >
+      <ResizablePanel className="relative" defaultSize={100} id="chat">
+        {children}
+      </ResizablePanel>
       <ResizableHandle
         id={`${resizableIdBase}-separator`}
         className={cn(
@@ -218,10 +172,8 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
             </div>
           )}
         </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
-      </div>
-    </div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 };
 

@@ -37,9 +37,10 @@ export function buildFileTree(
     const parts: string[] = [];
 
     for (let i = 0; i < segments.length; i++) {
+      const segment = segments[i]!;
       const isLast = i === segments.length - 1;
       const parentPath = parts.join("/");
-      parts.push(segments[i]);
+      parts.push(segment);
       const fullPath = parts.join("/");
 
       if (!dirMap.has(parentPath)) {
@@ -51,7 +52,7 @@ export function buildFileTree(
       );
       if (!existing) {
         dirMap.get(parentPath)!.push({
-          name: segments[i],
+          name: segment,
           path: fullPath,
           isDirectory: !isLast,
           children: [],
