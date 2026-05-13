@@ -4,7 +4,6 @@ import {
   ChevronRightIcon,
   FileIcon,
   FolderIcon,
-  FolderOpenIcon,
 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 
@@ -66,15 +65,6 @@ export function FileTreePanel({
 
   return (
     <div className={cn("flex h-full flex-col", className)}>
-      <div className="flex shrink-0 items-center gap-2 border-b px-3 py-2">
-        <FolderIcon className="size-4 text-muted-foreground" />
-        <span className="text-xs font-medium text-muted-foreground">
-          Files
-        </span>
-        <span className="text-xs text-muted-foreground/50">
-          ({files.length})
-        </span>
-      </div>
       <ScrollArea className="min-h-0 flex-1">
         <div className="py-1">
           {flatTree.length === 0 ? (

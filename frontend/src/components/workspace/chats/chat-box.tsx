@@ -1,4 +1,4 @@
-import { FilesIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, XIcon } from "lucide-react";
+import { FilesIcon, FolderTreeIcon, XIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { GroupImperativeHandle } from "react-resizable-panels";
@@ -10,6 +10,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { Tooltip } from "@/components/workspace/tooltip";
 import { env } from "@/env";
 import { cn } from "@/lib/utils";
 
@@ -23,8 +24,6 @@ import { useThread } from "../messages/context";
 
 const CLOSE_MODE = { chat: 100, artifacts: 0 };
 const OPEN_MODE = { chat: 60, artifacts: 40 };
-const FILE_TREE_MIN_SIZE = 18;
-const FILE_TREE_DEFAULT_SIZE = 22;
 
 const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
   children,
@@ -46,9 +45,20 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
   } = useArtifacts();
 
   const [autoSelectFirstArtifact, setAutoSelectFirstArtifact] = useState(true);
-  const [fileTreeOpen, setFileTreeOpen] = useState(true);
+  // File tree is hidden by default — user opens it on demand via the sidebar toggle
+  const [fileTreeOpen, setFileTreeOpen] = useState(false);
+  const [prevFileCount, setPrevFileCount] = useState(0);
 
-  const hasArtifacts = (thread.values.artifacts?.length ?? 0) > 0;
+  const files = thread.values.artifacts ?? [];
+  const hasArtifacts = files.length > 0;
+
+  // Auto-open file tree when new files appear during an active conversation
+  useEffect(() => {
+    if (files.length > prevFileCount && prevFileCount > 0) {
+      setFileTreeOpen(true);
+    }
+    setPrevFileCount(files.length);
+  }, [files.length, prevFileCount]);
   useEffect(() => {
     if (threadIdRef.current !== threadId) {
       threadIdRef.current = threadId;
@@ -108,32 +118,49 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
 
   return (
     <div className="flex h-full w-full">
-      {/* File Tree Panel (left sidebar) */}
+      {/* File Tree Panel (left sidebar) — hidden by default, toggle on demand */}
       {hasArtifacts && fileTreeOpen && (
         <div className="flex h-full w-64 shrink-0 border-r">
           <div className="relative flex h-full w-full flex-col">
-            <div className="absolute top-1 right-1 z-10">
-              <Button
-                size="icon-sm"
-                variant="ghost"
-                onClick={() => setFileTreeOpen(false)}
-              >
-                <PanelLeftCloseIcon className="size-3.5" />
-              </Button>
+            <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
+              <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                <FolderTreeIcon className="size-3.5" />
+                Files
+                <span className="text-muted-foreground/50">({files.length})</span>
+              </span>
+              <Tooltip content="Close file tree">
+                <Button
+                  size="icon-sm"
+                  variant="ghost"
+                  onClick={() => setFileTreeOpen(false)}
+                >
+                  <XIcon className="size-3.5" />
+                </Button>
+              </Tooltip>
             </div>
             <FileTreePanel
-              files={thread.values.artifacts ?? []}
+              files={files}
               selectedFile={selectedArtifact}
               onSelect={(filepath) => {
                 selectArtifact(filepath);
                 setArtifactsOpen(true);
               }}
-              className="h-full"
+              className="min-h-0 flex-1"
             />
           </div>
         </div>
       )}
-      {/* Main content: Chat + Artifacts resizable panels */}
+      {/* File tree toggle tab (when tree is closed) */}
+      {hasArtifacts && !fileTreeOpen && (
+        <div
+          className="flex h-full w-6 shrink-0 cursor-pointer items-center justify-center border-r bg-muted/20 text-muted-foreground/40 transition-colors hover:bg-accent/30 hover:text-muted-foreground"
+          onClick={() => setFileTreeOpen(true)}
+        >
+          <Tooltip content="Open file tree">
+            <FolderTreeIcon className="size-4" />
+          </Tooltip>
+        </div>
+      )}
       <div className="flex min-w-0 flex-1">
         <ResizablePanelGroup
           id={`${resizableIdBase}-panels`}
@@ -143,17 +170,6 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
         >
           {/* Chat Panel */}
           <ResizablePanel className="relative" defaultSize={100} id="chat">
-            {/* File tree toggle button when tree is closed */}
-            {hasArtifacts && !fileTreeOpen && (
-              <Button
-                size="icon-sm"
-                variant="ghost"
-                className="absolute top-2 left-2 z-10"
-                onClick={() => setFileTreeOpen(true)}
-              >
-                <PanelLeftOpenIcon className="size-4" />
-              </Button>
-            )}
             {children}
           </ResizablePanel>
       <ResizableHandle
