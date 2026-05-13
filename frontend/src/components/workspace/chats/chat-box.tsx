@@ -1,4 +1,4 @@
-import { FilesIcon, FolderTreeIcon, XIcon } from "lucide-react";
+import { FilesIcon, FolderTree, XIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { GroupImperativeHandle } from "react-resizable-panels";
@@ -124,7 +124,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
           <div className="relative flex h-full w-full flex-col">
             <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
               <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                <FolderTreeIcon className="size-3.5" />
+                <FolderTree className="size-3.5" />
                 Files
                 <span className="text-muted-foreground/50">({files.length})</span>
               </span>
@@ -157,7 +157,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
           onClick={() => setFileTreeOpen(true)}
         >
           <Tooltip content="Open file tree">
-            <FolderTreeIcon className="size-4" />
+            <FolderTree className="size-4" />
           </Tooltip>
         </div>
       )}
