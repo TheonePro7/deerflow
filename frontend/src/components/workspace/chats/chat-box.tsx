@@ -119,7 +119,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
   return (
     <div className="flex h-full w-full">
       {/* File Tree Panel (left sidebar) — hidden by default, toggle on demand */}
-      {hasArtifacts && fileTreeOpen && (
+      {fileTreeOpen && (
         <div className="flex h-full w-64 shrink-0 border-r">
           <div className="relative flex h-full w-full flex-col">
             <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
@@ -150,8 +150,8 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
           </div>
         </div>
       )}
-      {/* File tree toggle tab (when tree is closed) */}
-      {hasArtifacts && !fileTreeOpen && (
+      {/* File tree toggle tab (always visible on the left edge) */}
+      {!fileTreeOpen && (
         <div
           className="flex h-full w-6 shrink-0 cursor-pointer items-center justify-center border-r bg-muted/20 text-muted-foreground/40 transition-colors hover:bg-accent/30 hover:text-muted-foreground"
           onClick={() => setFileTreeOpen(true)}
