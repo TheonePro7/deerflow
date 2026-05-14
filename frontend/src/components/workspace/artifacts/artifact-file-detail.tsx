@@ -3,6 +3,7 @@ import {
   CopyIcon,
   DownloadIcon,
   EyeIcon,
+  FileIcon,
   LoaderIcon,
   PackageIcon,
   SquareArrowOutUpRightIcon,
@@ -12,6 +13,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Streamdown } from "streamdown";
 
+import { Button } from "@/components/ui/button";
 import {
   Artifact,
   ArtifactAction,
@@ -83,6 +85,14 @@ export function ArtifactFileDetail({
   const isSupportPreview = useMemo(() => {
     return language === "html" || language === "markdown";
   }, [language]);
+  // Detect image and other viewable file types
+  const fileExt = useMemo(() => filepath.split(".").pop()?.toLowerCase() ?? "", [filepath]);
+  const isImage = useMemo(() =>
+    ["jpg", "jpeg", "png", "gif", "bmp", "webp", "svg", "ico", "heic"].includes(fileExt),
+  [fileExt]);
+  const isPdf = fileExt === "pdf";
+  const isUnsupportedOffice = ["pptx", "ppt", "xlsx", "xls", "docx", "doc"].includes(fileExt);
+
   const { content } = useArtifactContent({
     threadId,
     filepath: filepathFromProps,
@@ -249,6 +259,7 @@ export function ArtifactFileDetail({
         </div>
       </ArtifactHeader>
       <ArtifactContent className="p-0">
+        {/* Markdown / HTML preview mode */}
         {isSupportPreview &&
           viewMode === "preview" &&
           (language === "markdown" || language === "html") && (
@@ -257,6 +268,7 @@ export function ArtifactFileDetail({
               language={language ?? "text"}
             />
           )}
+        {/* Code view mode */}
         {isCodeFile && viewMode === "code" && (
           <CodeEditor
             className="size-full resize-none rounded-none border-none"
@@ -264,7 +276,49 @@ export function ArtifactFileDetail({
             readonly
           />
         )}
-        {!isCodeFile && (
+        {/* Image preview */}
+        {isImage && (
+          <div className="flex size-full items-center justify-center p-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={urlOfArtifact({ filepath, threadId, isMock, download: true })}
+              alt={getFileName(filepath)}
+              className="max-h-full max-w-full object-contain"
+            />
+          </div>
+        )}
+        {/* PDF preview */}
+        {isPdf && (
+          <iframe
+            className="size-full"
+            src={urlOfArtifact({ filepath, threadId, isMock, download: true })}
+          />
+        )}
+        {/* Unsupported office files — show download prompt */}
+        {isUnsupportedOffice && (
+          <div className="flex size-full flex-col items-center justify-center gap-4 p-8 text-center">
+            <FileIcon className="size-16 text-muted-foreground/30" />
+            <p className="text-sm text-muted-foreground">
+              This file type (<code>.{fileExt}</code>) cannot be previewed in the browser.
+            </p>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                const w = window.open(
+                  urlOfArtifact({ filepath, threadId, isMock, download: true }),
+                  "_blank",
+                  "noopener,noreferrer",
+                );
+                if (w) w.opener = null;
+              }}
+            >
+              <DownloadIcon className="size-4" />
+              Download to view
+            </Button>
+          </div>
+        )}
+        {/* Fallback iframe for other file types */}
+        {!isCodeFile && !isImage && !isPdf && !isUnsupportedOffice && (
           <iframe
             className="size-full"
             src={urlOfArtifact({ filepath, threadId, isMock })}
