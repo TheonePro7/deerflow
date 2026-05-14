@@ -170,14 +170,14 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
         </div>
       </ResizablePanel>
 
-      <ResizableHandle className={cn(!fileTreeOpen && "opacity-0 pointer-events-none")} />
+      <ResizableHandle className={cn(!fileTreeOpen && "opacity-0")} />
 
       {/* Chat Panel (center) */}
-      <ResizablePanel id="chat" minSize={30}>
+      <ResizablePanel id="chat" minSize={25}>
         {children}
       </ResizablePanel>
 
-      <ResizableHandle className={cn(!artifactPanelOpen && "opacity-0 pointer-events-none")} />
+      <ResizableHandle className={cn(!artifactPanelOpen && "opacity-0")} />
 
       {/* Artifacts Panel (right) */}
       <ResizablePanel
