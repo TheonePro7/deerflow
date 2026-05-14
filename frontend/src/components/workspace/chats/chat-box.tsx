@@ -1,6 +1,6 @@
-import { FilesIcon, FolderTree, XIcon } from "lucide-react";
+import { FilesIcon, FolderTree, GripVerticalIcon, XIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { GroupImperativeHandle } from "react-resizable-panels";
 
 import { ConversationEmptyState } from "@/components/ai-elements/conversation";
@@ -25,6 +25,9 @@ import { useThread } from "../messages/context";
 
 const CLOSE_MODE = { chat: 100, artifacts: 0 };
 const OPEN_MODE = { chat: 60, artifacts: 40 };
+const FILE_TREE_MIN_WIDTH = 200;
+const FILE_TREE_MAX_WIDTH = 500;
+const FILE_TREE_DEFAULT_WIDTH = 260;
 
 const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
   children,
@@ -34,6 +37,8 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
   const pathname = usePathname();
   const threadIdRef = useRef(threadId);
   const layoutRef = useRef<GroupImperativeHandle>(null);
+  const fileTreeRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef(false);
 
   const {
     artifacts,
@@ -48,10 +53,11 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
   const [autoSelectFirstArtifact, setAutoSelectFirstArtifact] = useState(true);
   const [prevFileCount, setPrevFileCount] = useState(0);
   const [files, setFiles] = useState<string[]>([]);
+  const [fileTreeWidth, setFileTreeWidth] = useState(FILE_TREE_DEFAULT_WIDTH);
 
   // Fetch files from server on mount / thread change
   useEffect(() => {
-    setFiles(thread.values.artifacts ?? []); // start with thread artifacts
+    setFiles(thread.values.artifacts ?? []);
     fetchThreadFiles(threadId).then((serverFiles) => {
       if (serverFiles.length > 0) {
         setFiles(serverFiles);
@@ -59,7 +65,6 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
     });
   }, [threadId, thread.values.artifacts]);
 
-  // Use context for file tree state (shared with header trigger button)
   const { fileTreeOpen, setFileTreeOpen } = useArtifacts();
 
   // Auto-open file tree when new files appear during an active conversation
@@ -75,16 +80,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
       deselect();
     }
 
-    // Update artifacts from the current thread
     setArtifacts(thread.values.artifacts);
-
-    // DO NOT automatically deselect the artifact when switching threads, because the artifacts auto discovering is not work now.
-    // if (
-    //   selectedArtifact &&
-    //   !thread.values.artifacts?.includes(selectedArtifact)
-    // ) {
-    //   deselect();
-    // }
 
     if (
       env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true" &&
@@ -116,121 +112,163 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
     return pathname.replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "");
   }, [pathname]);
 
-  // Control panel sizes via setLayout — every panel must have > 0% to avoid crash
   useEffect(() => {
-    if (!layoutRef.current) return;
-    const ft = fileTreeOpen ? 20 : 3;  // 3% "hidden" size when collapsed
-    const art = artifactPanelOpen ? 35 : 3;
-    const chat = 100 - ft - art;
-    layoutRef.current.setLayout({ "file-tree": ft, chat, artifacts: art });
-  }, [fileTreeOpen, artifactPanelOpen]);
+    if (layoutRef.current) {
+      if (artifactPanelOpen) {
+        layoutRef.current.setLayout(OPEN_MODE);
+      } else {
+        layoutRef.current.setLayout(CLOSE_MODE);
+      }
+    }
+  }, [artifactPanelOpen]);
+
+  // File tree drag-to-resize handler
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    dragRef.current = true;
+    const startX = e.clientX;
+    const startWidth = fileTreeRef.current?.offsetWidth ?? FILE_TREE_DEFAULT_WIDTH;
+
+    const onMove = (ev: MouseEvent) => {
+      if (!dragRef.current) return;
+      const newWidth = Math.max(FILE_TREE_MIN_WIDTH, Math.min(FILE_TREE_MAX_WIDTH, startWidth + (ev.clientX - startX)));
+      setFileTreeWidth(newWidth);
+    };
+
+    const onUp = () => {
+      dragRef.current = false;
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+  }, []);
 
   return (
-    <ResizablePanelGroup
-      id={`${resizableIdBase}-panels`}
-      orientation="horizontal"
-      defaultLayout={{ "file-tree": 3, chat: 94, artifacts: 3 }}
-      groupRef={layoutRef}
-      className="h-full w-full"
-    >
-      {/* File Tree Panel (left) */}
-      <ResizablePanel
-        id="file-tree"
-        defaultSize={20}
-        minSize={3}
-        maxSize={40}
-        className={cn(fileTreeOpen ? "border-r" : "")}
-      >
-        <div className={cn("flex h-full w-full flex-col", !fileTreeOpen && "overflow-hidden opacity-0")}>
-          <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
-            <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-              <FolderTree className="size-3.5" />
-              Files
-              <span className="text-muted-foreground/50">({files.length})</span>
-            </span>
-            <Tooltip content="Close file tree">
-              <Button
-                size="icon-sm"
-                variant="ghost"
-                onClick={() => setFileTreeOpen(false)}
-              >
-                <XIcon className="size-3.5" />
-              </Button>
-            </Tooltip>
+    <div className="flex h-full w-full">
+      {/* File Tree Panel (fixed sidebar, outside ResizablePanelGroup) */}
+      {fileTreeOpen && (
+        <div
+          ref={fileTreeRef}
+          className="flex h-full shrink-0 border-r"
+          style={{ width: fileTreeWidth }}
+        >
+          <div className="relative flex h-full w-full flex-col">
+            <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
+              <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                <FolderTree className="size-3.5" />
+                Files
+                <span className="text-muted-foreground/50">({files.length})</span>
+              </span>
+              <Tooltip content="Close file tree">
+                <Button
+                  size="icon-sm"
+                  variant="ghost"
+                  onClick={() => setFileTreeOpen(false)}
+                >
+                  <XIcon className="size-3.5" />
+                </Button>
+              </Tooltip>
+            </div>
+            <FileTreePanel
+              files={files}
+              selectedFile={selectedArtifact}
+              onSelect={(filepath) => {
+                selectArtifact(filepath);
+                setArtifactsOpen(true);
+              }}
+              className="min-h-0 flex-1"
+            />
           </div>
-          <FileTreePanel
-            files={files}
-            selectedFile={selectedArtifact}
-            onSelect={(filepath) => {
-              selectArtifact(filepath);
-              setArtifactsOpen(true);
-            }}
-            className="min-h-0 flex-1"
-          />
+          {/* Drag handle for resizing file tree width */}
+          <div
+            className="flex w-2 shrink-0 cursor-col-resize items-center justify-center bg-transparent transition-colors hover:bg-accent/50 active:bg-accent"
+            onMouseDown={handleMouseDown}
+          >
+            <GripVerticalIcon className="size-3 text-muted-foreground/40" />
+          </div>
         </div>
-      </ResizablePanel>
-
-      <ResizableHandle className={cn(!fileTreeOpen && "opacity-0")} />
-
-      {/* Chat Panel (center) */}
-      <ResizablePanel id="chat" minSize={25}>
-        {children}
-      </ResizablePanel>
-
-      <ResizableHandle className={cn(!artifactPanelOpen && "opacity-0")} />
-
-      {/* Artifacts Panel (right) */}
-      <ResizablePanel
-        id="artifacts"
-        defaultSize={35}
-        minSize={3}
-        maxSize={50}
-      >
-        <div className={cn("h-full", !artifactPanelOpen && "overflow-hidden opacity-0")}>
-          <div className="h-full p-4">
-            {selectedArtifact ? (
-              <ArtifactFileDetail
-                className="size-full"
-                filepath={selectedArtifact}
-                threadId={threadId}
-              />
-            ) : (
-              <div className="relative flex size-full justify-center">
-                <div className="absolute top-1 right-1 z-30">
-                  <Button
-                    size="icon-sm"
-                    variant="ghost"
-                    onClick={() => setArtifactsOpen(false)}
-                  >
-                    <XIcon />
-                  </Button>
-                </div>
-                {thread.values.artifacts?.length === 0 ? (
-                  <ConversationEmptyState
-                    icon={<FilesIcon />}
-                    title="No artifact selected"
-                    description="Select an artifact to view its details"
-                  />
-                ) : (
-                  <div className="flex size-full max-w-(--container-width-sm) flex-col justify-center p-4 pt-8">
-                    <header className="shrink-0">
-                      <h2 className="text-lg font-medium">Artifacts</h2>
-                    </header>
-                    <main className="min-h-0 grow">
-                      <ArtifactFileList
-                        className="max-w-(--container-width-sm) p-4 pt-12"
-                        files={thread.values.artifacts ?? []}
-                        threadId={threadId}
-                      />
-                    </main>
-                  </div>
-                )}
-              </div>
+      )}
+      {/* Original 2-panel ResizablePanelGroup (unchanged) */}
+      <div className="flex min-w-0 flex-1">
+        <ResizablePanelGroup
+          id={`${resizableIdBase}-panels`}
+          orientation="horizontal"
+          defaultLayout={{ chat: 100, artifacts: 0 }}
+          groupRef={layoutRef}
+        >
+          <ResizablePanel className="relative" defaultSize={100} id="chat">
+            {children}
+          </ResizablePanel>
+          <ResizableHandle
+            id={`${resizableIdBase}-separator`}
+            className={cn(
+              "opacity-33 hover:opacity-100",
+              !artifactPanelOpen && "pointer-events-none opacity-0",
             )}
-          </div>
-        </div>
-      </ResizablePanel>
-    </ResizablePanelGroup>
+          />
+          <ResizablePanel
+            className={cn(
+              "transition-all duration-300 ease-in-out",
+              !artifactsOpen && "opacity-0",
+            )}
+            id="artifacts"
+          >
+            <div
+              className={cn(
+                "h-full p-4 transition-transform duration-300 ease-in-out",
+                artifactPanelOpen ? "translate-x-0" : "translate-x-full",
+              )}
+            >
+              {selectedArtifact ? (
+                <ArtifactFileDetail
+                  className="size-full"
+                  filepath={selectedArtifact}
+                  threadId={threadId}
+                />
+              ) : (
+                <div className="relative flex size-full justify-center">
+                  <div className="absolute top-1 right-1 z-30">
+                    <Button
+                      size="icon-sm"
+                      variant="ghost"
+                      onClick={() => setArtifactsOpen(false)}
+                    >
+                      <XIcon />
+                    </Button>
+                  </div>
+                  {thread.values.artifacts?.length === 0 ? (
+                    <ConversationEmptyState
+                      icon={<FilesIcon />}
+                      title="No artifact selected"
+                      description="Select an artifact to view its details"
+                    />
+                  ) : (
+                    <div className="flex size-full max-w-(--container-width-sm) flex-col justify-center p-4 pt-8">
+                      <header className="shrink-0">
+                        <h2 className="text-lg font-medium">Artifacts</h2>
+                      </header>
+                      <main className="min-h-0 grow">
+                        <ArtifactFileList
+                          className="max-w-(--container-width-sm) p-4 pt-12"
+                          files={thread.values.artifacts ?? []}
+                          threadId={threadId}
+                        />
+                      </main>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
+    </div>
   );
 };
 
