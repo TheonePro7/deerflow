@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { type PromptInputMessage } from "@/components/ai-elements/prompt-input";
-import { ArtifactTrigger } from "@/components/workspace/artifacts";
+import { ArtifactTrigger, FileTreeTrigger } from "@/components/workspace/artifacts";
 import {
   ChatBox,
   useSpecificChatMode,
@@ -149,6 +149,7 @@ export default function ChatPage() {
                   setLocalSettings("tokenUsage", preferences)
                 }
               />
+              <FileTreeTrigger />
               <ExportTrigger threadId={threadId} />
               <ArtifactTrigger />
             </div>

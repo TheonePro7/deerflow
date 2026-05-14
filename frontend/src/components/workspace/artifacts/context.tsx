@@ -21,6 +21,10 @@ export interface ArtifactsContextType {
   open: boolean;
   autoOpen: boolean;
   setOpen: (open: boolean) => void;
+
+  /** File tree panel visibility */
+  fileTreeOpen: boolean;
+  setFileTreeOpen: (open: boolean) => void;
 }
 
 const ArtifactsContext = createContext<ArtifactsContextType | undefined>(
@@ -39,6 +43,7 @@ export function ArtifactsProvider({ children }: ArtifactsProviderProps) {
     env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true",
   );
   const [autoOpen, setAutoOpen] = useState(true);
+  const [fileTreeOpen, setFileTreeOpen] = useState(false);
   const { setOpen: setSidebarOpen } = useSidebar();
 
   const select = useCallback(
@@ -74,6 +79,9 @@ export function ArtifactsProvider({ children }: ArtifactsProviderProps) {
       }
       setOpen(isOpen);
     },
+
+    fileTreeOpen,
+    setFileTreeOpen,
 
     selectedArtifact,
     select,

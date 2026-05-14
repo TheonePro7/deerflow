@@ -45,12 +45,13 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
   } = useArtifacts();
 
   const [autoSelectFirstArtifact, setAutoSelectFirstArtifact] = useState(true);
-  // File tree is hidden by default — user opens it on demand via the sidebar toggle
-  const [fileTreeOpen, setFileTreeOpen] = useState(false);
   const [prevFileCount, setPrevFileCount] = useState(0);
 
   const files = thread.values.artifacts ?? [];
   const hasArtifacts = files.length > 0;
+
+  // Use context for file tree state (shared with header trigger button)
+  const { fileTreeOpen, setFileTreeOpen } = useArtifacts();
 
   // Auto-open file tree when new files appear during an active conversation
   useEffect(() => {
@@ -58,7 +59,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
       setFileTreeOpen(true);
     }
     setPrevFileCount(files.length);
-  }, [files.length, prevFileCount]);
+  }, [files.length, prevFileCount, setFileTreeOpen]);
   useEffect(() => {
     if (threadIdRef.current !== threadId) {
       threadIdRef.current = threadId;
@@ -118,7 +119,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
 
   return (
     <div className="flex h-full w-full">
-      {/* File Tree Panel (left sidebar) — hidden by default, toggle on demand */}
+      {/* File Tree Panel (left sidebar) */}
       {fileTreeOpen && (
         <div className="flex h-full w-64 shrink-0 border-r">
           <div className="relative flex h-full w-full flex-col">
@@ -148,17 +149,6 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
               className="min-h-0 flex-1"
             />
           </div>
-        </div>
-      )}
-      {/* File tree toggle tab (always visible on the left edge) */}
-      {!fileTreeOpen && (
-        <div
-          className="flex h-full w-6 shrink-0 cursor-pointer items-center justify-center border-r bg-muted/20 text-muted-foreground/40 transition-colors hover:bg-accent/30 hover:text-muted-foreground"
-          onClick={() => setFileTreeOpen(true)}
-        >
-          <Tooltip content="Open file tree">
-            <FolderTree className="size-4" />
-          </Tooltip>
         </div>
       )}
       <div className="flex min-w-0 flex-1">
