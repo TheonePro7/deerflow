@@ -11,6 +11,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Tooltip } from "@/components/workspace/tooltip";
+import { fetchThreadFiles } from "@/core/artifacts/api";
 import { env } from "@/env";
 import { cn } from "@/lib/utils";
 
@@ -46,9 +47,17 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
 
   const [autoSelectFirstArtifact, setAutoSelectFirstArtifact] = useState(true);
   const [prevFileCount, setPrevFileCount] = useState(0);
+  const [files, setFiles] = useState<string[]>([]);
 
-  const files = thread.values.artifacts ?? [];
-  const hasArtifacts = files.length > 0;
+  // Fetch files from server on mount / thread change
+  useEffect(() => {
+    setFiles(thread.values.artifacts ?? []); // start with thread artifacts
+    fetchThreadFiles(threadId).then((serverFiles) => {
+      if (serverFiles.length > 0) {
+        setFiles(serverFiles);
+      }
+    });
+  }, [threadId, thread.values.artifacts]);
 
   // Use context for file tree state (shared with header trigger button)
   const { fileTreeOpen, setFileTreeOpen } = useArtifacts();
