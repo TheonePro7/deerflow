@@ -126,71 +126,87 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
     }
   }, [artifactPanelOpen]);
 
+  // Toggle panel sizes when open/close state changes
+  useEffect(() => {
+    if (!layoutRef.current) return;
+    if (fileTreeOpen && artifactPanelOpen) {
+      layoutRef.current.setLayout({ "file-tree": 20, chat: 50, artifacts: 30 });
+    } else if (fileTreeOpen) {
+      layoutRef.current.setLayout({ "file-tree": 20, chat: 80, artifacts: 0 });
+    } else if (artifactPanelOpen) {
+      layoutRef.current.setLayout({ "file-tree": 0, chat: 60, artifacts: 40 });
+    } else {
+      layoutRef.current.setLayout({ "file-tree": 0, chat: 100, artifacts: 0 });
+    }
+  }, [fileTreeOpen, artifactPanelOpen]);
+
   return (
-    <div className="flex h-full w-full">
-      {/* File Tree Panel (left sidebar) */}
-      {fileTreeOpen && (
-        <div className="flex h-full w-64 shrink-0 border-r">
-          <div className="relative flex h-full w-full flex-col">
-            <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
-              <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                <FolderTree className="size-3.5" />
-                Files
-                <span className="text-muted-foreground/50">({files.length})</span>
-              </span>
-              <Tooltip content="Close file tree">
-                <Button
-                  size="icon-sm"
-                  variant="ghost"
-                  onClick={() => setFileTreeOpen(false)}
-                >
-                  <XIcon className="size-3.5" />
-                </Button>
-              </Tooltip>
-            </div>
-            <FileTreePanel
-              files={files}
-              selectedFile={selectedArtifact}
-              onSelect={(filepath) => {
-                selectArtifact(filepath);
-                setArtifactsOpen(true);
-              }}
-              className="min-h-0 flex-1"
-            />
-          </div>
-        </div>
-      )}
-      <div className="flex min-w-0 flex-1">
-        <ResizablePanelGroup
-          id={`${resizableIdBase}-panels`}
-          orientation="horizontal"
-          defaultLayout={{ chat: 100, artifacts: 0 }}
-          groupRef={layoutRef}
-        >
-          {/* Chat Panel */}
-          <ResizablePanel className="relative" defaultSize={100} id="chat">
-            {children}
-          </ResizablePanel>
-      <ResizableHandle
-        id={`${resizableIdBase}-separator`}
-        className={cn(
-          "opacity-33 hover:opacity-100",
-          !artifactPanelOpen && "pointer-events-none opacity-0",
-        )}
-      />
+    <ResizablePanelGroup
+      id={`${resizableIdBase}-panels`}
+      orientation="horizontal"
+      defaultLayout={{ "file-tree": 0, chat: 100, artifacts: 0 }}
+      groupRef={layoutRef}
+      className="h-full w-full"
+    >
+      {/* File Tree Panel (left, collapsible) */}
       <ResizablePanel
-        className={cn(
-          "transition-all duration-300 ease-in-out",
-          !artifactsOpen && "opacity-0",
-        )}
-        id="artifacts"
+        id="file-tree"
+        defaultSize={20}
+        minSize={15}
+        maxSize={40}
+        collapsible
+        collapsedSize={0}
+        className={cn(fileTreeOpen ? "border-r" : "")}
       >
-        <div
-          className={cn(
-            "h-full p-4 transition-transform duration-300 ease-in-out",
-            artifactPanelOpen ? "translate-x-0" : "translate-x-full",
-          )}
-        >
+        <div className="flex h-full w-full flex-col">
+          <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
+            <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+              <FolderTree className="size-3.5" />
+              Files
+              <span className="text-muted-foreground/50">({files.length})</span>
+            </span>
+            <Tooltip content="Close file tree">
+              <Button
+                size="icon-sm"
+                variant="ghost"
+                onClick={() => setFileTreeOpen(false)}
+              >
+                <XIcon className="size-3.5" />
+              </Button>
+            </Tooltip>
+          </div>
+          <FileTreePanel
+            files={files}
+            selectedFile={selectedArtifact}
+            onSelect={(filepath) => {
+              selectArtifact(filepath);
+              setArtifactsOpen(true);
+            }}
+            className="min-h-0 flex-1"
+          />
+        </div>
+      </ResizablePanel>
+
+      <ResizableHandle />
+
+      {/* Chat Panel (center) */}
+      <ResizablePanel id="chat">
+        {children}
+      </ResizablePanel>
+
+      <ResizableHandle className={cn(!artifactPanelOpen && "opacity-0 pointer-events-none")} />
+
+      {/* Artifacts Panel (right, collapsible) */}
+      <ResizablePanel
+        id="artifacts"
+        defaultSize={0}
+        minSize={20}
+        maxSize={50}
+        collapsible
+        collapsedSize={0}
+        className={cn(!artifactsOpen && "opacity-0")}
+      >
+        <div className="h-full p-4">
           {selectedArtifact ? (
             <ArtifactFileDetail
               className="size-full"
@@ -203,9 +219,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
                 <Button
                   size="icon-sm"
                   variant="ghost"
-                  onClick={() => {
-                    setArtifactsOpen(false);
-                  }}
+                  onClick={() => setArtifactsOpen(false)}
                 >
                   <XIcon />
                 </Button>
@@ -233,10 +247,8 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
             </div>
           )}
         </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
-      </div>
-    </div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 };
 

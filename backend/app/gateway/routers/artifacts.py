@@ -92,8 +92,11 @@ async def list_thread_files(thread_id: str) -> dict:
         user_id = get_effective_user_id()
         thread_dir = get_paths().thread_dir(thread_id, user_id=user_id)
         user_data_dir = thread_dir / "user-data"
-    except Exception:
+    except Exception as e:
+        logger.warning(f"[DEBUG] files/tree failed: thread={thread_id}, user={get_effective_user_id()}, error={e}")
         raise HTTPException(status_code=404, detail="Thread directory not found")
+
+    logger.info(f"[DEBUG] files/tree: thread_id={thread_id}, user_id={user_id}, user_data_dir={user_data_dir}, exists={user_data_dir.exists()}")
 
     if not user_data_dir.exists():
         return {"files": []}
@@ -103,7 +106,7 @@ async def list_thread_files(thread_id: str) -> dict:
         if f.is_file():
             # Convert to virtual path
             rel = f.relative_to(user_data_dir)
-            virtual_path = f"mnt/user-data/{rel.as_posix()}"
+            virtual_path = f"/mnt/user-data/{rel.as_posix()}"
             files.append(virtual_path)
 
     return {"files": files}
@@ -186,9 +189,11 @@ async def get_artifact(thread_id: str, path: str, request: Request, download: bo
         except UnicodeDecodeError:
             return Response(content=content, media_type=mime_type or "application/octet-stream", headers=cache_headers)
 
+    from deerflow.runtime.user_context import get_effective_user_id
+    uid = get_effective_user_id()
     actual_path = resolve_thread_virtual_path(thread_id, path)
 
-    logger.info(f"Resolving artifact path: thread_id={thread_id}, requested_path={path}, actual_path={actual_path}")
+    logger.info(f"[DEBUG] Artifact: thread_id={thread_id}, path={path}, user_id={uid}, resolved={actual_path}, exists={actual_path.exists()}")
 
     if not actual_path.exists():
         raise HTTPException(status_code=404, detail=f"Artifact not found: {path}")
