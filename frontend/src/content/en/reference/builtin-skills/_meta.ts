@@ -1,10 +1,7 @@
 import type { MetaRecord } from "nextra";
 
 const meta: MetaRecord = {
-  "model-providers": {
-    title: "Model providers",
-  },
-  "builtin-skills": {
+  index: {
     title: "Built-in Skills",
   },
 };
