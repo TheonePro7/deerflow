@@ -104,10 +104,9 @@ async def list_thread_files(thread_id: str) -> dict:
     files: list[str] = []
     for f in sorted(user_data_dir.rglob("*")):
         if f.is_file():
-            # Convert to virtual path
+            # Return paths relative to /mnt/user-data/ (e.g. "outputs/file.md")
             rel = f.relative_to(user_data_dir)
-            virtual_path = f"/mnt/user-data/{rel.as_posix()}"
-            files.append(virtual_path)
+            files.append(rel.as_posix())
 
     return {"files": files}
 
