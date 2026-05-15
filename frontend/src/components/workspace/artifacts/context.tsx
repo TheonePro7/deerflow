@@ -45,11 +45,18 @@ export function ArtifactsProvider({ children }: ArtifactsProviderProps) {
     "artifacts:selectedArtifact",
     null,
   );
-  const [autoSelect, setAutoSelect] = useState(true);
-  const [open, setOpen] = useState(
+  const [autoSelect, setAutoSelect] = usePersistedState<boolean>(
+    "artifacts:autoSelect",
+    true,
+  );
+  const [open, setOpen] = usePersistedState<boolean>(
+    "artifacts:artifactsOpen",
     env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true",
   );
-  const [autoOpen, setAutoOpen] = useState(true);
+  const [autoOpen, setAutoOpen] = usePersistedState<boolean>(
+    "artifacts:autoOpen",
+    true,
+  );
   const [fileTreeOpen, setFileTreeOpen] = usePersistedState<boolean>(
     "artifacts:fileTreeOpen",
     false,
