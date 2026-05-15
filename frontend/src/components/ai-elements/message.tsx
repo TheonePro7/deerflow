@@ -44,7 +44,7 @@ export const MessageContent = ({
 }: MessageContentProps) => (
   <div
     className={cn(
-      "is-user:dark flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-visible",
+      "is-user:dark flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-visible break-words",
       "group-[.is-user]:overflow-hidden",
       "group-[.is-user]:bg-secondary group-[.is-user]:text-foreground group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:px-4 group-[.is-user]:py-3",
       "group-[.is-assistant]:text-foreground",
@@ -198,7 +198,7 @@ export const MessageBranchContent = ({
   return childrenArray.map((branch, index) => (
     <div
       className={cn(
-        "grid gap-2 overflow-hidden [&>div]:pb-0",
+        "grid gap-2 overflow-hidden break-words [&>div]:pb-0",
         index === currentBranch ? "block" : "hidden",
       )}
       key={branch.key}
