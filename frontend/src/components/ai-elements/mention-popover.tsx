@@ -314,12 +314,15 @@ export function MentionPopover({
                   key={item.id}
                   value={item.id}
                   onSelect={() => handleSelect(item.id)}
+                  className="flex items-start gap-3 py-3"
                 >
-                  <span className="mr-2">{item.icon}</span>
-                  <span className="font-medium">{item.label}</span>
-                  <span className="text-muted-foreground ml-2 text-xs">
-                    {item.description}
-                  </span>
+                  <span className="mt-0.5 shrink-0 text-base">{item.icon}</span>
+                  <div className="grid min-w-0 grid-cols-[130px_1fr] gap-x-4 gap-y-0.5 items-start">
+                    <span className="truncate font-medium text-sm">{item.label}</span>
+                    <span className="text-muted-foreground text-sm leading-snug">
+                      {item.description}
+                    </span>
+                  </div>
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -376,12 +379,15 @@ export function MentionPopover({
                     key={item.id}
                     value={item.id}
                     onSelect={() => handleSelect(item.id)}
+                    className="flex items-start gap-3 py-3"
                   >
-                    <span className="mr-2">{item.icon}</span>
-                    <span className="font-medium">{item.label}</span>
-                    <span className="text-muted-foreground ml-2 text-xs">
-                      {item.description}
-                    </span>
+                    <span className="mt-0.5 shrink-0 text-base">{item.icon}</span>
+                    <div className="grid min-w-0 grid-cols-[130px_1fr] gap-x-4 gap-y-0.5 items-start">
+                      <span className="truncate font-medium text-sm">{item.label}</span>
+                      <span className="text-muted-foreground text-sm leading-snug">
+                        {item.description}
+                      </span>
+                    </div>
                   </CommandItem>
                 );
               },
