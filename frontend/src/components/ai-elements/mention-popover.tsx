@@ -139,6 +139,7 @@ export function MentionPopover({
   const [skills, setSkills] = useState<Skill[]>([]);
   const [selectedSub, setSelectedSub] = useState<string | null>(null);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [popoverKey, setPopoverKey] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Load files once
@@ -175,6 +176,7 @@ export function MentionPopover({
       }
       setState(detected);
       setOpen(true);
+      setPopoverKey((k) => k + 1);
       setSelectedSub(null);
     } else {
       setOpen(false);
@@ -324,7 +326,7 @@ export function MentionPopover({
   if (state.type === "/" && selectedSub === "skill") {
     return (
       <div className="mb-2">
-        <Command className="border-border rounded-lg border shadow-lg">
+        <Command key={`cmd-${popoverKey}-skills`} className="border-border rounded-lg border shadow-lg">
           <CommandInput
             ref={inputRef}
             placeholder="搜索技能..."
@@ -357,11 +359,11 @@ export function MentionPopover({
   }
 
   // Main popover: @ files or / commands
-  // NOTE: shouldFilter is NOT set to false so the Command component's native
-  // filtering works — typing in the search box filters items by their `value` prop.
+  // NOTE: key={popoverKey} forces re-mount so cmdk internal state resets
+  // between invocations, fixing the "second @ doesn't show files" bug.
   return (
     <div className="mb-2">
-      <Command className="border-border rounded-lg border shadow-lg">
+      <Command key={`cmd-${popoverKey}`} className="border-border rounded-lg border shadow-lg">
         <CommandInput
           ref={inputRef}
           placeholder={
