@@ -18,8 +18,10 @@ export function VoiceInput({ onTranscript, supported }: VoiceInputProps) {
   const [recording, setRecording] = useState(false);
   const [interim, setInterim] = useState("");
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const callbackRef = useRef(onTranscript);
+  callbackRef.current = onTranscript; // always fresh, no re-init needed
 
-  // Initialize speech recognition once
+  // Initialize speech recognition once (on mount)
   useEffect(() => {
     if (!supported) return;
 
@@ -50,7 +52,7 @@ export function VoiceInput({ onTranscript, supported }: VoiceInputProps) {
         }
       }
       if (finalText) {
-        onTranscript(finalText);
+        callbackRef.current(finalText);
       }
       setInterim(interimText);
     };
@@ -70,7 +72,7 @@ export function VoiceInput({ onTranscript, supported }: VoiceInputProps) {
     return () => {
       recognition.abort();
     };
-  }, [supported, onTranscript]);
+  }, [supported]); // only re-init when supported changes
 
   const toggleRecording = useCallback(() => {
     const recognition = recognitionRef.current;
