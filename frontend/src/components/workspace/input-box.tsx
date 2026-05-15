@@ -64,6 +64,10 @@ import { textOfMessage } from "@/core/threads/utils";
 import { cn } from "@/lib/utils";
 
 import {
+  MentionPopover,
+  expandFileReferences,
+} from "@/components/ai-elements/mention-popover";
+import {
   ModelSelector,
   ModelSelectorContent,
   ModelSelectorInput,
@@ -274,11 +278,15 @@ export function InputBox({
             selectedModel?.supports_thinking ?? false,
           ),
         });
-        setTimeout(() => onSubmit?.(message), 0);
+        // Expand @ references before the delayed submit too
+        const expandedPre = expandFileReferences(message.text ?? "");
+        setTimeout(() => onSubmit?.({ ...message, text: expandedPre }), 0);
         return;
       }
 
-      onSubmit?.(message);
+      // Expand @file references into full paths before sending
+      const expandedText = expandFileReferences(message.text ?? "");
+      onSubmit?.({ ...message, text: expandedText });
     },
     [
       context,
@@ -486,6 +494,20 @@ export function InputBox({
         <PromptInputAttachments>
           {(attachment) => <PromptInputAttachment data={attachment} />}
         </PromptInputAttachments>
+        <MentionPopover
+          value={textInput.value}
+          threadId={threadId}
+          onInsert={(text, range) => {
+            const before = textInput.value.slice(0, range.start);
+            const after = textInput.value.slice(range.end);
+            textInput.setInput(before + text + after);
+          }}
+          onCommand={(cmd, _args) => {
+            // For now, /skill just inserts the skill name
+            const before = textInput.value.slice(0, textInput.value.length);
+            textInput.setInput(before + cmd);
+          }}
+        />
         <PromptInputBody className="absolute top-0 right-0 left-0 z-3">
           <PromptInputTextarea
             className={cn("size-full")}
