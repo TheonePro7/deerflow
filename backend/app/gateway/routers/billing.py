@@ -89,7 +89,7 @@ async def _fetch_balance(api_key: str) -> BalanceInfo | None:
 
 
 @router.get("/overview", response_model=BillingOverviewResponse)
-@require_permission("threads", "read", owner_check=True)
+@require_permission("billing", "read")
 async def get_billing_overview(request: Request) -> BillingOverviewResponse:
     """Get billing overview: DeepSeek balance + daily usage from DB."""
     api_key = os.environ.get("DEEPSEEK_API_KEY", "")
