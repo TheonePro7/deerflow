@@ -6,21 +6,33 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useVoiceShortcut } from "@/core/hooks/use-voice-shortcut";
-
-const SHORTCUT_OPTIONS = ["Space", "Ctrl+Space", "Alt+V", "Off"];
 
 interface VoiceInputProps {
   /** Called when speech is recognized and transcribed */
   onTranscript: (text: string) => void;
   /** Whether speech recognition is supported by the browser */
   supported: boolean;
+}
+
+/** Format a key-combo string into human-readable form */
+function formatShortcut(code: string): string {
+  if (code === "Off" || !code) return "关闭";
+  const parts = code.split("+");
+  return parts
+    .map((p) => {
+      if (p === "ctrlKey") return "Ctrl";
+      if (p === "altKey") return "Alt";
+      if (p === "metaKey") return "Cmd";
+      if (p === "shiftKey") return "Shift";
+      return p.replace(/^Key|^Digit/, "");
+    })
+    .join("+");
 }
 
 /**
@@ -31,6 +43,7 @@ export function VoiceInput({ onTranscript, supported }: VoiceInputProps) {
   const [shortcut, setShortcut] = useVoiceShortcut();
   const [recording, setRecording] = useState(false);
   const [interim, setInterim] = useState("");
+  const [listening, setListening] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const callbackRef = useRef(onTranscript);
   callbackRef.current = onTranscript; // always fresh, no re-init needed
@@ -104,19 +117,28 @@ export function VoiceInput({ onTranscript, supported }: VoiceInputProps) {
 
   // Global keyboard shortcut (AFTER toggleRecording so the ref is stable)
   useEffect(() => {
-    if (shortcut === "Off" || typeof window === "undefined") return;
+    if (shortcut === "Off" || !shortcut || typeof window === "undefined") return;
+
+    const parts = new Set(shortcut.split("+"));
+    const targetKey = [...parts].find(
+      (p) => !["ctrlKey", "altKey", "metaKey", "shiftKey"].includes(p),
+    );
+    if (!targetKey) return;
 
     const handler = (e: KeyboardEvent) => {
-      const isMatch =
-        (shortcut === "Space" && e.code === "Space" && !e.ctrlKey && !e.altKey) ||
-        (shortcut === "Ctrl+Space" && e.code === "Space" && (e.ctrlKey || e.metaKey)) ||
-        (shortcut === "Alt+V" && e.code === "KeyV" && e.altKey);
+      const match =
+        e.code === targetKey &&
+        parts.has("ctrlKey") === (e.ctrlKey || e.metaKey) &&
+        parts.has("altKey") === e.altKey &&
+        parts.has("shiftKey") === e.shiftKey;
 
-      if (!isMatch) return;
+      if (!match) return;
 
-      // Don't trigger Space shortcut when typing in an input/textarea
-      const tag = (e.target as HTMLElement)?.tagName;
-      if (shortcut === "Space" && (tag === "INPUT" || tag === "TEXTAREA")) return;
+      // Don't trigger unmodified Space shortcut when typing in inputs
+      if (!parts.has("ctrlKey") && !parts.has("altKey") && !parts.has("metaKey") && shortcut.startsWith("Space")) {
+        const tag = (e.target as HTMLElement)?.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA") return;
+      }
 
       e.preventDefault();
       toggleRecording();
@@ -158,21 +180,47 @@ export function VoiceInput({ onTranscript, supported }: VoiceInputProps) {
             <SettingsIcon size={12} />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent side="top" align="start" className="w-44">
+        <DropdownMenuContent side="top" align="start" className="w-52">
           <DropdownMenuLabel>语音快捷键</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuRadioGroup
-            value={shortcut}
-            onValueChange={(v) => setShortcut(v)}
+          <div className="px-2 py-1.5 text-xs text-muted-foreground">
+            <div className="mb-2">当前快捷键</div>
+            <div className="flex items-center justify-between rounded-md border px-3 py-2 font-mono text-sm">
+              {shortcut === "Off" ? (
+                <span className="text-muted-foreground">已关闭</span>
+              ) : (
+                <span>{formatShortcut(shortcut)}</span>
+              )}
+              <button
+                type="button"
+                className="text-primary hover:text-primary/80 ml-2 text-xs font-medium"
+                onClick={() => {
+                  setListening(true);
+                }}
+              >
+                修改
+              </button>
+            </div>
+          </div>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="text-muted-foreground text-xs"
+            onSelect={() => setShortcut("Off")}
           >
-            {SHORTCUT_OPTIONS.map((opt) => (
-              <DropdownMenuRadioItem key={opt} value={opt}>
-                {opt === "Off" ? "关闭" : opt}
-              </DropdownMenuRadioItem>
-            ))}
-          </DropdownMenuRadioGroup>
+            关闭快捷键
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {/* Key recording overlay when the user is pressing a new shortcut */}
+      <ListeningOverlay
+        listening={listening}
+        onCapture={(combo) => {
+          setShortcut(combo);
+          setListening(false);
+        }}
+        onCancel={() => setListening(false)}
+      />
       {/* Interim text tooltip */}
       {recording && interim && (
         <div className="absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-black/80 px-3 py-1.5 text-xs text-white shadow-lg">
@@ -194,5 +242,71 @@ export function isSpeechSupported(): boolean {
   return !!(
     (window as unknown as Record<string, unknown>).SpeechRecognition ||
     (window as unknown as Record<string, unknown>).webkitSpeechRecognition
+  );
+}
+
+// ---------------------------------------------------------------------------
+// ListeningOverlay — captures the user's key combination
+// ---------------------------------------------------------------------------
+
+function ListeningOverlay({
+  listening,
+  onCapture,
+  onCancel,
+}: {
+  listening: boolean;
+  onCapture: (combo: string) => void;
+  onCancel: () => void;
+}) {
+  useEffect(() => {
+    if (!listening) return;
+
+    const handler = (e: KeyboardEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Ignore modifier-only presses
+      if (["Control", "Alt", "Meta", "Shift"].includes(e.key)) return;
+
+      const parts: string[] = [];
+      if (e.ctrlKey || e.metaKey) parts.push(e.metaKey ? "metaKey" : "ctrlKey");
+      if (e.altKey) parts.push("altKey");
+      if (e.shiftKey) parts.push("shiftKey");
+      parts.push(e.code);
+
+      onCapture(parts.join("+"));
+    };
+
+    document.addEventListener("keydown", handler, true);
+    return () => document.removeEventListener("keydown", handler, true);
+  }, [listening, onCapture]);
+
+  // ESC to cancel
+  useEffect(() => {
+    if (!listening) return;
+    const escHandler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onCancel();
+    };
+    document.addEventListener("keydown", escHandler);
+    return () => document.removeEventListener("keydown", escHandler);
+  }, [listening, onCancel]);
+
+  if (!listening) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="bg-background rounded-xl border p-6 text-center shadow-2xl">
+        <div className="mb-3 text-lg font-semibold">设置语音快捷键</div>
+        <div className="text-muted-foreground mb-4 text-sm">
+          请在键盘上按下你想要使用的组合键
+        </div>
+        <div className="border-border bg-muted mx-auto mb-4 flex h-20 w-64 items-center justify-center rounded-lg border-2 border-dashed font-mono text-lg">
+          ⌨️
+        </div>
+        <div className="text-muted-foreground text-xs">
+          按 <kbd className="bg-muted rounded border px-1.5 py-0.5 font-mono text-[11px]">Esc</kbd> 取消
+        </div>
+      </div>
+    </div>
   );
 }
