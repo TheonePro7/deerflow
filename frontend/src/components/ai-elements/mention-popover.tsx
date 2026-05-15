@@ -218,6 +218,30 @@ export function MentionPopover({
     );
   }, [state, skills, selectedSub]);
 
+  // Dismiss the popover without modifying the input text
+  const dismiss = useCallback(() => {
+    setOpen(false);
+    setState(null);
+    setSelectedSub(null);
+  }, []);
+
+  // Global ESC listener to dismiss the popover
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        if (selectedSub) {
+          setSelectedSub(null); // go back one level
+        } else {
+          dismiss();            // close popover, trigger text stays
+        }
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [open, selectedSub, dismiss]);
+
   const handleSelect = useCallback(
     (itemId: string) => {
       if (!state) return;
