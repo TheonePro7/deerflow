@@ -3,8 +3,10 @@
 import type { Message } from "@langchain/langgraph-sdk";
 import {
   ChevronDownIcon,
+  ChevronRightIcon,
   CoinsIcon,
   DollarSignIcon,
+  Settings2Icon,
   TrendingUpIcon,
   CalendarDaysIcon,
 } from "lucide-react";
@@ -91,6 +93,7 @@ export function TokenUsageIndicator({
 }: TokenUsageIndicatorProps) {
   const { t } = useI18n();
   const [billing, setBilling] = useState<BillingData | null>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   // Fetch billing data on mount
   useEffect(() => {
@@ -260,34 +263,56 @@ export function TokenUsageIndicator({
         )}
 
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>{t.tokenUsage.view}</DropdownMenuLabel>
-        <DropdownMenuRadioGroup
-          value={preset}
-          onValueChange={(value) =>
-            onPreferencesChange(
-              tokenUsagePreferencesFromPreset(value as TokenUsageViewPreset),
-            )
-          }
-        >
-          {(
-            ["off", "summary", "per_turn", "debug"] as TokenUsageViewPreset[]
-          ).map((value) => {
-            const translationKey = presetKeyToTranslationKey(value);
-            return (
-              <DropdownMenuRadioItem key={value} value={value}>
-                <div className="grid gap-0.5">
-                  <span>{t.tokenUsage.presets[translationKey]}</span>
-                  <span className="text-muted-foreground text-xs">
-                    {t.tokenUsage.presetDescriptions[translationKey]}
-                  </span>
-                </div>
-              </DropdownMenuRadioItem>
-            );
-          })}
-        </DropdownMenuRadioGroup>
-        <DropdownMenuSeparator />
-        <div className="text-muted-foreground px-2 py-2 text-xs leading-relaxed">
-          {t.tokenUsage.note}
+        {/* ── Settings (collapsible) ── */}
+        <div className="px-2 py-1.5">
+          <button
+            type="button"
+            className="text-muted-foreground hover:text-foreground flex w-full items-center gap-2 py-0.5 text-xs transition-colors"
+            onClick={() => setSettingsOpen(!settingsOpen)}
+          >
+            {settingsOpen ? (
+              <ChevronDownIcon size={14} className="shrink-0" />
+            ) : (
+              <ChevronRightIcon size={14} className="shrink-0" />
+            )}
+            <Settings2Icon size={14} className="shrink-0" />
+            <span>显示方式</span>
+            <span className="font-mono ml-auto text-[11px] opacity-60">
+              {t.tokenUsage.presets[presetKeyToTranslationKey(preset)]}
+            </span>
+          </button>
+
+          {settingsOpen && (
+            <div className="mt-1 pl-6">
+              <DropdownMenuRadioGroup
+                value={preset}
+                onValueChange={(value) => {
+                  onPreferencesChange(
+                    tokenUsagePreferencesFromPreset(value as TokenUsageViewPreset),
+                  );
+                  setSettingsOpen(false); // collapse after selection
+                }}
+              >
+                {(
+                  ["off", "summary", "per_turn", "debug"] as TokenUsageViewPreset[]
+                ).map((value) => {
+                  const translationKey = presetKeyToTranslationKey(value);
+                  return (
+                    <DropdownMenuRadioItem key={value} value={value} className="py-1.5">
+                      <div className="grid gap-0">
+                        <span className="text-xs font-medium">
+                          {t.tokenUsage.presets[translationKey]}
+                        </span>
+                        <span className="text-muted-foreground text-[11px] leading-tight">
+                          {t.tokenUsage.presetDescriptions[translationKey]}
+                        </span>
+                      </div>
+                    </DropdownMenuRadioItem>
+                  );
+                })}
+              </DropdownMenuRadioGroup>
+            </div>
+          )}
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
