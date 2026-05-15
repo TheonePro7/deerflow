@@ -2,11 +2,15 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useState,
   type ReactNode,
 } from "react";
 
+import { usePathname } from "next/navigation";
+
 import { useSidebar } from "@/components/ui/sidebar";
+import { usePersistedState } from "@/core/hooks/use-persisted-state";
 import { env } from "@/env";
 
 export interface ArtifactsContextType {
@@ -36,14 +40,27 @@ interface ArtifactsProviderProps {
 }
 
 export function ArtifactsProvider({ children }: ArtifactsProviderProps) {
+  const pathname = usePathname();
+  // Derive a stable page key from the URL so each thread remembers its own layout.
+  // Format: "thread/<thread_id>" or "page/<path>" for non-thread pages.
+  const pageKey = pathname.match(/\/chats\/([^/]+)/)
+    ? `thread/${pathname.match(/\/chats\/([^/]+)/)![1]}`
+    : `page/${pathname}`;
+
   const [artifacts, setArtifacts] = useState<string[]>([]);
-  const [selectedArtifact, setSelectedArtifact] = useState<string | null>(null);
+  const [selectedArtifact, setSelectedArtifact] = usePersistedState<string | null>(
+    `${pageKey}:selectedArtifact`,
+    null,
+  );
   const [autoSelect, setAutoSelect] = useState(true);
   const [open, setOpen] = useState(
     env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true",
   );
   const [autoOpen, setAutoOpen] = useState(true);
-  const [fileTreeOpen, setFileTreeOpen] = useState(false);
+  const [fileTreeOpen, setFileTreeOpen] = usePersistedState<boolean>(
+    `${pageKey}:fileTreeOpen`,
+    false,
+  );
   const { setOpen: setSidebarOpen } = useSidebar();
 
   const select = useCallback(
