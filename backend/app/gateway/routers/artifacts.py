@@ -1,3 +1,4 @@
+import io
 import logging
 import mimetypes
 import zipfile
@@ -106,6 +107,43 @@ async def list_thread_files(thread_id: str) -> dict:
             files.append(rel.as_posix())
 
     return {"files": files}
+
+
+@router.get(
+    "/threads/{thread_id}/files/download-all",
+    summary="Download All Files as ZIP",
+    description="Download all thread files as a ZIP archive.",
+)
+@require_permission("threads", "read", owner_check=True)
+async def download_all_files(thread_id: str) -> Response:
+    """Download all files in the thread's user-data directory as a ZIP archive."""
+    from deerflow.config.paths import get_paths
+    from deerflow.runtime.user_context import get_effective_user_id
+
+    try:
+        user_id = get_effective_user_id()
+        thread_dir = get_paths().thread_dir(thread_id, user_id=user_id)
+        user_data_dir = thread_dir / "user-data"
+    except Exception as e:
+        logger.warning(f"download-all failed: thread={thread_id}, error={e}")
+        raise HTTPException(status_code=404, detail="Thread directory not found")
+
+    if not user_data_dir.exists():
+        raise HTTPException(status_code=404, detail="No files to download")
+
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        for f in sorted(user_data_dir.rglob("*")):
+            if f.is_file():
+                rel = f.relative_to(user_data_dir)
+                zf.write(f, str(rel))
+
+    buf.seek(0)
+    return Response(
+        content=buf.getvalue(),
+        media_type="application/zip",
+        headers={"Content-Disposition": f'attachment; filename="{thread_id}.zip"'},
+    )
 
 
 @router.get(

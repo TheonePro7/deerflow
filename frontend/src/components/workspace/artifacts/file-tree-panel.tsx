@@ -2,11 +2,14 @@
 
 import {
   ChevronRightIcon,
+  DownloadIcon,
   FileIcon,
   FolderIcon,
 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
+import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   type FileTreeNode,
@@ -21,6 +24,7 @@ export interface FileTreePanelProps {
   files: string[];
   selectedFile: string | null;
   onSelect: (filepath: string) => void;
+  threadId: string;
   className?: string;
 }
 
@@ -28,6 +32,7 @@ export function FileTreePanel({
   files,
   selectedFile,
   onSelect,
+  threadId,
   className,
 }: FileTreePanelProps) {
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(
@@ -63,6 +68,16 @@ export function FileTreePanel({
     [toggleExpand, onSelect],
   );
 
+  const handleDownloadAll = useCallback(() => {
+    const a = document.createElement("a");
+    a.href = `/api/threads/${encodeURIComponent(threadId)}/files/download-all`;
+    a.download = `${threadId}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    toast.success("文件下载中...");
+  }, [threadId]);
+
   return (
     <div className={cn("flex h-full flex-col", className)}>
       <ScrollArea className="min-h-0 flex-1">
@@ -84,6 +99,22 @@ export function FileTreePanel({
           )}
         </div>
       </ScrollArea>
+
+      {/* Download all button */}
+      {flatTree.length > 0 && (
+        <div className="border-border flex items-center justify-center border-t p-2">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:text-foreground h-auto w-full gap-1.5 text-xs"
+            onClick={handleDownloadAll}
+          >
+            <DownloadIcon size={14} />
+            下载全部文件
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

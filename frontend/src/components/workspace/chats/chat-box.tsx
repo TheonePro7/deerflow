@@ -182,6 +182,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
                 selectArtifact(filepath);
                 setArtifactsOpen(true);
               }}
+              threadId={threadId}
               className="min-h-0 flex-1"
             />
           </div>
