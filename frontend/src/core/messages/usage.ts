@@ -4,6 +4,40 @@ export interface TokenUsage {
   inputTokens: number;
   outputTokens: number;
   totalTokens: number;
+  /** Estimated cost in USD, calculated from model pricing */
+  inputCost?: number;
+  outputCost?: number;
+  totalCost?: number;
+}
+
+/** Model pricing per 1M tokens (in USD) */
+const MODEL_PRICING: Record<string, { inputPer1M: number; outputPer1M: number }> = {
+  "deepseek-v4-flash": { inputPer1M: 0.15, outputPer1M: 0.60 },
+  "deepseek-v4-pro":   { inputPer1M: 0.50, outputPer1M: 2.00 },
+  "deepseek-v3":       { inputPer1M: 0.27, outputPer1M: 1.10 },
+  "gpt-4o":            { inputPer1M: 2.50, outputPer1M: 10.00 },
+  "gpt-4o-mini":       { inputPer1M: 0.15, outputPer1M: 0.60 },
+  "claude-sonnet-4":   { inputPer1M: 3.00, outputPer1M: 15.00 },
+  "claude-3.5-haiku":  { inputPer1M: 0.25, outputPer1M: 1.25 },
+};
+
+/**
+ * Calculate estimated cost from token counts for a given model.
+ * Falls back to DeepSeek V4 Flash pricing if the model is not found.
+ */
+export function calculateCost(
+  inputTokens: number,
+  outputTokens: number,
+  modelName?: string,
+): { inputCost: number; outputCost: number; totalCost: number } {
+  const pricing = MODEL_PRICING[modelName ?? ""] ?? MODEL_PRICING["deepseek-v4-flash"]!;
+  const inputCost = (inputTokens / 1_000_000) * pricing.inputPer1M;
+  const outputCost = (outputTokens / 1_000_000) * pricing.outputPer1M;
+  return {
+    inputCost,
+    outputCost,
+    totalCost: inputCost + outputCost,
+  };
 }
 
 /**
@@ -80,7 +114,23 @@ function addUsage(base: TokenUsage, delta: TokenUsage): TokenUsage {
     inputTokens: base.inputTokens + delta.inputTokens,
     outputTokens: base.outputTokens + delta.outputTokens,
     totalTokens: base.totalTokens + delta.totalTokens,
+    inputCost: (base.inputCost ?? 0) + (delta.inputCost ?? 0),
+    outputCost: (base.outputCost ?? 0) + (delta.outputCost ?? 0),
+    totalCost: (base.totalCost ?? 0) + (delta.totalCost ?? 0),
   };
+}
+
+/**
+ * Format a cost amount for display: 0.0023 -> "$0.0023", 0.12 -> "$0.12"
+ */
+export function formatCost(cost: number): string {
+  if (cost < 0.01) {
+    return `$${cost.toFixed(4)}`;
+  }
+  if (cost < 1) {
+    return `$${cost.toFixed(3)}`;
+  }
+  return `$${cost.toFixed(2)}`;
 }
 
 export function selectHeaderTokenUsage({

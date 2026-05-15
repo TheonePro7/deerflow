@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useI18n } from "@/core/i18n/hooks";
 import {
+  formatCost,
   formatTokenCount,
   selectHeaderTokenUsage,
   type TokenUsage,
@@ -113,6 +114,24 @@ export function TokenUsageIndicator({
                     {formatTokenCount(usage.totalTokens)}
                   </span>
                 </div>
+                <div className="flex justify-between gap-4 text-amber-600 dark:text-amber-400">
+                  <span>{t.tokenUsage.cost ?? "预估费用"}</span>
+                  <span className="font-mono">
+                    {usage.totalCost !== undefined
+                      ? formatCost(usage.totalCost)
+                      : "-"}
+                  </span>
+                </div>
+                {usage.inputCost !== undefined && usage.outputCost !== undefined && (
+                  <div className="text-muted-foreground flex justify-between gap-4 text-[11px]">
+                    <span>
+                      {t.tokenUsage.inputCost ?? "输入"}: {formatCost(usage.inputCost)}
+                    </span>
+                    <span>
+                      {t.tokenUsage.outputCost ?? "输出"}: {formatCost(usage.outputCost)}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
