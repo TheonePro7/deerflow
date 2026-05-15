@@ -608,4 +608,77 @@ def update_memory_from_conversation(
         True if successful, False otherwise.
     """
     updater = MemoryUpdater()
-    return updater.update_memory(messages, thread_id, agent_name, correction_detected, reinforcement_detected, user_id=user_id)
+    result = updater.update_memory(messages, thread_id, agent_name, correction_detected, reinforcement_detected, user_id=user_id)
+
+    # Also run LangMem extraction if available (best-effort, non-blocking)
+    try:
+        from deerflow.agents.memory.langmem_adapter import is_available
+
+        if is_available():
+            effective_user = user_id or "default"
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                pool.submit(_run_langmem_extraction, messages, effective_user)
+    except Exception:
+        logger.debug("LangMem extraction skipped (not available or failed)")
+
+    return result
+
+
+def _run_langmem_extraction(
+    messages: list[Any],
+    user_id: str,
+) -> None:
+    """Run LangMem memory extraction in a background thread."""
+    try:
+        import asyncio
+        from deerflow.config.paths import get_paths
+        from deerflow.agents.memory.langmem_adapter import LangMemManager
+        from langgraph.store.sqlite.aio import AsyncSqliteStore
+
+        db_path = f"{get_paths().base_dir}/langmem.db"
+
+        async def _extract():
+            async with AsyncSqliteStore.from_conn_string(db_path) as store:
+                manager = LangMemManager(
+                    store=store,
+                    model_name="deepseek-v4-flash",
+                    user_id=user_id,
+                )
+                langmem_messages = [
+                    m for m in messages
+                    if hasattr(m, "type") and m.type in ("human", "ai")
+                ]
+                if len(langmem_messages) < 2:
+                    return
+                memories = await manager.extract(langmem_messages)
+                if memories:
+                    logger.info(
+                        "LangMem: extracted %d memories for user %s",
+                        len(memories), user_id,
+                    )
+
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(_extract())
+        loop.close()
+    except Exception:
+        logger.debug("LangMem extraction background task failed", exc_info=True)
+
+
+def _run_langmem_extraction(
+    manager: Any,
+    messages: list[Any],
+    user_id: str,
+) -> None:
+    """Run LangMem memory extraction in a background thread."""
+    try:
+        import asyncio
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        memories = loop.run_until_complete(manager.extract(messages))
+        loop.close()
+        if memories:
+            logger.info("LangMem: extracted %d memories for user %s", len(memories), user_id)
+    except Exception:
+        logger.debug("LangMem extraction background task failed", exc_info=True)
