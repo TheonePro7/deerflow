@@ -465,8 +465,9 @@ async def _fetch_langmem_memories(user_id: str) -> list[LangMemItem]:
         from deerflow.config.paths import get_paths
         db_path = f"{get_paths().base_dir}/langmem.db"
         async with AsyncSqliteStore.from_conn_string(db_path) as store:
-            results = await store.alist(
+            results = await store.asearch(
                 ("memories", user_id, "semantic"),
+                query="",
                 limit=100,
             )
             items = []
