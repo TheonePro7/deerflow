@@ -646,3 +646,67 @@ async def get_thread_history(thread_id: str, body: ThreadHistoryRequest, request
         raise HTTPException(status_code=500, detail="Failed to get thread history")
 
     return entries
+
+
+class AllMessagesResponse(BaseModel):
+    """Response model for full thread message history."""
+
+    messages: list[dict[str, Any]] = Field(default_factory=list, description="All unique messages in chronological order")
+    total: int = Field(default=0, description="Total number of unique messages")
+
+
+@router.get("/{thread_id}/all-messages", response_model=AllMessagesResponse)
+@require_permission("threads", "read", owner_check=True)
+async def get_thread_all_messages(thread_id: str, request: Request) -> AllMessagesResponse:
+    """Get ALL unique messages from all checkpoints for display purposes.
+
+    Unlike the main state (which is summarised for the LLM), this endpoint
+    traverses every checkpoint and collects every unique message — so the
+    frontend can show the human the full conversation history without
+    blowing the LLM's token budget.
+
+    Deduplication is by message ``id``; messages without an ``id`` are
+    always included.
+    """
+    checkpointer = get_checkpointer(request)
+
+    config: dict[str, Any] = {"configurable": {"thread_id": thread_id}}
+    seen_ids: set[str] = set()
+    all_messages: list[dict[str, Any]] = []
+    buffer: list[dict[str, Any]] = []  # messages from the current (oldest) batch
+
+    try:
+        # ``alist`` yields from newest to oldest.  We collect messages in
+        # reverse order and then reverse at the end so the result is
+        # chronological.
+        async for checkpoint_tuple in checkpointer.alist(config, limit=200):
+            checkpoint = getattr(checkpoint_tuple, "checkpoint", {}) or {}
+            channel_values = checkpoint.get("channel_values", {})
+            messages = channel_values.get("messages")
+            if not messages:
+                continue
+
+            serialized = serialize_channel_values({"messages": messages}).get("messages", [])
+            for msg in serialized:
+                if not isinstance(msg, dict):
+                    continue
+                msg_id = msg.get("id")
+                if msg_id and msg_id in seen_ids:
+                    continue
+                if msg_id:
+                    seen_ids.add(msg_id)
+
+                # Skip internal summary messages — they are for the LLM only.
+                if msg.get("name") == "summary":
+                    continue
+
+                buffer.append(msg)
+
+        # ``alist`` returns newest-first, so we reverse to get chronological order.
+        all_messages = list(reversed(buffer))
+
+    except Exception:
+        logger.exception("Failed to get full messages for thread %s", sanitize_log_param(thread_id))
+        raise HTTPException(status_code=500, detail="Failed to get thread messages")
+
+    return AllMessagesResponse(messages=all_messages, total=len(all_messages))

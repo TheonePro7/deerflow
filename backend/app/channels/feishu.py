@@ -422,16 +422,57 @@ class FeishuChannel(Channel):
         except Exception:
             logger.exception("[Feishu] failed to add reaction '%s' to message %s", emoji_type, message_id)
 
-    async def _reply_card(self, message_id: str, text: str) -> str | None:
-        """Reply with an interactive card and return the created card message ID."""
+    async def _reply_text(self, message_id: str, text: str) -> str | None:
+        """Reply with a plain text message (NOT card/interactive, NOT in thread)."""
+        if not self._api_client:
+            return None
+
+        import json
+        content = json.dumps({"text": text})
+        # reply_in_thread=False sends as a direct message in the chat,
+        # not nested under the original message as a thread reply.
+        request = self._ReplyMessageRequest.builder().message_id(message_id).request_body(self._ReplyMessageRequestBody.builder().msg_type("text").content(content).reply_in_thread(False).build()).build()
+        try:
+            response = await asyncio.to_thread(self._api_client.im.v1.message.reply, request)
+            response_data = getattr(response, "data", None)
+            mid = getattr(response_data, "message_id", None)
+            if mid is None:
+                code = getattr(response, "code", -1)
+                msg = getattr(response, "msg", "unknown")
+                logger.warning("[Feishu] reply returned no message_id: code=%s msg=%s", code, msg)
+            return mid
+        except Exception as exc:
+            logger.exception("[Feishu] failed to reply to message %s: %s", message_id, exc)
+            return None
+
+    async def _reply_card(self, message_id: str, text: str, *, fallback_to_text: bool = True) -> str | None:
+        """Reply with an interactive card and return the created card message ID.
+
+        When *fallback_to_text* is True (default), falls back to a plain-text
+        reply if the card API call fails.  Set to False for non-final streaming
+        updates to avoid duplicate messages.
+        """
         if not self._api_client:
             return None
 
         content = self._build_card_content(text)
-        request = self._ReplyMessageRequest.builder().message_id(message_id).request_body(self._ReplyMessageRequestBody.builder().msg_type("interactive").content(content).reply_in_thread(True).build()).build()
-        response = await asyncio.to_thread(self._api_client.im.v1.message.reply, request)
-        response_data = getattr(response, "data", None)
-        return getattr(response_data, "message_id", None)
+        request = self._ReplyMessageRequest.builder().message_id(message_id).request_body(self._ReplyMessageRequestBody.builder().msg_type("interactive").content(content).reply_in_thread(False).build()).build()
+        try:
+            response = await asyncio.to_thread(self._api_client.im.v1.message.reply, request)
+            response_data = getattr(response, "data", None)
+            mid = getattr(response_data, "message_id", None)
+            if mid is None:
+                code = getattr(response, "code", -1)
+                msg = getattr(response, "msg", "unknown")
+                logger.warning("[Feishu] card reply returned no message_id: code=%s msg=%s (fallback_to_text=%s)", code, msg, fallback_to_text)
+                if fallback_to_text:
+                    return await self._reply_text(message_id, text)
+            return mid
+        except Exception as exc:
+            logger.exception("[Feishu] card reply failed for message %s: %s", message_id, exc)
+            if fallback_to_text:
+                return await self._reply_text(message_id, text)
+            return None
 
     async def _create_card(self, chat_id: str, text: str) -> None:
         """Create a new card message in the target chat."""
@@ -509,7 +550,15 @@ class FeishuChannel(Channel):
             logger.exception("[Feishu] failed to send running reply for message %s", message_id)
 
     async def _send_card_message(self, msg: OutboundMessage) -> None:
-        """Send or update the Feishu card tied to the current request."""
+        """Send or update the Feishu card tied to the current request.
+
+        All replies are sent as cards (interactive) — no separate text message.
+        For final replies the card already holds the content, so we just mark
+        it done and add the DONE reaction.
+        """
+        import uuid
+        _cid = str(uuid.uuid4())[:8]
+        logger.info("[Feishu] _send_card_message[%s] called: is_final=%s, text_len=%d, source=%s", _cid, msg.is_final, len(msg.text), msg.thread_ts)
         source_message_id = msg.thread_ts
         if source_message_id:
             running_card_id = self._running_card_ids.get(source_message_id)
@@ -525,24 +574,20 @@ class FeishuChannel(Channel):
                 try:
                     await self._update_card(running_card_id, msg.text)
                 except Exception:
-                    if not msg.is_final:
-                        raise
-                    logger.exception(
-                        "[Feishu] failed to patch running card %s, falling back to final reply",
+                    logger.warning(
+                        "[Feishu] failed to patch running card %s",
                         running_card_id,
                     )
-                    await self._reply_card(source_message_id, msg.text)
-                else:
-                    logger.info("[Feishu] running card updated: source=%s card=%s", source_message_id, running_card_id)
-            elif msg.is_final:
-                await self._reply_card(source_message_id, msg.text)
             elif awaited_running_card_task:
                 logger.warning(
                     "[Feishu] running card task finished without message_id for source=%s, skipping duplicate non-final creation",
                     source_message_id,
                 )
             else:
-                await self._ensure_running_card(source_message_id, msg.text)
+                # Create a running card (works now that IP whitelist is configured)
+                running_card_id = await self._reply_card(source_message_id, msg.text, fallback_to_text=False)
+                if running_card_id:
+                    self._running_card_ids[source_message_id] = running_card_id
 
             if msg.is_final:
                 self._running_card_ids.pop(source_message_id, None)
@@ -673,8 +718,11 @@ class FeishuChannel(Channel):
             else:
                 msg_type = InboundMessageType.CHAT
 
-            # topic_id: use root_id for replies (same topic), msg_id for new messages (new topic)
-            topic_id = root_id or msg_id
+            # topic_id: use root_id for threaded replies so they join the same
+            # DeerFlow thread.  For top-level messages (root_id is None),
+            # leave topic_id unset so the store key is "feishu:<chat_id>" —
+            # this way all messages in the same chat share one thread.
+            topic_id = root_id or None
 
             inbound = self._make_inbound(
                 chat_id=chat_id,

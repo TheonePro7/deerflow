@@ -617,8 +617,48 @@ export function useThreadHistory(threadId: string) {
   const loadingRef = useRef(false);
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
+  // Full checkpoint-based history for display (includes messages that were
+  // summarised away for the LLM).  Populated once on mount / thread change.
+  const [fullHistoryLoaded, setFullHistoryLoaded] = useState(false);
 
   loadingRef.current = loading;
+
+  // On mount / thread change, load the FULL message history from checkpoints.
+  // This shows the human every message ever sent in this thread, regardless
+  // of summarisation (which only compresses for the LLM).
+  useEffect(() => {
+    threadIdRef.current = threadId;
+    setFullHistoryLoaded(false);
+    setMessages([]);
+    if (!threadId) return;
+
+    const tid = threadId;
+    fetch(
+      `${getBackendBaseURL()}/api/threads/${encodeURIComponent(tid)}/all-messages`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    )
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json() as Promise<{ messages: Message[]; total: number }>;
+      })
+      .then((data) => {
+        // Only apply if still on the same thread
+        if (threadIdRef.current === tid) {
+          setMessages(data.messages);
+          setFullHistoryLoaded(true);
+        }
+      })
+      .catch((err) => {
+        console.warn("[ThreadHistory] all-messages endpoint failed, falling back to runs:", err);
+        // Setting runsRef / indexRef to trigger runs fallback
+        setFullHistoryLoaded(true);
+      });
+  }, [threadId]);
+
+  // Load from runs — used as fallback when all-messages fails, or via loadMore.
   const loadMessages = useCallback(async () => {
     if (runsRef.current.length === 0) {
       return;
@@ -652,16 +692,17 @@ export function useThreadHistory(threadId: string) {
       setLoading(false);
     }
   }, []);
+
   useEffect(() => {
-    threadIdRef.current = threadId;
+    if (!fullHistoryLoaded) {
+      return; // wait for all-messages response (or its failure)
+    }
+    // If messages are still empty and we have runs data, try loading from runs.
     if (runs.data && runs.data.length > 0) {
       runsRef.current = runs.data ?? [];
       indexRef.current = runs.data.length - 1;
     }
-    loadMessages().catch(() => {
-      toast.error("Failed to load thread history.");
-    });
-  }, [threadId, runs.data, loadMessages]);
+  }, [threadId, runs.data, fullHistoryLoaded]);
 
   const appendMessages = useCallback((_messages: Message[]) => {
     setMessages((prev) => {
