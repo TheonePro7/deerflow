@@ -615,8 +615,8 @@ def _get_langmem_memories(user_id: str, max_tokens: int) -> str:
         async def _fetch():
             async with AsyncSqliteStore.from_conn_string(db_path) as store:
                 results = await store.asearch(
-                    ("memories",),
-                    query=f"user_{user_id} memories",
+                    ("memories", user_id, "semantic"),
+                    query="",
                     limit=20,
                 )
                 if not results:

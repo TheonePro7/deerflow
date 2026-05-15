@@ -8,6 +8,8 @@ DeerFlow's existing BaseStore (SQLite).
 from __future__ import annotations
 
 import logging
+import uuid
+from datetime import datetime, timezone
 from typing import Any
 
 from langchain_core.messages import AnyMessage
@@ -96,7 +98,7 @@ class LangMemManager:
         self,
         messages: list[AnyMessage],
     ) -> list[dict[str, Any]]:
-        """Extract memories from a conversation.
+        """Extract memories from a conversation and persist them to the store.
 
         Args:
             messages: List of conversation messages.
@@ -125,19 +127,49 @@ class LangMemManager:
                         content = item.content.content
                         text = str(content) if content else ""
                         if text:
-                            # Determine type from content prefix like "[技术决策] ..."
                             mem_type = "general"
                             for t in ["用户偏好", "工作领域", "技术决策", "项目需求", "项目目标"]:
                                 if f"[{t}]" in text or text.startswith(t):
                                     mem_type = t
                                     break
+
+                            mem_id = getattr(item, "id", None) or str(uuid.uuid4())
                             extracted.append({
                                 "type": mem_type,
                                 "content": text,
-                                "id": getattr(item, "id", None),
+                                "id": mem_id,
                             })
+
+            # ⚡ Persist extracted memories to the store (跨对话共享)
+            import asyncio
+            try:
+                loop = asyncio.get_running_loop()
+            except RuntimeError:
+                loop = None
+
+            for mem in extracted:
+                namespace = self._namespace + (self._user_id, "semantic")
+                key = f"{mem['type']}_{mem['id'][:8]}"
+                try:
+                    if loop and loop.is_running():
+                        await self._store.aput(namespace, key, {
+                            "content": mem["content"],
+                            "type": mem["type"],
+                            "updated_at": datetime.now(timezone.utc).isoformat(),
+                        })
+                    else:
+                        # Sync fallback
+                        import asyncio
+                        asyncio.run(self._store.aput(namespace, key, {
+                            "content": mem["content"],
+                            "type": mem["type"],
+                            "updated_at": datetime.now(timezone.utc).isoformat(),
+                        }))
+                except Exception as store_err:
+                    logger.warning("Failed to persist LangMem memory: %s", store_err)
+
             if extracted:
-                logger.info("LangMem extracted %d memories", len(extracted))
+                logger.info("LangMem extracted & saved %d memories", len(extracted))
             return extracted
         except Exception as exc:
             logger.warning("LangMem extraction failed: %s", exc)
