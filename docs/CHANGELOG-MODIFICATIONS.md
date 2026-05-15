@@ -122,7 +122,7 @@ bb3683de refactor: file tree as independent sidebar, restore original 2-panel la
 
 ### 概述
 
-增强右侧产物预览面板的文件渲染能力，支持多种文件类型的内联预览。
+增强右侧产物预览面板的文件渲染能力，支持多种文件类型的内联预览，避免不必要的强制下载。
 
 ### 涉及文件
 
@@ -131,13 +131,40 @@ bb3683de refactor: file tree as independent sidebar, restore original 2-panel la
 | `frontend/src/components/workspace/artifacts/artifact-file-detail.tsx` | 修改 |
 | `backend/app/gateway/routers/artifacts.py` | 修改 |
 
+### 预览逻辑
+
+预览面板根据文件扩展名自动选择最合适的展示方式：
+
+```
+文件请求 → 检查扩展名
+  ├── .md, .html, .txt, .json, .js, .ts, .py, .css 等
+  │   └── 内联代码/HTML/Markdown 渲染（CodeEditor / Streamdown）
+  ├── .jpg, .jpeg, .png, .gif, .bmp, .webp, .svg, .ico, .heic
+  │   └── 内联 <img> 标签渲染（SVG 也直接显示，不再强制下载）
+  ├── .pdf
+  │   └── 浏览器原生 <iframe> 预览
+  ├── .pptx, .ppt, .xlsx, .xls, .docx, .doc
+  │   └── 显示下载提示（浏览器无法内联预览 Office 文件）
+  └── 其他
+      └── CodeEditor 代码视图（可切换 preview/code 模式）
+```
+
 ### 支持的预览类型
 
-| 文件类型 | 预览方式 |
-|---------|---------|
-| 图片 (jpg/png/gif/svg/webp) | 内联 `<img>` 渲染 |
-| PDF | 浏览器原生 `<iframe>` 预览 |
-| Office 文件 (pptx/docx/xlsx) | 显示下载提示 |
+| 文件类型 | 预览方式 | 说明 |
+|---------|---------|------|
+| 图片 (jpg/png/gif/webp) | 内联 `<img>` | 直接显示图片 |
+| **SVG** | **内联 `<img>`** | **原本强制下载，现改为直接显示** |
+| PDF | `<iframe>` | 浏览器原生预览 |
+| Markdown/HTML | Streamdown / iframe | 渲染为富文本 |
+| 代码文件 (js/ts/py等) | CodeEditor | 语法高亮显示 |
+| Office (pptx/docx/xlsx) | 下载提示 | 浏览器无法内联预览 |
+
+### 核心改进
+
+- **SVG 不再强制下载**：之前所有 SVG 文件都被当作"活动内容"强制下载，现在改为内联 `<img>` 渲染，可直接查看
+- **智能模式切换**：代码文件支持 `code` / `preview` 两种视图模式切换，方便查看源码或渲染效果
+- **图片类型扩展**：增加了 webp、bmp、ico、heic 等更多图片格式的支持
 
 ### 提交
 
