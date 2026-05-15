@@ -15,6 +15,7 @@ from app.gateway.routers import (
     artifacts,
     assistants_compat,
     auth,
+    billing,
     channels,
     feedback,
     mcp,
@@ -324,6 +325,9 @@ This gateway provides runtime endpoints for agent runs plus custom endpoints for
         )
 
     # Include routers
+    # Billing API is mounted at /api/billing
+    app.include_router(billing.router)
+
     # Models API is mounted at /api/models
     app.include_router(models.router)
 
