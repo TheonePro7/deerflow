@@ -20,7 +20,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getBackendBaseURL } from "@/core/config";
 import { useI18n } from "@/core/i18n/hooks";
 import {
   formatCost,
@@ -95,7 +94,7 @@ export function TokenUsageIndicator({
 
   // Fetch billing data on mount
   useEffect(() => {
-    fetch(`${getBackendBaseURL()}/api/billing/overview`, {
+    fetch("/api/billing/overview", {
       credentials: "include",
     })
       .then((res) => (res.ok ? res.json() : null))
