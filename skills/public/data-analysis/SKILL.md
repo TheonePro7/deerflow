@@ -1,6 +1,6 @@
 ---
 name: data-analysis
-description: Use this skill when the user uploads Excel (.xlsx/.xls) or CSV files and wants to perform data analysis, generate statistics, create summaries, pivot tables, SQL queries, or any form of structured data exploration. Supports multi-sheet Excel workbooks, aggregation, filtering, joins, and exporting results to CSV/JSON/Markdown.
+description: 当用户上传Excel或CSV文件并希望进行数据分析、生成统计数据、创建摘要、数据透视表、SQL查询或任何形式的结构化数据探索时使用。支持多工作表Excel工作簿、聚合、过滤、连接和导出结果到CSV/JSON/Markdown格式。
 ---
 
 # Data Analysis Skill

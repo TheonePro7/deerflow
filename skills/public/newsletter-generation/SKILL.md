@@ -1,6 +1,6 @@
 ---
 name: newsletter-generation
-description: Use this skill when the user requests to generate, create, write, or draft a newsletter, email digest, weekly roundup, industry briefing, or curated content summary. Supports topic-based research, content curation from multiple sources, and professional formatting for email or web distribution. Trigger on requests like "create a newsletter about X", "write a weekly digest", "generate a tech roundup", or "curate news about Y".
+description: 当用户请求生成、创建、撰写或起草新闻通讯、邮件摘要、周报、行业简报或策划内容摘要时使用。支持基于主题的研究、多来源内容策划，以及适合邮件或网页发布的专业格式排版。
 ---
 
 # Newsletter Generation Skill

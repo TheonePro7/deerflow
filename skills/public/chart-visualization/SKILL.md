@@ -1,6 +1,6 @@
 ---
 name: chart-visualization
-description: This skill should be used when the user wants to visualize data. It intelligently selects the most suitable chart type from 26 available options, extracts parameters based on detailed specifications, and generates a chart image using a JavaScript script.
+description: 当用户想要可视化数据时使用。智能地从26种可选图表类型中选择最合适的类型，根据详细规格提取参数，并通过JavaScript脚本生成图表图片。
 compatibility:
   nodejs: ">=18.0.0"
 ---

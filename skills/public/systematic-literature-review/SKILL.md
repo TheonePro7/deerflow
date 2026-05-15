@@ -1,6 +1,6 @@
 ---
 name: systematic-literature-review
-description: Use this skill when the user wants a systematic literature review, survey, or synthesis across multiple academic papers on a topic. Also covers annotated bibliographies and cross-paper comparisons. Searches arXiv and outputs reports in APA, IEEE, or BibTeX format. Not for single-paper tasks — use academic-paper-review for reviewing one paper.
+description: 当用户想要对一个主题进行系统性文献综述、调查或在多篇学术论文之间进行综合对比时使用。也涵盖带注释的参考文献和跨论文比较。搜索arXiv并以APA、IEEE或BibTeX格式输出报告。不适用于单篇论文任务。
 ---
 
 # Systematic Literature Review Skill
