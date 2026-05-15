@@ -191,18 +191,48 @@ class ViewImageMiddleware(AgentMiddleware[ViewImageMiddlewareState]):
     def before_model(self, state: ViewImageMiddlewareState, runtime: Runtime) -> dict | None:
         """Inject image details message before LLM call if view_image tools have completed (sync version).
 
-        This runs before each LLM call, checking if the previous turn included view_image
-        tool calls that have all completed. If so, it injects a human message with the image
-        details so the LLM can see and analyze the images.
+        Also strips image_url content blocks from existing messages when the
+        current model doesn't support vision (handles legacy threads).
 
         Args:
             state: Current state
-            runtime: Runtime context (unused but required by interface)
+            runtime: Runtime context (used to check model vision support)
 
         Returns:
             State update with additional human message, or None if no update needed
         """
+        # Strip image_url content for models without vision (e.g. DeepSeek V4 Flash)
+        self._sanitize_image_blocks(state, runtime)
         return self._inject_image_message(state)
+
+    def _sanitize_image_blocks(self, state: ViewImageMiddlewareState, runtime: Runtime) -> None:
+        """Remove image_url content blocks from messages if the model doesn't support vision."""
+        model_name = (runtime.context or {}).get("model_name") if runtime else None
+        if not model_name:
+            return
+
+        # Check if model supports vision via app config
+        from deerflow.config.app_config import get_config
+        config = get_config()
+        supports_vision = any(
+            m.name == model_name and getattr(m, "supports_vision", False)
+            for m in config.models
+        )
+        if supports_vision:
+            return
+
+        messages = state.get("messages", [])
+        modified = False
+        for msg in messages:
+            content = getattr(msg, "content", None)
+            if isinstance(content, list):
+                filtered = [b for b in content if not (isinstance(b, dict) and b.get("type") == "image_url")]
+                if len(filtered) != len(content):
+                    msg.content = filtered
+                    modified = True
+
+        if modified:
+            logger.info("Stripped image_url blocks for model %s (no vision)", model_name)
 
     @override
     async def abefore_model(self, state: ViewImageMiddlewareState, runtime: Runtime) -> dict | None:

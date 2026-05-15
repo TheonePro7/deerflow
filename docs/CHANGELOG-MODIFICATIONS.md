@@ -1051,3 +1051,4 @@ eab4a53b feat: LangMem 记忆注入 + 完整测试套件
 | 2026-05-16 | v6.2 | 文件树下载全部文件 |
 | 2026-05-16 | v7.0-rc | LangMem 记忆系统（提取+注入+管理器 CRUD）|
 | 2026-05-16 | v7.0-rc.4 | 修复 DeepSeek V4 Flash 不支持 image_url 导致 400 |
+| 2026-05-16 | v7.0-rc.5 | view_image_middleware 自动剥离 image_url（兼容旧线程）|
