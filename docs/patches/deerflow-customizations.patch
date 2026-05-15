@@ -1,7 +1,7 @@
 From b47bb72d5cbad936b98d044a8fdd9dbbc5e118d1 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Wed, 13 May 2026 23:11:29 +0800
-Subject: [PATCH 01/17] feat(artifacts): add file tree utility (buildFileTree +
+Subject: [PATCH 01/19] feat(artifacts): add file tree utility (buildFileTree +
  flattenTree)
 
 - buildFileTree converts flat artifact paths into a nested tree structure
@@ -175,7 +175,7 @@ index 00000000..1af92d6f
 From bba18d89cd5ea22d32270c245114f4ab49748122 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Wed, 13 May 2026 23:13:30 +0800
-Subject: [PATCH 02/17] feat(artifacts): add FileTreePanel component
+Subject: [PATCH 02/19] feat(artifacts): add FileTreePanel component
 
 - New FileTreePanel renders a collapsible directory tree from artifact paths
 - Directories show expand/collapse with ChevronRight icons
@@ -346,7 +346,7 @@ index 0e589d5f..b39bfe66 100644
 From bfa1113f4ad12b1ad0b07097b59634a05f228f39 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Wed, 13 May 2026 23:16:42 +0800
-Subject: [PATCH 03/17] feat(workspace): add file tree panel in three-column
+Subject: [PATCH 03/19] feat(workspace): add file tree panel in three-column
  layout
 
 - ChatBox now has three columns: File Tree | Chat | Artifacts
@@ -694,7 +694,7 @@ index 1af92d6f..b3840a91 100644
 From 8bdcca81c84d8f68e0c40b475ceacc82377a122a Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Wed, 13 May 2026 23:45:02 +0800
-Subject: [PATCH 04/17] fix(workspace): file tree hidden by default with toggle
+Subject: [PATCH 04/19] fix(workspace): file tree hidden by default with toggle
  tab
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -875,7 +875,7 @@ index 0c468360..061d975f 100644
 From d35df9798eecf2c9e45150c9857ff0d236fd0c50 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Wed, 13 May 2026 23:45:12 +0800
-Subject: [PATCH 05/17] chore: remove backup file
+Subject: [PATCH 05/19] chore: remove backup file
 
 ---
  .../workspace/chats/chat-box.tsx.bak          | 180 ------------------
@@ -1075,7 +1075,7 @@ index a57aa522..00000000
 From ee259fc23ea111753b37e0ffe28d92fcd6446562 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Wed, 13 May 2026 23:55:46 +0800
-Subject: [PATCH 06/17] =?UTF-8?q?fix:=20correct=20lucide-react=20icon=20na?=
+Subject: [PATCH 06/19] =?UTF-8?q?fix:=20correct=20lucide-react=20icon=20na?=
  =?UTF-8?q?me=20(FolderTreeIcon=20=E2=86=92=20FolderTree)?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -1120,7 +1120,7 @@ index 061d975f..3263b601 100644
 From 79c7af3c8b46f3ef56d16b1147c5a22a587e80fd Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Thu, 14 May 2026 00:00:03 +0800
-Subject: [PATCH 07/17] fix: make file tree toggle tab always visible
+Subject: [PATCH 07/19] fix: make file tree toggle tab always visible
 
 - Remove hasArtifacts gate from toggle tab and tree panel
 - Tab now always shows on the left edge of the chat area
@@ -1160,7 +1160,7 @@ index 3263b601..e7689799 100644
 From 4a647f13fafb129f9b02e38184b665bce1552fe2 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Thu, 14 May 2026 10:44:53 +0800
-Subject: [PATCH 08/17] refactor: move file tree toggle to chat page header
+Subject: [PATCH 08/19] refactor: move file tree toggle to chat page header
 
 - Add fileTreeOpen state to ArtifactsContext (shared state)
 - Create FileTreeTrigger button component (header button)
@@ -1357,7 +1357,7 @@ index e7689799..e633405c 100644
 From b047b603b6a2386293345d7d8eb8ea59a1ebdef3 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Thu, 14 May 2026 10:50:48 +0800
-Subject: [PATCH 09/17] feat: fetch file tree from filesystem API instead of
+Subject: [PATCH 09/19] feat: fetch file tree from filesystem API instead of
  thread artifacts
 
 - New backend endpoint: GET /api/threads/{id}/files/tree
@@ -1490,7 +1490,7 @@ index 00000000..5d84fe87
 From 6a885505b0e6ccf2650e888bb636539811e3bbc0 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Thu, 14 May 2026 11:12:37 +0800
-Subject: [PATCH 10/17] refactor: three-column resizable layout for file tree
+Subject: [PATCH 10/19] refactor: three-column resizable layout for file tree
 
 - File tree, chat, and artifacts are now all in one ResizablePanelGroup
 - File tree panel is collapsible (left side), draggable to resize
@@ -1723,7 +1723,7 @@ index f4339ca9..daa60762 100644
 From 961e226ccd6c838335b6a71aec146b5ce03b2b65 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Thu, 14 May 2026 11:20:23 +0800
-Subject: [PATCH 11/17] fix: panel layout crash - each panel must have >0% size
+Subject: [PATCH 11/19] fix: panel layout crash - each panel must have >0% size
 
 - Removed collapsible/collapsedSize props (unsupported with setLayout)
 - Collapsed panels get 3% (hidden with opacity-0) instead of 0%
@@ -1915,7 +1915,7 @@ index daa60762..858b083f 100644
 From 8dbcb7bf6839421e6ef784166714780b6602cc2c Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Thu, 14 May 2026 11:23:12 +0800
-Subject: [PATCH 12/17] fix: enable all resize handles for proper 3-panel
+Subject: [PATCH 12/19] fix: enable all resize handles for proper 3-panel
  dragging
 
 - Remove pointer-events-none from handles (was blocking space propagation)
@@ -1954,7 +1954,7 @@ index 858b083f..d17f5290 100644
 From bb3683de80b80cc8ef13a01533c6c902fb66f8af Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Thu, 14 May 2026 11:28:25 +0800
-Subject: [PATCH 13/17] refactor: file tree as independent sidebar, restore
+Subject: [PATCH 13/19] refactor: file tree as independent sidebar, restore
  original 2-panel layout
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -2319,7 +2319,7 @@ index d17f5290..52611770 100644
 From ac1f5254ba950ede2b2d773ff00051400178ab11 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Thu, 14 May 2026 11:50:51 +0800
-Subject: [PATCH 14/17] docs: add built-in skills documentation page
+Subject: [PATCH 14/19] docs: add built-in skills documentation page
 
 - Create MDX pages for 21 built-in skills (zh + en)
 - Add navigation entries in reference _meta.ts
@@ -3923,7 +3923,7 @@ index 00000000..599f0e76
 From 7fb3cad1670438db45cb585c2f7f8323eb53c159 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Thu, 14 May 2026 14:14:56 +0800
-Subject: [PATCH 15/17] refactor: simplify file tree paths, remove
+Subject: [PATCH 15/19] refactor: simplify file tree paths, remove
  /mnt/user-data/ prefix
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -3999,7 +3999,7 @@ index 40269650..00172d56 100644
 From eec9bc405fa593a01491ef84348d9f77ceccf629 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Thu, 14 May 2026 16:09:29 +0800
-Subject: [PATCH 16/17] feat: improve preview panel for images, PDFs, and
+Subject: [PATCH 16/19] feat: improve preview panel for images, PDFs, and
  office files
 
 - Add image detection + <img> render for jpg/png/gif/svg/webp
@@ -4159,7 +4159,7 @@ index 17e642fc..c4932207 100644
 From b2bf9fbeb1080126553d1c007f1b28b9313c4243 Mon Sep 17 00:00:00 2001
 From: Trae AI <ai@trae.com>
 Date: Fri, 15 May 2026 14:02:28 +0800
-Subject: [PATCH 17/17] =?UTF-8?q?feat:=20=E9=A3=9E=E4=B9=A6=E6=B8=A0?=
+Subject: [PATCH 17/19] =?UTF-8?q?feat:=20=E9=A3=9E=E4=B9=A6=E6=B8=A0?=
  =?UTF-8?q?=E9=81=93=E9=9B=86=E6=88=90=20+=20=E5=85=A8=E9=87=8F=E6=B6=88?=
  =?UTF-8?q?=E6=81=AF=E5=8E=86=E5=8F=B2=20API=20+=20=E5=89=8D=E7=AB=AF?=
  =?UTF-8?q?=E5=8E=86=E5=8F=B2=E6=98=BE=E7=A4=BA=E4=BC=98=E5=8C=96?=
@@ -4981,6 +4981,5513 @@ index 0ac790eb..38ffe390 100644
  
    const appendMessages = useCallback((_messages: Message[]) => {
      setMessages((prev) => {
+-- 
+2.43.7
+
+
+From b7fb889ccf0b7b1d01f2c0dd451a9a5e0624489e Mon Sep 17 00:00:00 2001
+From: Trae AI <ai@trae.com>
+Date: Fri, 15 May 2026 14:02:58 +0800
+Subject: [PATCH 18/19] docs: add comprehensive patch file for all
+ customizations
+
+---
+ docs/patches/deerflow-customizations.patch | 4986 ++++++++++++++++++++
+ 1 file changed, 4986 insertions(+)
+ create mode 100644 docs/patches/deerflow-customizations.patch
+
+diff --git a/docs/patches/deerflow-customizations.patch b/docs/patches/deerflow-customizations.patch
+new file mode 100644
+index 00000000..ca3f5e77
+--- /dev/null
++++ b/docs/patches/deerflow-customizations.patch
+@@ -0,0 +1,4986 @@
++From b47bb72d5cbad936b98d044a8fdd9dbbc5e118d1 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Wed, 13 May 2026 23:11:29 +0800
++Subject: [PATCH 01/17] feat(artifacts): add file tree utility (buildFileTree +
++ flattenTree)
++
++- buildFileTree converts flat artifact paths into a nested tree structure
++- flattenTree produces a flat list for rendering with expand/collapse
++- Supports sorting by type (dirs first) or alphabetically
++---
++ frontend/src/core/artifacts/file-tree.ts | 150 +++++++++++++++++++++++
++ 1 file changed, 150 insertions(+)
++ create mode 100644 frontend/src/core/artifacts/file-tree.ts
++
++diff --git a/frontend/src/core/artifacts/file-tree.ts b/frontend/src/core/artifacts/file-tree.ts
++new file mode 100644
++index 00000000..1af92d6f
++--- /dev/null
+++++ b/frontend/src/core/artifacts/file-tree.ts
++@@ -0,0 +1,150 @@
+++/**
+++ * File tree utilities — converts flat artifact paths into a navigable tree.
+++ */
+++
+++export interface FileTreeNode {
+++  /** Display name (file or directory name). */
+++  name: string;
+++  /** Full virtual path (e.g. "mnt/user-data/outputs/foo.txt"). */
+++  path: string;
+++  /** True if this is a directory. */
+++  isDirectory: boolean;
+++  /** Children (only for directories). */
+++  children: FileTreeNode[];
+++  /** Depth level (root = 0). */
+++  depth: number;
+++}
+++
+++/**
+++ * Build a tree from a flat list of file paths.
+++ * Paths are expected to use `/` as separator.
+++ * Directories are inferred from path segments.
+++ */
+++export function buildFileTree(
+++  paths: string[],
+++  options?: { sort?: "alpha" | "type" },
+++): FileTreeNode[] {
+++  if (!paths || paths.length === 0) return [];
+++
+++  const sortMode = options?.sort ?? "type";
+++  const root: FileTreeNode[] = [];
+++
+++  // Collect all segments
+++  const dirMap = new Map<string, FileTreeNode[]>();
+++
+++  for (const filePath of paths) {
+++    const segments = filePath.split("/");
+++    const parts: string[] = [];
+++
+++    for (let i = 0; i < segments.length; i++) {
+++      const isLast = i === segments.length - 1;
+++      const parentPath = parts.join("/");
+++      parts.push(segments[i]);
+++      const fullPath = parts.join("/");
+++
+++      if (!dirMap.has(parentPath)) {
+++        dirMap.set(parentPath, []);
+++      }
+++
+++      const existing = dirMap.get(parentPath)!.find(
+++        (n) => n.path === fullPath,
+++      );
+++      if (!existing) {
+++        dirMap.get(parentPath)!.push({
+++          name: segments[i],
+++          path: fullPath,
+++          isDirectory: !isLast,
+++          children: [],
+++          depth: i,
+++        });
+++      }
+++    }
+++  }
+++
+++  // Assemble children
+++  const result: FileTreeNode[] = [];
+++  for (const [parentPath, nodes] of dirMap) {
+++    if (parentPath === "") {
+++      result.push(...nodes);
+++    } else {
+++      const parent = findNode(result, parentPath);
+++      if (parent) {
+++        parent.children.push(...nodes);
+++      }
+++    }
+++  }
+++
+++  // Sort
+++  const sortFn = createSorter(sortMode);
+++  sortTree(result, sortFn);
+++
+++  return result;
+++}
+++
+++function findNode(tree: FileTreeNode[], path: string): FileTreeNode | null {
+++  for (const node of tree) {
+++    if (node.path === path) return node;
+++    if (node.children.length > 0) {
+++      const found = findNode(node.children, path);
+++      if (found) return found;
+++    }
+++  }
+++  return null;
+++}
+++
+++function createSorter(mode: "alpha" | "type") {
+++  return (a: FileTreeNode, b: FileTreeNode) => {
+++    if (mode === "type") {
+++      // Directories first, then sort by name
+++      if (a.isDirectory && !b.isDirectory) return -1;
+++      if (!a.isDirectory && b.isDirectory) return 1;
+++    }
+++    return a.name.localeCompare(b.name);
+++  };
+++}
+++
+++function sortTree(tree: FileTreeNode[], sortFn: (a: FileTreeNode, b: FileTreeNode) => number) {
+++  tree.sort(sortFn);
+++  for (const node of tree) {
+++    if (node.children.length > 0) {
+++      sortTree(node.children, sortFn);
+++    }
+++  }
+++}
+++
+++/**
+++ * Flatten a tree into a list of (name, depth, isDirectory) for rendering.
+++ * Each directory has an `expanded` state that controls whether children are shown.
+++ */
+++export interface FlatTreeNode {
+++  name: string;
+++  path: string;
+++  isDirectory: boolean;
+++  depth: number;
+++  hasChildren: boolean;
+++}
+++
+++export function flattenTree(
+++  tree: FileTreeNode[],
+++  expandedPaths: Set<string>,
+++): FlatTreeNode[] {
+++  const result: FlatTreeNode[] = [];
+++
+++  function walk(nodes: FileTreeNode[]) {
+++    for (const node of nodes) {
+++      result.push({
+++        name: node.name,
+++        path: node.path,
+++        isDirectory: node.isDirectory,
+++        depth: node.depth,
+++        hasChildren: node.children.length > 0,
+++      });
+++      if (node.isDirectory && expandedPaths.has(node.path)) {
+++        walk(node.children);
+++      }
+++    }
+++  }
+++
+++  walk(tree);
+++  return result;
+++}
++-- 
++2.43.7
++
++
++From bba18d89cd5ea22d32270c245114f4ab49748122 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Wed, 13 May 2026 23:13:30 +0800
++Subject: [PATCH 02/17] feat(artifacts): add FileTreePanel component
++
++- New FileTreePanel renders a collapsible directory tree from artifact paths
++- Directories show expand/collapse with ChevronRight icons
++- Files show appropriate icons based on extension (via getFileIcon)
++- Empty state when no files exist
++- Exported from artifacts index
++---
++ .../workspace/artifacts/file-tree-panel.tsx   | 136 ++++++++++++++++++
++ .../components/workspace/artifacts/index.ts   |   1 +
++ 2 files changed, 137 insertions(+)
++ create mode 100644 frontend/src/components/workspace/artifacts/file-tree-panel.tsx
++
++diff --git a/frontend/src/components/workspace/artifacts/file-tree-panel.tsx b/frontend/src/components/workspace/artifacts/file-tree-panel.tsx
++new file mode 100644
++index 00000000..e4ee57b0
++--- /dev/null
+++++ b/frontend/src/components/workspace/artifacts/file-tree-panel.tsx
++@@ -0,0 +1,136 @@
+++"use client";
+++
+++import {
+++  ChevronRightIcon,
+++  FileIcon,
+++  FolderIcon,
+++  FolderOpenIcon,
+++} from "lucide-react";
+++import { useCallback, useMemo, useState } from "react";
+++
+++import { ScrollArea } from "@/components/ui/scroll-area";
+++import {
+++  type FileTreeNode,
+++  buildFileTree,
+++  flattenTree,
+++  type FlatTreeNode,
+++} from "@/core/artifacts/file-tree";
+++import { getFileIcon } from "@/core/utils/files";
+++import { cn } from "@/lib/utils";
+++
+++export interface FileTreePanelProps {
+++  files: string[];
+++  selectedFile: string | null;
+++  onSelect: (filepath: string) => void;
+++  className?: string;
+++}
+++
+++export function FileTreePanel({
+++  files,
+++  selectedFile,
+++  onSelect,
+++  className,
+++}: FileTreePanelProps) {
+++  const [expandedPaths, setExpandedPaths] = useState<Set<string>>(
+++    () => new Set(),
+++  );
+++
+++  const tree = useMemo(() => buildFileTree(files), [files]);
+++  const flatTree = useMemo(
+++    () => flattenTree(tree, expandedPaths),
+++    [tree, expandedPaths],
+++  );
+++
+++  const toggleExpand = useCallback((path: string) => {
+++    setExpandedPaths((prev) => {
+++      const next = new Set(prev);
+++      if (next.has(path)) {
+++        next.delete(path);
+++      } else {
+++        next.add(path);
+++      }
+++      return next;
+++    });
+++  }, []);
+++
+++  const handleClick = useCallback(
+++    (node: FlatTreeNode) => {
+++      if (node.isDirectory) {
+++        toggleExpand(node.path);
+++      } else {
+++        onSelect(node.path);
+++      }
+++    },
+++    [toggleExpand, onSelect],
+++  );
+++
+++  return (
+++    <div className={cn("flex h-full flex-col", className)}>
+++      <div className="flex shrink-0 items-center gap-2 border-b px-3 py-2">
+++        <FolderIcon className="size-4 text-muted-foreground" />
+++        <span className="text-xs font-medium text-muted-foreground">
+++          Files
+++        </span>
+++        <span className="text-xs text-muted-foreground/50">
+++          ({files.length})
+++        </span>
+++      </div>
+++      <ScrollArea className="min-h-0 flex-1">
+++        <div className="py-1">
+++          {flatTree.length === 0 ? (
+++            <div className="flex flex-col items-center gap-2 px-4 py-12 text-center">
+++              <FileIcon className="size-8 text-muted-foreground/30" />
+++              <p className="text-xs text-muted-foreground/50">No files yet</p>
+++            </div>
+++          ) : (
+++            flatTree.map((node) => (
+++              <FileTreeRow
+++                key={node.path}
+++                node={node}
+++                isSelected={node.path === selectedFile}
+++                onSelect={handleClick}
+++              />
+++            ))
+++          )}
+++        </div>
+++      </ScrollArea>
+++    </div>
+++  );
+++}
+++
+++interface FileTreeRowProps {
+++  node: FlatTreeNode;
+++  isSelected: boolean;
+++  onSelect: (node: FlatTreeNode) => void;
+++}
+++
+++const FileTreeRow = ({ node, isSelected, onSelect }: FileTreeRowProps) => {
+++  return (
+++    <button
+++      type="button"
+++      className={cn(
+++        "flex w-full items-center gap-1 px-3 py-1 text-left text-xs transition-colors hover:bg-accent/50",
+++        isSelected && "bg-accent text-accent-foreground",
+++      )}
+++      style={{ paddingLeft: `${12 + node.depth * 16}px` }}
+++      onClick={() => onSelect(node)}
+++    >
+++      {node.isDirectory ? (
+++        <>
+++          <ChevronRightIcon
+++            className={cn(
+++              "size-3 shrink-0 transition-transform text-muted-foreground",
+++            )}
+++          />
+++          <FolderIcon className="size-4 shrink-0 text-muted-foreground" />
+++        </>
+++      ) : (
+++        <>
+++          <span className="size-3 shrink-0" />
+++          {getFileIcon(node.path, "size-4 shrink-0")}
+++        </>
+++      )}
+++      <span className="min-w-0 truncate">{node.name}</span>
+++    </button>
+++  );
+++};
++diff --git a/frontend/src/components/workspace/artifacts/index.ts b/frontend/src/components/workspace/artifacts/index.ts
++index 0e589d5f..b39bfe66 100644
++--- a/frontend/src/components/workspace/artifacts/index.ts
+++++ b/frontend/src/components/workspace/artifacts/index.ts
++@@ -2,3 +2,4 @@ export * from "./artifact-file-detail";
++ export * from "./artifact-file-list";
++ export * from "./artifact-trigger";
++ export * from "./context";
+++export * from "./file-tree-panel";
++-- 
++2.43.7
++
++
++From bfa1113f4ad12b1ad0b07097b59634a05f228f39 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Wed, 13 May 2026 23:16:42 +0800
++Subject: [PATCH 03/17] feat(workspace): add file tree panel in three-column
++ layout
++
++- ChatBox now has three columns: File Tree | Chat | Artifacts
++- File tree panel shows on the left when artifacts exist
++- Toggle open/close with panel icon buttons
++- File tree is a fixed 256px sidebar outside the resizable panel group
++- Clicking a file in the tree opens it in the right artifacts panel
++- Clean TypeScript compilation
++---
++ .../components/workspace/chats/chat-box.tsx   |  72 +++++--
++ .../workspace/chats/chat-box.tsx.bak          | 180 ++++++++++++++++++
++ frontend/src/core/artifacts/file-tree.ts      |   5 +-
++ 3 files changed, 243 insertions(+), 14 deletions(-)
++ create mode 100644 frontend/src/components/workspace/chats/chat-box.tsx.bak
++
++diff --git a/frontend/src/components/workspace/chats/chat-box.tsx b/frontend/src/components/workspace/chats/chat-box.tsx
++index a57aa522..0c468360 100644
++--- a/frontend/src/components/workspace/chats/chat-box.tsx
+++++ b/frontend/src/components/workspace/chats/chat-box.tsx
++@@ -1,4 +1,4 @@
++-import { FilesIcon, XIcon } from "lucide-react";
+++import { FilesIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, XIcon } from "lucide-react";
++ import { usePathname } from "next/navigation";
++ import { useEffect, useMemo, useRef, useState } from "react";
++ import type { GroupImperativeHandle } from "react-resizable-panels";
++@@ -16,12 +16,15 @@ import { cn } from "@/lib/utils";
++ import {
++   ArtifactFileDetail,
++   ArtifactFileList,
+++  FileTreePanel,
++   useArtifacts,
++ } from "../artifacts";
++ import { useThread } from "../messages/context";
++ 
++ const CLOSE_MODE = { chat: 100, artifacts: 0 };
++ const OPEN_MODE = { chat: 60, artifacts: 40 };
+++const FILE_TREE_MIN_SIZE = 18;
+++const FILE_TREE_DEFAULT_SIZE = 22;
++ 
++ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++   children,
++@@ -43,6 +46,9 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++   } = useArtifacts();
++ 
++   const [autoSelectFirstArtifact, setAutoSelectFirstArtifact] = useState(true);
+++  const [fileTreeOpen, setFileTreeOpen] = useState(true);
+++
+++  const hasArtifacts = (thread.values.artifacts?.length ?? 0) > 0;
++   useEffect(() => {
++     if (threadIdRef.current !== threadId) {
++       threadIdRef.current = threadId;
++@@ -101,15 +107,55 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++   }, [artifactPanelOpen]);
++ 
++   return (
++-    <ResizablePanelGroup
++-      id={`${resizableIdBase}-panels`}
++-      orientation="horizontal"
++-      defaultLayout={{ chat: 100, artifacts: 0 }}
++-      groupRef={layoutRef}
++-    >
++-      <ResizablePanel className="relative" defaultSize={100} id="chat">
++-        {children}
++-      </ResizablePanel>
+++    <div className="flex h-full w-full">
+++      {/* File Tree Panel (left sidebar) */}
+++      {hasArtifacts && fileTreeOpen && (
+++        <div className="flex h-full w-64 shrink-0 border-r">
+++          <div className="relative flex h-full w-full flex-col">
+++            <div className="absolute top-1 right-1 z-10">
+++              <Button
+++                size="icon-sm"
+++                variant="ghost"
+++                onClick={() => setFileTreeOpen(false)}
+++              >
+++                <PanelLeftCloseIcon className="size-3.5" />
+++              </Button>
+++            </div>
+++            <FileTreePanel
+++              files={thread.values.artifacts ?? []}
+++              selectedFile={selectedArtifact}
+++              onSelect={(filepath) => {
+++                selectArtifact(filepath);
+++                setArtifactsOpen(true);
+++              }}
+++              className="h-full"
+++            />
+++          </div>
+++        </div>
+++      )}
+++      {/* Main content: Chat + Artifacts resizable panels */}
+++      <div className="flex min-w-0 flex-1">
+++        <ResizablePanelGroup
+++          id={`${resizableIdBase}-panels`}
+++          orientation="horizontal"
+++          defaultLayout={{ chat: 100, artifacts: 0 }}
+++          groupRef={layoutRef}
+++        >
+++          {/* Chat Panel */}
+++          <ResizablePanel className="relative" defaultSize={100} id="chat">
+++            {/* File tree toggle button when tree is closed */}
+++            {hasArtifacts && !fileTreeOpen && (
+++              <Button
+++                size="icon-sm"
+++                variant="ghost"
+++                className="absolute top-2 left-2 z-10"
+++                onClick={() => setFileTreeOpen(true)}
+++              >
+++                <PanelLeftOpenIcon className="size-4" />
+++              </Button>
+++            )}
+++            {children}
+++          </ResizablePanel>
++       <ResizableHandle
++         id={`${resizableIdBase}-separator`}
++         className={cn(
++@@ -172,8 +218,10 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++             </div>
++           )}
++         </div>
++-      </ResizablePanel>
++-    </ResizablePanelGroup>
+++        </ResizablePanel>
+++      </ResizablePanelGroup>
+++      </div>
+++    </div>
++   );
++ };
++ 
++diff --git a/frontend/src/components/workspace/chats/chat-box.tsx.bak b/frontend/src/components/workspace/chats/chat-box.tsx.bak
++new file mode 100644
++index 00000000..a57aa522
++--- /dev/null
+++++ b/frontend/src/components/workspace/chats/chat-box.tsx.bak
++@@ -0,0 +1,180 @@
+++import { FilesIcon, XIcon } from "lucide-react";
+++import { usePathname } from "next/navigation";
+++import { useEffect, useMemo, useRef, useState } from "react";
+++import type { GroupImperativeHandle } from "react-resizable-panels";
+++
+++import { ConversationEmptyState } from "@/components/ai-elements/conversation";
+++import { Button } from "@/components/ui/button";
+++import {
+++  ResizableHandle,
+++  ResizablePanel,
+++  ResizablePanelGroup,
+++} from "@/components/ui/resizable";
+++import { env } from "@/env";
+++import { cn } from "@/lib/utils";
+++
+++import {
+++  ArtifactFileDetail,
+++  ArtifactFileList,
+++  useArtifacts,
+++} from "../artifacts";
+++import { useThread } from "../messages/context";
+++
+++const CLOSE_MODE = { chat: 100, artifacts: 0 };
+++const OPEN_MODE = { chat: 60, artifacts: 40 };
+++
+++const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
+++  children,
+++  threadId,
+++}) => {
+++  const { thread } = useThread();
+++  const pathname = usePathname();
+++  const threadIdRef = useRef(threadId);
+++  const layoutRef = useRef<GroupImperativeHandle>(null);
+++
+++  const {
+++    artifacts,
+++    open: artifactsOpen,
+++    setOpen: setArtifactsOpen,
+++    setArtifacts,
+++    select: selectArtifact,
+++    deselect,
+++    selectedArtifact,
+++  } = useArtifacts();
+++
+++  const [autoSelectFirstArtifact, setAutoSelectFirstArtifact] = useState(true);
+++  useEffect(() => {
+++    if (threadIdRef.current !== threadId) {
+++      threadIdRef.current = threadId;
+++      deselect();
+++    }
+++
+++    // Update artifacts from the current thread
+++    setArtifacts(thread.values.artifacts);
+++
+++    // DO NOT automatically deselect the artifact when switching threads, because the artifacts auto discovering is not work now.
+++    // if (
+++    //   selectedArtifact &&
+++    //   !thread.values.artifacts?.includes(selectedArtifact)
+++    // ) {
+++    //   deselect();
+++    // }
+++
+++    if (
+++      env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true" &&
+++      autoSelectFirstArtifact
+++    ) {
+++      if (thread?.values?.artifacts?.length > 0) {
+++        setAutoSelectFirstArtifact(false);
+++        selectArtifact(thread.values.artifacts[0]!);
+++      }
+++    }
+++  }, [
+++    threadId,
+++    autoSelectFirstArtifact,
+++    deselect,
+++    selectArtifact,
+++    selectedArtifact,
+++    setArtifacts,
+++    thread.values.artifacts,
+++  ]);
+++
+++  const artifactPanelOpen = useMemo(() => {
+++    if (env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true") {
+++      return artifactsOpen && artifacts?.length > 0;
+++    }
+++    return artifactsOpen;
+++  }, [artifactsOpen, artifacts]);
+++
+++  const resizableIdBase = useMemo(() => {
+++    return pathname.replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "");
+++  }, [pathname]);
+++
+++  useEffect(() => {
+++    if (layoutRef.current) {
+++      if (artifactPanelOpen) {
+++        layoutRef.current.setLayout(OPEN_MODE);
+++      } else {
+++        layoutRef.current.setLayout(CLOSE_MODE);
+++      }
+++    }
+++  }, [artifactPanelOpen]);
+++
+++  return (
+++    <ResizablePanelGroup
+++      id={`${resizableIdBase}-panels`}
+++      orientation="horizontal"
+++      defaultLayout={{ chat: 100, artifacts: 0 }}
+++      groupRef={layoutRef}
+++    >
+++      <ResizablePanel className="relative" defaultSize={100} id="chat">
+++        {children}
+++      </ResizablePanel>
+++      <ResizableHandle
+++        id={`${resizableIdBase}-separator`}
+++        className={cn(
+++          "opacity-33 hover:opacity-100",
+++          !artifactPanelOpen && "pointer-events-none opacity-0",
+++        )}
+++      />
+++      <ResizablePanel
+++        className={cn(
+++          "transition-all duration-300 ease-in-out",
+++          !artifactsOpen && "opacity-0",
+++        )}
+++        id="artifacts"
+++      >
+++        <div
+++          className={cn(
+++            "h-full p-4 transition-transform duration-300 ease-in-out",
+++            artifactPanelOpen ? "translate-x-0" : "translate-x-full",
+++          )}
+++        >
+++          {selectedArtifact ? (
+++            <ArtifactFileDetail
+++              className="size-full"
+++              filepath={selectedArtifact}
+++              threadId={threadId}
+++            />
+++          ) : (
+++            <div className="relative flex size-full justify-center">
+++              <div className="absolute top-1 right-1 z-30">
+++                <Button
+++                  size="icon-sm"
+++                  variant="ghost"
+++                  onClick={() => {
+++                    setArtifactsOpen(false);
+++                  }}
+++                >
+++                  <XIcon />
+++                </Button>
+++              </div>
+++              {thread.values.artifacts?.length === 0 ? (
+++                <ConversationEmptyState
+++                  icon={<FilesIcon />}
+++                  title="No artifact selected"
+++                  description="Select an artifact to view its details"
+++                />
+++              ) : (
+++                <div className="flex size-full max-w-(--container-width-sm) flex-col justify-center p-4 pt-8">
+++                  <header className="shrink-0">
+++                    <h2 className="text-lg font-medium">Artifacts</h2>
+++                  </header>
+++                  <main className="min-h-0 grow">
+++                    <ArtifactFileList
+++                      className="max-w-(--container-width-sm) p-4 pt-12"
+++                      files={thread.values.artifacts ?? []}
+++                      threadId={threadId}
+++                    />
+++                  </main>
+++                </div>
+++              )}
+++            </div>
+++          )}
+++        </div>
+++      </ResizablePanel>
+++    </ResizablePanelGroup>
+++  );
+++};
+++
+++export { ChatBox };
++diff --git a/frontend/src/core/artifacts/file-tree.ts b/frontend/src/core/artifacts/file-tree.ts
++index 1af92d6f..b3840a91 100644
++--- a/frontend/src/core/artifacts/file-tree.ts
+++++ b/frontend/src/core/artifacts/file-tree.ts
++@@ -37,9 +37,10 @@ export function buildFileTree(
++     const parts: string[] = [];
++ 
++     for (let i = 0; i < segments.length; i++) {
+++      const segment = segments[i]!;
++       const isLast = i === segments.length - 1;
++       const parentPath = parts.join("/");
++-      parts.push(segments[i]);
+++      parts.push(segment);
++       const fullPath = parts.join("/");
++ 
++       if (!dirMap.has(parentPath)) {
++@@ -51,7 +52,7 @@ export function buildFileTree(
++       );
++       if (!existing) {
++         dirMap.get(parentPath)!.push({
++-          name: segments[i],
+++          name: segment,
++           path: fullPath,
++           isDirectory: !isLast,
++           children: [],
++-- 
++2.43.7
++
++
++From 8bdcca81c84d8f68e0c40b475ceacc82377a122a Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Wed, 13 May 2026 23:45:02 +0800
++Subject: [PATCH 04/17] fix(workspace): file tree hidden by default with toggle
++ tab
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++- File tree now defaults to closed (user opens on demand)
++- When closed, a slim vertical tab (📁) on the left edge opens it
++- Header inside file tree includes close button (×)
++- File tree auto-opens when new files appear mid-conversation
++- No more layout flickering from artifacts state changes
++---
++ .../workspace/artifacts/file-tree-panel.tsx   | 10 ---
++ .../components/workspace/chats/chat-box.tsx   | 72 +++++++++++--------
++ 2 files changed, 44 insertions(+), 38 deletions(-)
++
++diff --git a/frontend/src/components/workspace/artifacts/file-tree-panel.tsx b/frontend/src/components/workspace/artifacts/file-tree-panel.tsx
++index e4ee57b0..98e41184 100644
++--- a/frontend/src/components/workspace/artifacts/file-tree-panel.tsx
+++++ b/frontend/src/components/workspace/artifacts/file-tree-panel.tsx
++@@ -4,7 +4,6 @@ import {
++   ChevronRightIcon,
++   FileIcon,
++   FolderIcon,
++-  FolderOpenIcon,
++ } from "lucide-react";
++ import { useCallback, useMemo, useState } from "react";
++ 
++@@ -66,15 +65,6 @@ export function FileTreePanel({
++ 
++   return (
++     <div className={cn("flex h-full flex-col", className)}>
++-      <div className="flex shrink-0 items-center gap-2 border-b px-3 py-2">
++-        <FolderIcon className="size-4 text-muted-foreground" />
++-        <span className="text-xs font-medium text-muted-foreground">
++-          Files
++-        </span>
++-        <span className="text-xs text-muted-foreground/50">
++-          ({files.length})
++-        </span>
++-      </div>
++       <ScrollArea className="min-h-0 flex-1">
++         <div className="py-1">
++           {flatTree.length === 0 ? (
++diff --git a/frontend/src/components/workspace/chats/chat-box.tsx b/frontend/src/components/workspace/chats/chat-box.tsx
++index 0c468360..061d975f 100644
++--- a/frontend/src/components/workspace/chats/chat-box.tsx
+++++ b/frontend/src/components/workspace/chats/chat-box.tsx
++@@ -1,4 +1,4 @@
++-import { FilesIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, XIcon } from "lucide-react";
+++import { FilesIcon, FolderTreeIcon, XIcon } from "lucide-react";
++ import { usePathname } from "next/navigation";
++ import { useEffect, useMemo, useRef, useState } from "react";
++ import type { GroupImperativeHandle } from "react-resizable-panels";
++@@ -10,6 +10,7 @@ import {
++   ResizablePanel,
++   ResizablePanelGroup,
++ } from "@/components/ui/resizable";
+++import { Tooltip } from "@/components/workspace/tooltip";
++ import { env } from "@/env";
++ import { cn } from "@/lib/utils";
++ 
++@@ -23,8 +24,6 @@ import { useThread } from "../messages/context";
++ 
++ const CLOSE_MODE = { chat: 100, artifacts: 0 };
++ const OPEN_MODE = { chat: 60, artifacts: 40 };
++-const FILE_TREE_MIN_SIZE = 18;
++-const FILE_TREE_DEFAULT_SIZE = 22;
++ 
++ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++   children,
++@@ -46,9 +45,20 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++   } = useArtifacts();
++ 
++   const [autoSelectFirstArtifact, setAutoSelectFirstArtifact] = useState(true);
++-  const [fileTreeOpen, setFileTreeOpen] = useState(true);
+++  // File tree is hidden by default — user opens it on demand via the sidebar toggle
+++  const [fileTreeOpen, setFileTreeOpen] = useState(false);
+++  const [prevFileCount, setPrevFileCount] = useState(0);
++ 
++-  const hasArtifacts = (thread.values.artifacts?.length ?? 0) > 0;
+++  const files = thread.values.artifacts ?? [];
+++  const hasArtifacts = files.length > 0;
+++
+++  // Auto-open file tree when new files appear during an active conversation
+++  useEffect(() => {
+++    if (files.length > prevFileCount && prevFileCount > 0) {
+++      setFileTreeOpen(true);
+++    }
+++    setPrevFileCount(files.length);
+++  }, [files.length, prevFileCount]);
++   useEffect(() => {
++     if (threadIdRef.current !== threadId) {
++       threadIdRef.current = threadId;
++@@ -108,32 +118,49 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++ 
++   return (
++     <div className="flex h-full w-full">
++-      {/* File Tree Panel (left sidebar) */}
+++      {/* File Tree Panel (left sidebar) — hidden by default, toggle on demand */}
++       {hasArtifacts && fileTreeOpen && (
++         <div className="flex h-full w-64 shrink-0 border-r">
++           <div className="relative flex h-full w-full flex-col">
++-            <div className="absolute top-1 right-1 z-10">
++-              <Button
++-                size="icon-sm"
++-                variant="ghost"
++-                onClick={() => setFileTreeOpen(false)}
++-              >
++-                <PanelLeftCloseIcon className="size-3.5" />
++-              </Button>
+++            <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
+++              <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+++                <FolderTreeIcon className="size-3.5" />
+++                Files
+++                <span className="text-muted-foreground/50">({files.length})</span>
+++              </span>
+++              <Tooltip content="Close file tree">
+++                <Button
+++                  size="icon-sm"
+++                  variant="ghost"
+++                  onClick={() => setFileTreeOpen(false)}
+++                >
+++                  <XIcon className="size-3.5" />
+++                </Button>
+++              </Tooltip>
++             </div>
++             <FileTreePanel
++-              files={thread.values.artifacts ?? []}
+++              files={files}
++               selectedFile={selectedArtifact}
++               onSelect={(filepath) => {
++                 selectArtifact(filepath);
++                 setArtifactsOpen(true);
++               }}
++-              className="h-full"
+++              className="min-h-0 flex-1"
++             />
++           </div>
++         </div>
++       )}
++-      {/* Main content: Chat + Artifacts resizable panels */}
+++      {/* File tree toggle tab (when tree is closed) */}
+++      {hasArtifacts && !fileTreeOpen && (
+++        <div
+++          className="flex h-full w-6 shrink-0 cursor-pointer items-center justify-center border-r bg-muted/20 text-muted-foreground/40 transition-colors hover:bg-accent/30 hover:text-muted-foreground"
+++          onClick={() => setFileTreeOpen(true)}
+++        >
+++          <Tooltip content="Open file tree">
+++            <FolderTreeIcon className="size-4" />
+++          </Tooltip>
+++        </div>
+++      )}
++       <div className="flex min-w-0 flex-1">
++         <ResizablePanelGroup
++           id={`${resizableIdBase}-panels`}
++@@ -143,17 +170,6 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++         >
++           {/* Chat Panel */}
++           <ResizablePanel className="relative" defaultSize={100} id="chat">
++-            {/* File tree toggle button when tree is closed */}
++-            {hasArtifacts && !fileTreeOpen && (
++-              <Button
++-                size="icon-sm"
++-                variant="ghost"
++-                className="absolute top-2 left-2 z-10"
++-                onClick={() => setFileTreeOpen(true)}
++-              >
++-                <PanelLeftOpenIcon className="size-4" />
++-              </Button>
++-            )}
++             {children}
++           </ResizablePanel>
++       <ResizableHandle
++-- 
++2.43.7
++
++
++From d35df9798eecf2c9e45150c9857ff0d236fd0c50 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Wed, 13 May 2026 23:45:12 +0800
++Subject: [PATCH 05/17] chore: remove backup file
++
++---
++ .../workspace/chats/chat-box.tsx.bak          | 180 ------------------
++ 1 file changed, 180 deletions(-)
++ delete mode 100644 frontend/src/components/workspace/chats/chat-box.tsx.bak
++
++diff --git a/frontend/src/components/workspace/chats/chat-box.tsx.bak b/frontend/src/components/workspace/chats/chat-box.tsx.bak
++deleted file mode 100644
++index a57aa522..00000000
++--- a/frontend/src/components/workspace/chats/chat-box.tsx.bak
+++++ /dev/null
++@@ -1,180 +0,0 @@
++-import { FilesIcon, XIcon } from "lucide-react";
++-import { usePathname } from "next/navigation";
++-import { useEffect, useMemo, useRef, useState } from "react";
++-import type { GroupImperativeHandle } from "react-resizable-panels";
++-
++-import { ConversationEmptyState } from "@/components/ai-elements/conversation";
++-import { Button } from "@/components/ui/button";
++-import {
++-  ResizableHandle,
++-  ResizablePanel,
++-  ResizablePanelGroup,
++-} from "@/components/ui/resizable";
++-import { env } from "@/env";
++-import { cn } from "@/lib/utils";
++-
++-import {
++-  ArtifactFileDetail,
++-  ArtifactFileList,
++-  useArtifacts,
++-} from "../artifacts";
++-import { useThread } from "../messages/context";
++-
++-const CLOSE_MODE = { chat: 100, artifacts: 0 };
++-const OPEN_MODE = { chat: 60, artifacts: 40 };
++-
++-const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++-  children,
++-  threadId,
++-}) => {
++-  const { thread } = useThread();
++-  const pathname = usePathname();
++-  const threadIdRef = useRef(threadId);
++-  const layoutRef = useRef<GroupImperativeHandle>(null);
++-
++-  const {
++-    artifacts,
++-    open: artifactsOpen,
++-    setOpen: setArtifactsOpen,
++-    setArtifacts,
++-    select: selectArtifact,
++-    deselect,
++-    selectedArtifact,
++-  } = useArtifacts();
++-
++-  const [autoSelectFirstArtifact, setAutoSelectFirstArtifact] = useState(true);
++-  useEffect(() => {
++-    if (threadIdRef.current !== threadId) {
++-      threadIdRef.current = threadId;
++-      deselect();
++-    }
++-
++-    // Update artifacts from the current thread
++-    setArtifacts(thread.values.artifacts);
++-
++-    // DO NOT automatically deselect the artifact when switching threads, because the artifacts auto discovering is not work now.
++-    // if (
++-    //   selectedArtifact &&
++-    //   !thread.values.artifacts?.includes(selectedArtifact)
++-    // ) {
++-    //   deselect();
++-    // }
++-
++-    if (
++-      env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true" &&
++-      autoSelectFirstArtifact
++-    ) {
++-      if (thread?.values?.artifacts?.length > 0) {
++-        setAutoSelectFirstArtifact(false);
++-        selectArtifact(thread.values.artifacts[0]!);
++-      }
++-    }
++-  }, [
++-    threadId,
++-    autoSelectFirstArtifact,
++-    deselect,
++-    selectArtifact,
++-    selectedArtifact,
++-    setArtifacts,
++-    thread.values.artifacts,
++-  ]);
++-
++-  const artifactPanelOpen = useMemo(() => {
++-    if (env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true") {
++-      return artifactsOpen && artifacts?.length > 0;
++-    }
++-    return artifactsOpen;
++-  }, [artifactsOpen, artifacts]);
++-
++-  const resizableIdBase = useMemo(() => {
++-    return pathname.replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "");
++-  }, [pathname]);
++-
++-  useEffect(() => {
++-    if (layoutRef.current) {
++-      if (artifactPanelOpen) {
++-        layoutRef.current.setLayout(OPEN_MODE);
++-      } else {
++-        layoutRef.current.setLayout(CLOSE_MODE);
++-      }
++-    }
++-  }, [artifactPanelOpen]);
++-
++-  return (
++-    <ResizablePanelGroup
++-      id={`${resizableIdBase}-panels`}
++-      orientation="horizontal"
++-      defaultLayout={{ chat: 100, artifacts: 0 }}
++-      groupRef={layoutRef}
++-    >
++-      <ResizablePanel className="relative" defaultSize={100} id="chat">
++-        {children}
++-      </ResizablePanel>
++-      <ResizableHandle
++-        id={`${resizableIdBase}-separator`}
++-        className={cn(
++-          "opacity-33 hover:opacity-100",
++-          !artifactPanelOpen && "pointer-events-none opacity-0",
++-        )}
++-      />
++-      <ResizablePanel
++-        className={cn(
++-          "transition-all duration-300 ease-in-out",
++-          !artifactsOpen && "opacity-0",
++-        )}
++-        id="artifacts"
++-      >
++-        <div
++-          className={cn(
++-            "h-full p-4 transition-transform duration-300 ease-in-out",
++-            artifactPanelOpen ? "translate-x-0" : "translate-x-full",
++-          )}
++-        >
++-          {selectedArtifact ? (
++-            <ArtifactFileDetail
++-              className="size-full"
++-              filepath={selectedArtifact}
++-              threadId={threadId}
++-            />
++-          ) : (
++-            <div className="relative flex size-full justify-center">
++-              <div className="absolute top-1 right-1 z-30">
++-                <Button
++-                  size="icon-sm"
++-                  variant="ghost"
++-                  onClick={() => {
++-                    setArtifactsOpen(false);
++-                  }}
++-                >
++-                  <XIcon />
++-                </Button>
++-              </div>
++-              {thread.values.artifacts?.length === 0 ? (
++-                <ConversationEmptyState
++-                  icon={<FilesIcon />}
++-                  title="No artifact selected"
++-                  description="Select an artifact to view its details"
++-                />
++-              ) : (
++-                <div className="flex size-full max-w-(--container-width-sm) flex-col justify-center p-4 pt-8">
++-                  <header className="shrink-0">
++-                    <h2 className="text-lg font-medium">Artifacts</h2>
++-                  </header>
++-                  <main className="min-h-0 grow">
++-                    <ArtifactFileList
++-                      className="max-w-(--container-width-sm) p-4 pt-12"
++-                      files={thread.values.artifacts ?? []}
++-                      threadId={threadId}
++-                    />
++-                  </main>
++-                </div>
++-              )}
++-            </div>
++-          )}
++-        </div>
++-      </ResizablePanel>
++-    </ResizablePanelGroup>
++-  );
++-};
++-
++-export { ChatBox };
++-- 
++2.43.7
++
++
++From ee259fc23ea111753b37e0ffe28d92fcd6446562 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Wed, 13 May 2026 23:55:46 +0800
++Subject: [PATCH 06/17] =?UTF-8?q?fix:=20correct=20lucide-react=20icon=20na?=
++ =?UTF-8?q?me=20(FolderTreeIcon=20=E2=86=92=20FolderTree)?=
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++---
++ frontend/src/components/workspace/chats/chat-box.tsx | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/frontend/src/components/workspace/chats/chat-box.tsx b/frontend/src/components/workspace/chats/chat-box.tsx
++index 061d975f..3263b601 100644
++--- a/frontend/src/components/workspace/chats/chat-box.tsx
+++++ b/frontend/src/components/workspace/chats/chat-box.tsx
++@@ -1,4 +1,4 @@
++-import { FilesIcon, FolderTreeIcon, XIcon } from "lucide-react";
+++import { FilesIcon, FolderTree, XIcon } from "lucide-react";
++ import { usePathname } from "next/navigation";
++ import { useEffect, useMemo, useRef, useState } from "react";
++ import type { GroupImperativeHandle } from "react-resizable-panels";
++@@ -124,7 +124,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++           <div className="relative flex h-full w-full flex-col">
++             <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
++               <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
++-                <FolderTreeIcon className="size-3.5" />
+++                <FolderTree className="size-3.5" />
++                 Files
++                 <span className="text-muted-foreground/50">({files.length})</span>
++               </span>
++@@ -157,7 +157,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++           onClick={() => setFileTreeOpen(true)}
++         >
++           <Tooltip content="Open file tree">
++-            <FolderTreeIcon className="size-4" />
+++            <FolderTree className="size-4" />
++           </Tooltip>
++         </div>
++       )}
++-- 
++2.43.7
++
++
++From 79c7af3c8b46f3ef56d16b1147c5a22a587e80fd Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Thu, 14 May 2026 00:00:03 +0800
++Subject: [PATCH 07/17] fix: make file tree toggle tab always visible
++
++- Remove hasArtifacts gate from toggle tab and tree panel
++- Tab now always shows on the left edge of the chat area
++- FileTreePanel handles empty state internally
++---
++ frontend/src/components/workspace/chats/chat-box.tsx | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/frontend/src/components/workspace/chats/chat-box.tsx b/frontend/src/components/workspace/chats/chat-box.tsx
++index 3263b601..e7689799 100644
++--- a/frontend/src/components/workspace/chats/chat-box.tsx
+++++ b/frontend/src/components/workspace/chats/chat-box.tsx
++@@ -119,7 +119,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++   return (
++     <div className="flex h-full w-full">
++       {/* File Tree Panel (left sidebar) — hidden by default, toggle on demand */}
++-      {hasArtifacts && fileTreeOpen && (
+++      {fileTreeOpen && (
++         <div className="flex h-full w-64 shrink-0 border-r">
++           <div className="relative flex h-full w-full flex-col">
++             <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
++@@ -150,8 +150,8 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++           </div>
++         </div>
++       )}
++-      {/* File tree toggle tab (when tree is closed) */}
++-      {hasArtifacts && !fileTreeOpen && (
+++      {/* File tree toggle tab (always visible on the left edge) */}
+++      {!fileTreeOpen && (
++         <div
++           className="flex h-full w-6 shrink-0 cursor-pointer items-center justify-center border-r bg-muted/20 text-muted-foreground/40 transition-colors hover:bg-accent/30 hover:text-muted-foreground"
++           onClick={() => setFileTreeOpen(true)}
++-- 
++2.43.7
++
++
++From 4a647f13fafb129f9b02e38184b665bce1552fe2 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Thu, 14 May 2026 10:44:53 +0800
++Subject: [PATCH 08/17] refactor: move file tree toggle to chat page header
++
++- Add fileTreeOpen state to ArtifactsContext (shared state)
++- Create FileTreeTrigger button component (header button)
++- Add FolderTree icon button to chat page headers (both chat pages)
++- ChatBox uses context's fileTreeOpen instead of local state
++- Remove subtle edge toggle tab (was too easy to miss)
++---
++ .../[agent_name]/chats/[thread_id]/page.tsx   |  3 ++-
++ .../app/workspace/chats/[thread_id]/page.tsx  |  3 ++-
++ .../workspace/artifacts/context.tsx           |  8 ++++++
++ .../workspace/artifacts/file-tree-trigger.tsx | 27 +++++++++++++++++++
++ .../components/workspace/artifacts/index.ts   |  1 +
++ .../components/workspace/chats/chat-box.tsx   | 20 ++++----------
++ 6 files changed, 45 insertions(+), 17 deletions(-)
++ create mode 100644 frontend/src/components/workspace/artifacts/file-tree-trigger.tsx
++
++diff --git a/frontend/src/app/workspace/agents/[agent_name]/chats/[thread_id]/page.tsx b/frontend/src/app/workspace/agents/[agent_name]/chats/[thread_id]/page.tsx
++index 8627762b..2e2c4e9b 100644
++--- a/frontend/src/app/workspace/agents/[agent_name]/chats/[thread_id]/page.tsx
+++++ b/frontend/src/app/workspace/agents/[agent_name]/chats/[thread_id]/page.tsx
++@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
++ import type { PromptInputMessage } from "@/components/ai-elements/prompt-input";
++ import { Button } from "@/components/ui/button";
++ import { AgentWelcome } from "@/components/workspace/agent-welcome";
++-import { ArtifactTrigger } from "@/components/workspace/artifacts";
+++import { ArtifactTrigger, FileTreeTrigger } from "@/components/workspace/artifacts";
++ import { ChatBox, useThreadChat } from "@/components/workspace/chats";
++ import { ExportTrigger } from "@/components/workspace/export-trigger";
++ import { InputBox } from "@/components/workspace/input-box";
++@@ -166,6 +166,7 @@ export default function AgentChatPage() {
++                   setLocalSettings("tokenUsage", preferences)
++                 }
++               />
+++              <FileTreeTrigger />
++               <ExportTrigger threadId={threadId} />
++               <ArtifactTrigger />
++             </div>
++diff --git a/frontend/src/app/workspace/chats/[thread_id]/page.tsx b/frontend/src/app/workspace/chats/[thread_id]/page.tsx
++index ed7d91c6..a0b72a37 100644
++--- a/frontend/src/app/workspace/chats/[thread_id]/page.tsx
+++++ b/frontend/src/app/workspace/chats/[thread_id]/page.tsx
++@@ -3,7 +3,7 @@
++ import { useCallback, useEffect, useRef, useState } from "react";
++ 
++ import { type PromptInputMessage } from "@/components/ai-elements/prompt-input";
++-import { ArtifactTrigger } from "@/components/workspace/artifacts";
+++import { ArtifactTrigger, FileTreeTrigger } from "@/components/workspace/artifacts";
++ import {
++   ChatBox,
++   useSpecificChatMode,
++@@ -149,6 +149,7 @@ export default function ChatPage() {
++                   setLocalSettings("tokenUsage", preferences)
++                 }
++               />
+++              <FileTreeTrigger />
++               <ExportTrigger threadId={threadId} />
++               <ArtifactTrigger />
++             </div>
++diff --git a/frontend/src/components/workspace/artifacts/context.tsx b/frontend/src/components/workspace/artifacts/context.tsx
++index af9b19ab..6745fdfe 100644
++--- a/frontend/src/components/workspace/artifacts/context.tsx
+++++ b/frontend/src/components/workspace/artifacts/context.tsx
++@@ -21,6 +21,10 @@ export interface ArtifactsContextType {
++   open: boolean;
++   autoOpen: boolean;
++   setOpen: (open: boolean) => void;
+++
+++  /** File tree panel visibility */
+++  fileTreeOpen: boolean;
+++  setFileTreeOpen: (open: boolean) => void;
++ }
++ 
++ const ArtifactsContext = createContext<ArtifactsContextType | undefined>(
++@@ -39,6 +43,7 @@ export function ArtifactsProvider({ children }: ArtifactsProviderProps) {
++     env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true",
++   );
++   const [autoOpen, setAutoOpen] = useState(true);
+++  const [fileTreeOpen, setFileTreeOpen] = useState(false);
++   const { setOpen: setSidebarOpen } = useSidebar();
++ 
++   const select = useCallback(
++@@ -75,6 +80,9 @@ export function ArtifactsProvider({ children }: ArtifactsProviderProps) {
++       setOpen(isOpen);
++     },
++ 
+++    fileTreeOpen,
+++    setFileTreeOpen,
+++
++     selectedArtifact,
++     select,
++     deselect,
++diff --git a/frontend/src/components/workspace/artifacts/file-tree-trigger.tsx b/frontend/src/components/workspace/artifacts/file-tree-trigger.tsx
++new file mode 100644
++index 00000000..b6502378
++--- /dev/null
+++++ b/frontend/src/components/workspace/artifacts/file-tree-trigger.tsx
++@@ -0,0 +1,27 @@
+++"use client";
+++
+++import { FolderTree } from "lucide-react";
+++
+++import { Button } from "@/components/ui/button";
+++import { Tooltip } from "@/components/workspace/tooltip";
+++
+++import { useArtifacts } from "./context";
+++
+++/**
+++ * File tree toggle button — placed in the chat page header.
+++ */
+++export function FileTreeTrigger() {
+++  const { fileTreeOpen, setFileTreeOpen } = useArtifacts();
+++
+++  return (
+++    <Tooltip content={fileTreeOpen ? "Close file tree" : "Open file tree"}>
+++      <Button
+++        size="sm"
+++        variant="ghost"
+++        onClick={() => setFileTreeOpen(!fileTreeOpen)}
+++      >
+++        <FolderTree className="size-4" />
+++      </Button>
+++    </Tooltip>
+++  );
+++}
++diff --git a/frontend/src/components/workspace/artifacts/index.ts b/frontend/src/components/workspace/artifacts/index.ts
++index b39bfe66..49fbd911 100644
++--- a/frontend/src/components/workspace/artifacts/index.ts
+++++ b/frontend/src/components/workspace/artifacts/index.ts
++@@ -3,3 +3,4 @@ export * from "./artifact-file-list";
++ export * from "./artifact-trigger";
++ export * from "./context";
++ export * from "./file-tree-panel";
+++export * from "./file-tree-trigger";
++diff --git a/frontend/src/components/workspace/chats/chat-box.tsx b/frontend/src/components/workspace/chats/chat-box.tsx
++index e7689799..e633405c 100644
++--- a/frontend/src/components/workspace/chats/chat-box.tsx
+++++ b/frontend/src/components/workspace/chats/chat-box.tsx
++@@ -45,20 +45,21 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++   } = useArtifacts();
++ 
++   const [autoSelectFirstArtifact, setAutoSelectFirstArtifact] = useState(true);
++-  // File tree is hidden by default — user opens it on demand via the sidebar toggle
++-  const [fileTreeOpen, setFileTreeOpen] = useState(false);
++   const [prevFileCount, setPrevFileCount] = useState(0);
++ 
++   const files = thread.values.artifacts ?? [];
++   const hasArtifacts = files.length > 0;
++ 
+++  // Use context for file tree state (shared with header trigger button)
+++  const { fileTreeOpen, setFileTreeOpen } = useArtifacts();
+++
++   // Auto-open file tree when new files appear during an active conversation
++   useEffect(() => {
++     if (files.length > prevFileCount && prevFileCount > 0) {
++       setFileTreeOpen(true);
++     }
++     setPrevFileCount(files.length);
++-  }, [files.length, prevFileCount]);
+++  }, [files.length, prevFileCount, setFileTreeOpen]);
++   useEffect(() => {
++     if (threadIdRef.current !== threadId) {
++       threadIdRef.current = threadId;
++@@ -118,7 +119,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++ 
++   return (
++     <div className="flex h-full w-full">
++-      {/* File Tree Panel (left sidebar) — hidden by default, toggle on demand */}
+++      {/* File Tree Panel (left sidebar) */}
++       {fileTreeOpen && (
++         <div className="flex h-full w-64 shrink-0 border-r">
++           <div className="relative flex h-full w-full flex-col">
++@@ -150,17 +151,6 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++           </div>
++         </div>
++       )}
++-      {/* File tree toggle tab (always visible on the left edge) */}
++-      {!fileTreeOpen && (
++-        <div
++-          className="flex h-full w-6 shrink-0 cursor-pointer items-center justify-center border-r bg-muted/20 text-muted-foreground/40 transition-colors hover:bg-accent/30 hover:text-muted-foreground"
++-          onClick={() => setFileTreeOpen(true)}
++-        >
++-          <Tooltip content="Open file tree">
++-            <FolderTree className="size-4" />
++-          </Tooltip>
++-        </div>
++-      )}
++       <div className="flex min-w-0 flex-1">
++         <ResizablePanelGroup
++           id={`${resizableIdBase}-panels`}
++-- 
++2.43.7
++
++
++From b047b603b6a2386293345d7d8eb8ea59a1ebdef3 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Thu, 14 May 2026 10:50:48 +0800
++Subject: [PATCH 09/17] feat: fetch file tree from filesystem API instead of
++ thread artifacts
++
++- New backend endpoint: GET /api/threads/{id}/files/tree
++  Recursively lists all files in thread's user-data directory
++  Returns paths relative to /mnt/user-data/
++- Frontend API module: fetchThreadFiles()
++- ChatBox fetches real filesystem listing on mount/thread change
++- Still falls back to thread.values.artifacts as initial data
++---
++ backend/app/gateway/routers/artifacts.py      | 32 +++++++++++++++++++
++ .../components/workspace/chats/chat-box.tsx   | 13 ++++++--
++ frontend/src/core/artifacts/api.ts            | 29 +++++++++++++++++
++ 3 files changed, 72 insertions(+), 2 deletions(-)
++ create mode 100644 frontend/src/core/artifacts/api.ts
++
++diff --git a/backend/app/gateway/routers/artifacts.py b/backend/app/gateway/routers/artifacts.py
++index 78ea5fa0..7cf8fac9 100644
++--- a/backend/app/gateway/routers/artifacts.py
+++++ b/backend/app/gateway/routers/artifacts.py
++@@ -77,6 +77,38 @@ def _extract_file_from_skill_archive(zip_path: Path, internal_path: str) -> byte
++         return None
++ 
++ 
+++@router.get(
+++    "/threads/{thread_id}/files/tree",
+++    summary="List Thread File Tree",
+++    description="Recursively list all files in the thread's user-data directory. Returns paths relative to /mnt/user-data/.",
+++)
+++@require_permission("threads", "read", owner_check=True)
+++async def list_thread_files(thread_id: str) -> dict:
+++    """List all files in the thread's user-data directory (recursive)."""
+++    from deerflow.config.paths import get_paths
+++    from deerflow.runtime.user_context import get_effective_user_id
+++
+++    try:
+++        user_id = get_effective_user_id()
+++        thread_dir = get_paths().thread_dir(thread_id, user_id=user_id)
+++        user_data_dir = thread_dir / "user-data"
+++    except Exception:
+++        raise HTTPException(status_code=404, detail="Thread directory not found")
+++
+++    if not user_data_dir.exists():
+++        return {"files": []}
+++
+++    files: list[str] = []
+++    for f in sorted(user_data_dir.rglob("*")):
+++        if f.is_file():
+++            # Convert to virtual path
+++            rel = f.relative_to(user_data_dir)
+++            virtual_path = f"mnt/user-data/{rel.as_posix()}"
+++            files.append(virtual_path)
+++
+++    return {"files": files}
+++
+++
++ @router.get(
++     "/threads/{thread_id}/artifacts/{path:path}",
++     summary="Get Artifact File",
++diff --git a/frontend/src/components/workspace/chats/chat-box.tsx b/frontend/src/components/workspace/chats/chat-box.tsx
++index e633405c..f4339ca9 100644
++--- a/frontend/src/components/workspace/chats/chat-box.tsx
+++++ b/frontend/src/components/workspace/chats/chat-box.tsx
++@@ -11,6 +11,7 @@ import {
++   ResizablePanelGroup,
++ } from "@/components/ui/resizable";
++ import { Tooltip } from "@/components/workspace/tooltip";
+++import { fetchThreadFiles } from "@/core/artifacts/api";
++ import { env } from "@/env";
++ import { cn } from "@/lib/utils";
++ 
++@@ -46,9 +47,17 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++ 
++   const [autoSelectFirstArtifact, setAutoSelectFirstArtifact] = useState(true);
++   const [prevFileCount, setPrevFileCount] = useState(0);
+++  const [files, setFiles] = useState<string[]>([]);
++ 
++-  const files = thread.values.artifacts ?? [];
++-  const hasArtifacts = files.length > 0;
+++  // Fetch files from server on mount / thread change
+++  useEffect(() => {
+++    setFiles(thread.values.artifacts ?? []); // start with thread artifacts
+++    fetchThreadFiles(threadId).then((serverFiles) => {
+++      if (serverFiles.length > 0) {
+++        setFiles(serverFiles);
+++      }
+++    });
+++  }, [threadId, thread.values.artifacts]);
++ 
++   // Use context for file tree state (shared with header trigger button)
++   const { fileTreeOpen, setFileTreeOpen } = useArtifacts();
++diff --git a/frontend/src/core/artifacts/api.ts b/frontend/src/core/artifacts/api.ts
++new file mode 100644
++index 00000000..5d84fe87
++--- /dev/null
+++++ b/frontend/src/core/artifacts/api.ts
++@@ -0,0 +1,29 @@
+++/**
+++ * API functions for thread file management.
+++ */
+++
+++const API_BASE = "/api";
+++
+++export interface ThreadFilesResponse {
+++  files: string[];
+++}
+++
+++/**
+++ * Fetch all files in a thread's user-data directory from the server.
+++ * Falls back to an empty list on error.
+++ */
+++export async function fetchThreadFiles(
+++  threadId: string,
+++): Promise<string[]> {
+++  try {
+++    const res = await fetch(
+++      `${API_BASE}/threads/${encodeURIComponent(threadId)}/files/tree`,
+++      { credentials: "include" },
+++    );
+++    if (!res.ok) return [];
+++    const data: ThreadFilesResponse = await res.json();
+++    return data.files ?? [];
+++  } catch {
+++    return [];
+++  }
+++}
++-- 
++2.43.7
++
++
++From 6a885505b0e6ccf2650e888bb636539811e3bbc0 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Thu, 14 May 2026 11:12:37 +0800
++Subject: [PATCH 10/17] refactor: three-column resizable layout for file tree
++
++- File tree, chat, and artifacts are now all in one ResizablePanelGroup
++- File tree panel is collapsible (left side), draggable to resize
++- Artifacts panel is collapsible (right side)
++- Both open/close properly via context state and setLayout
++---
++ backend/app/gateway/routers/artifacts.py      |  11 +-
++ .../components/workspace/chats/chat-box.tsx   | 144 ++++++++++--------
++ 2 files changed, 86 insertions(+), 69 deletions(-)
++
++diff --git a/backend/app/gateway/routers/artifacts.py b/backend/app/gateway/routers/artifacts.py
++index 7cf8fac9..7fe3df0d 100644
++--- a/backend/app/gateway/routers/artifacts.py
+++++ b/backend/app/gateway/routers/artifacts.py
++@@ -92,9 +92,12 @@ async def list_thread_files(thread_id: str) -> dict:
++         user_id = get_effective_user_id()
++         thread_dir = get_paths().thread_dir(thread_id, user_id=user_id)
++         user_data_dir = thread_dir / "user-data"
++-    except Exception:
+++    except Exception as e:
+++        logger.warning(f"[DEBUG] files/tree failed: thread={thread_id}, user={get_effective_user_id()}, error={e}")
++         raise HTTPException(status_code=404, detail="Thread directory not found")
++ 
+++    logger.info(f"[DEBUG] files/tree: thread_id={thread_id}, user_id={user_id}, user_data_dir={user_data_dir}, exists={user_data_dir.exists()}")
+++
++     if not user_data_dir.exists():
++         return {"files": []}
++ 
++@@ -103,7 +106,7 @@ async def list_thread_files(thread_id: str) -> dict:
++         if f.is_file():
++             # Convert to virtual path
++             rel = f.relative_to(user_data_dir)
++-            virtual_path = f"mnt/user-data/{rel.as_posix()}"
+++            virtual_path = f"/mnt/user-data/{rel.as_posix()}"
++             files.append(virtual_path)
++ 
++     return {"files": files}
++@@ -186,9 +189,11 @@ async def get_artifact(thread_id: str, path: str, request: Request, download: bo
++         except UnicodeDecodeError:
++             return Response(content=content, media_type=mime_type or "application/octet-stream", headers=cache_headers)
++ 
+++    from deerflow.runtime.user_context import get_effective_user_id
+++    uid = get_effective_user_id()
++     actual_path = resolve_thread_virtual_path(thread_id, path)
++ 
++-    logger.info(f"Resolving artifact path: thread_id={thread_id}, requested_path={path}, actual_path={actual_path}")
+++    logger.info(f"[DEBUG] Artifact: thread_id={thread_id}, path={path}, user_id={uid}, resolved={actual_path}, exists={actual_path.exists()}")
++ 
++     if not actual_path.exists():
++         raise HTTPException(status_code=404, detail=f"Artifact not found: {path}")
++diff --git a/frontend/src/components/workspace/chats/chat-box.tsx b/frontend/src/components/workspace/chats/chat-box.tsx
++index f4339ca9..daa60762 100644
++--- a/frontend/src/components/workspace/chats/chat-box.tsx
+++++ b/frontend/src/components/workspace/chats/chat-box.tsx
++@@ -126,71 +126,87 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++     }
++   }, [artifactPanelOpen]);
++ 
+++  // Toggle panel sizes when open/close state changes
+++  useEffect(() => {
+++    if (!layoutRef.current) return;
+++    if (fileTreeOpen && artifactPanelOpen) {
+++      layoutRef.current.setLayout({ "file-tree": 20, chat: 50, artifacts: 30 });
+++    } else if (fileTreeOpen) {
+++      layoutRef.current.setLayout({ "file-tree": 20, chat: 80, artifacts: 0 });
+++    } else if (artifactPanelOpen) {
+++      layoutRef.current.setLayout({ "file-tree": 0, chat: 60, artifacts: 40 });
+++    } else {
+++      layoutRef.current.setLayout({ "file-tree": 0, chat: 100, artifacts: 0 });
+++    }
+++  }, [fileTreeOpen, artifactPanelOpen]);
+++
++   return (
++-    <div className="flex h-full w-full">
++-      {/* File Tree Panel (left sidebar) */}
++-      {fileTreeOpen && (
++-        <div className="flex h-full w-64 shrink-0 border-r">
++-          <div className="relative flex h-full w-full flex-col">
++-            <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
++-              <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
++-                <FolderTree className="size-3.5" />
++-                Files
++-                <span className="text-muted-foreground/50">({files.length})</span>
++-              </span>
++-              <Tooltip content="Close file tree">
++-                <Button
++-                  size="icon-sm"
++-                  variant="ghost"
++-                  onClick={() => setFileTreeOpen(false)}
++-                >
++-                  <XIcon className="size-3.5" />
++-                </Button>
++-              </Tooltip>
++-            </div>
++-            <FileTreePanel
++-              files={files}
++-              selectedFile={selectedArtifact}
++-              onSelect={(filepath) => {
++-                selectArtifact(filepath);
++-                setArtifactsOpen(true);
++-              }}
++-              className="min-h-0 flex-1"
++-            />
+++    <ResizablePanelGroup
+++      id={`${resizableIdBase}-panels`}
+++      orientation="horizontal"
+++      defaultLayout={{ "file-tree": 0, chat: 100, artifacts: 0 }}
+++      groupRef={layoutRef}
+++      className="h-full w-full"
+++    >
+++      {/* File Tree Panel (left, collapsible) */}
+++      <ResizablePanel
+++        id="file-tree"
+++        defaultSize={20}
+++        minSize={15}
+++        maxSize={40}
+++        collapsible
+++        collapsedSize={0}
+++        className={cn(fileTreeOpen ? "border-r" : "")}
+++      >
+++        <div className="flex h-full w-full flex-col">
+++          <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
+++            <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+++              <FolderTree className="size-3.5" />
+++              Files
+++              <span className="text-muted-foreground/50">({files.length})</span>
+++            </span>
+++            <Tooltip content="Close file tree">
+++              <Button
+++                size="icon-sm"
+++                variant="ghost"
+++                onClick={() => setFileTreeOpen(false)}
+++              >
+++                <XIcon className="size-3.5" />
+++              </Button>
+++            </Tooltip>
++           </div>
+++          <FileTreePanel
+++            files={files}
+++            selectedFile={selectedArtifact}
+++            onSelect={(filepath) => {
+++              selectArtifact(filepath);
+++              setArtifactsOpen(true);
+++            }}
+++            className="min-h-0 flex-1"
+++          />
++         </div>
++-      )}
++-      <div className="flex min-w-0 flex-1">
++-        <ResizablePanelGroup
++-          id={`${resizableIdBase}-panels`}
++-          orientation="horizontal"
++-          defaultLayout={{ chat: 100, artifacts: 0 }}
++-          groupRef={layoutRef}
++-        >
++-          {/* Chat Panel */}
++-          <ResizablePanel className="relative" defaultSize={100} id="chat">
++-            {children}
++-          </ResizablePanel>
++-      <ResizableHandle
++-        id={`${resizableIdBase}-separator`}
++-        className={cn(
++-          "opacity-33 hover:opacity-100",
++-          !artifactPanelOpen && "pointer-events-none opacity-0",
++-        )}
++-      />
+++      </ResizablePanel>
+++
+++      <ResizableHandle />
+++
+++      {/* Chat Panel (center) */}
+++      <ResizablePanel id="chat">
+++        {children}
+++      </ResizablePanel>
+++
+++      <ResizableHandle className={cn(!artifactPanelOpen && "opacity-0 pointer-events-none")} />
+++
+++      {/* Artifacts Panel (right, collapsible) */}
++       <ResizablePanel
++-        className={cn(
++-          "transition-all duration-300 ease-in-out",
++-          !artifactsOpen && "opacity-0",
++-        )}
++         id="artifacts"
+++        defaultSize={0}
+++        minSize={20}
+++        maxSize={50}
+++        collapsible
+++        collapsedSize={0}
+++        className={cn(!artifactsOpen && "opacity-0")}
++       >
++-        <div
++-          className={cn(
++-            "h-full p-4 transition-transform duration-300 ease-in-out",
++-            artifactPanelOpen ? "translate-x-0" : "translate-x-full",
++-          )}
++-        >
+++        <div className="h-full p-4">
++           {selectedArtifact ? (
++             <ArtifactFileDetail
++               className="size-full"
++@@ -203,9 +219,7 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++                 <Button
++                   size="icon-sm"
++                   variant="ghost"
++-                  onClick={() => {
++-                    setArtifactsOpen(false);
++-                  }}
+++                  onClick={() => setArtifactsOpen(false)}
++                 >
++                   <XIcon />
++                 </Button>
++@@ -233,10 +247,8 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++             </div>
++           )}
++         </div>
++-        </ResizablePanel>
++-      </ResizablePanelGroup>
++-      </div>
++-    </div>
+++      </ResizablePanel>
+++    </ResizablePanelGroup>
++   );
++ };
++ 
++-- 
++2.43.7
++
++
++From 961e226ccd6c838335b6a71aec146b5ce03b2b65 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Thu, 14 May 2026 11:20:23 +0800
++Subject: [PATCH 11/17] fix: panel layout crash - each panel must have >0% size
++
++- Removed collapsible/collapsedSize props (unsupported with setLayout)
++- Collapsed panels get 3% (hidden with opacity-0) instead of 0%
++- All three panels always have valid percentage sizes > 0%
++- Resolved Uncaught Error: Invalid 3 panel layout
++---
++ .../components/workspace/chats/chat-box.tsx   | 128 ++++++++----------
++ 1 file changed, 55 insertions(+), 73 deletions(-)
++
++diff --git a/frontend/src/components/workspace/chats/chat-box.tsx b/frontend/src/components/workspace/chats/chat-box.tsx
++index daa60762..858b083f 100644
++--- a/frontend/src/components/workspace/chats/chat-box.tsx
+++++ b/frontend/src/components/workspace/chats/chat-box.tsx
++@@ -116,49 +116,32 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++     return pathname.replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "");
++   }, [pathname]);
++ 
++-  useEffect(() => {
++-    if (layoutRef.current) {
++-      if (artifactPanelOpen) {
++-        layoutRef.current.setLayout(OPEN_MODE);
++-      } else {
++-        layoutRef.current.setLayout(CLOSE_MODE);
++-      }
++-    }
++-  }, [artifactPanelOpen]);
++-
++-  // Toggle panel sizes when open/close state changes
+++  // Control panel sizes via setLayout — every panel must have > 0% to avoid crash
++   useEffect(() => {
++     if (!layoutRef.current) return;
++-    if (fileTreeOpen && artifactPanelOpen) {
++-      layoutRef.current.setLayout({ "file-tree": 20, chat: 50, artifacts: 30 });
++-    } else if (fileTreeOpen) {
++-      layoutRef.current.setLayout({ "file-tree": 20, chat: 80, artifacts: 0 });
++-    } else if (artifactPanelOpen) {
++-      layoutRef.current.setLayout({ "file-tree": 0, chat: 60, artifacts: 40 });
++-    } else {
++-      layoutRef.current.setLayout({ "file-tree": 0, chat: 100, artifacts: 0 });
++-    }
+++    const ft = fileTreeOpen ? 20 : 3;  // 3% "hidden" size when collapsed
+++    const art = artifactPanelOpen ? 35 : 3;
+++    const chat = 100 - ft - art;
+++    layoutRef.current.setLayout({ "file-tree": ft, chat, artifacts: art });
++   }, [fileTreeOpen, artifactPanelOpen]);
++ 
++   return (
++     <ResizablePanelGroup
++       id={`${resizableIdBase}-panels`}
++       orientation="horizontal"
++-      defaultLayout={{ "file-tree": 0, chat: 100, artifacts: 0 }}
+++      defaultLayout={{ "file-tree": 3, chat: 94, artifacts: 3 }}
++       groupRef={layoutRef}
++       className="h-full w-full"
++     >
++-      {/* File Tree Panel (left, collapsible) */}
+++      {/* File Tree Panel (left) */}
++       <ResizablePanel
++         id="file-tree"
++         defaultSize={20}
++-        minSize={15}
+++        minSize={3}
++         maxSize={40}
++-        collapsible
++-        collapsedSize={0}
++         className={cn(fileTreeOpen ? "border-r" : "")}
++       >
++-        <div className="flex h-full w-full flex-col">
+++        <div className={cn("flex h-full w-full flex-col", !fileTreeOpen && "overflow-hidden opacity-0")}>
++           <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
++             <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
++               <FolderTree className="size-3.5" />
++@@ -187,65 +170,64 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++         </div>
++       </ResizablePanel>
++ 
++-      <ResizableHandle />
+++      <ResizableHandle className={cn(!fileTreeOpen && "opacity-0 pointer-events-none")} />
++ 
++       {/* Chat Panel (center) */}
++-      <ResizablePanel id="chat">
+++      <ResizablePanel id="chat" minSize={30}>
++         {children}
++       </ResizablePanel>
++ 
++       <ResizableHandle className={cn(!artifactPanelOpen && "opacity-0 pointer-events-none")} />
++ 
++-      {/* Artifacts Panel (right, collapsible) */}
+++      {/* Artifacts Panel (right) */}
++       <ResizablePanel
++         id="artifacts"
++-        defaultSize={0}
++-        minSize={20}
+++        defaultSize={35}
+++        minSize={3}
++         maxSize={50}
++-        collapsible
++-        collapsedSize={0}
++-        className={cn(!artifactsOpen && "opacity-0")}
++       >
++-        <div className="h-full p-4">
++-          {selectedArtifact ? (
++-            <ArtifactFileDetail
++-              className="size-full"
++-              filepath={selectedArtifact}
++-              threadId={threadId}
++-            />
++-          ) : (
++-            <div className="relative flex size-full justify-center">
++-              <div className="absolute top-1 right-1 z-30">
++-                <Button
++-                  size="icon-sm"
++-                  variant="ghost"
++-                  onClick={() => setArtifactsOpen(false)}
++-                >
++-                  <XIcon />
++-                </Button>
++-              </div>
++-              {thread.values.artifacts?.length === 0 ? (
++-                <ConversationEmptyState
++-                  icon={<FilesIcon />}
++-                  title="No artifact selected"
++-                  description="Select an artifact to view its details"
++-                />
++-              ) : (
++-                <div className="flex size-full max-w-(--container-width-sm) flex-col justify-center p-4 pt-8">
++-                  <header className="shrink-0">
++-                    <h2 className="text-lg font-medium">Artifacts</h2>
++-                  </header>
++-                  <main className="min-h-0 grow">
++-                    <ArtifactFileList
++-                      className="max-w-(--container-width-sm) p-4 pt-12"
++-                      files={thread.values.artifacts ?? []}
++-                      threadId={threadId}
++-                    />
++-                  </main>
+++        <div className={cn("h-full", !artifactPanelOpen && "overflow-hidden opacity-0")}>
+++          <div className="h-full p-4">
+++            {selectedArtifact ? (
+++              <ArtifactFileDetail
+++                className="size-full"
+++                filepath={selectedArtifact}
+++                threadId={threadId}
+++              />
+++            ) : (
+++              <div className="relative flex size-full justify-center">
+++                <div className="absolute top-1 right-1 z-30">
+++                  <Button
+++                    size="icon-sm"
+++                    variant="ghost"
+++                    onClick={() => setArtifactsOpen(false)}
+++                  >
+++                    <XIcon />
+++                  </Button>
++                 </div>
++-              )}
++-            </div>
++-          )}
+++                {thread.values.artifacts?.length === 0 ? (
+++                  <ConversationEmptyState
+++                    icon={<FilesIcon />}
+++                    title="No artifact selected"
+++                    description="Select an artifact to view its details"
+++                  />
+++                ) : (
+++                  <div className="flex size-full max-w-(--container-width-sm) flex-col justify-center p-4 pt-8">
+++                    <header className="shrink-0">
+++                      <h2 className="text-lg font-medium">Artifacts</h2>
+++                    </header>
+++                    <main className="min-h-0 grow">
+++                      <ArtifactFileList
+++                        className="max-w-(--container-width-sm) p-4 pt-12"
+++                        files={thread.values.artifacts ?? []}
+++                        threadId={threadId}
+++                      />
+++                    </main>
+++                  </div>
+++                )}
+++              </div>
+++            )}
+++          </div>
++         </div>
++       </ResizablePanel>
++     </ResizablePanelGroup>
++-- 
++2.43.7
++
++
++From 8dbcb7bf6839421e6ef784166714780b6602cc2c Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Thu, 14 May 2026 11:23:12 +0800
++Subject: [PATCH 12/17] fix: enable all resize handles for proper 3-panel
++ dragging
++
++- Remove pointer-events-none from handles (was blocking space propagation)
++- Chat minSize reduced from 30 to 25 for more flexible layout
++- All three handles always interactive when their adjacent panel is open
++---
++ frontend/src/components/workspace/chats/chat-box.tsx | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/frontend/src/components/workspace/chats/chat-box.tsx b/frontend/src/components/workspace/chats/chat-box.tsx
++index 858b083f..d17f5290 100644
++--- a/frontend/src/components/workspace/chats/chat-box.tsx
+++++ b/frontend/src/components/workspace/chats/chat-box.tsx
++@@ -170,14 +170,14 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++         </div>
++       </ResizablePanel>
++ 
++-      <ResizableHandle className={cn(!fileTreeOpen && "opacity-0 pointer-events-none")} />
+++      <ResizableHandle className={cn(!fileTreeOpen && "opacity-0")} />
++ 
++       {/* Chat Panel (center) */}
++-      <ResizablePanel id="chat" minSize={30}>
+++      <ResizablePanel id="chat" minSize={25}>
++         {children}
++       </ResizablePanel>
++ 
++-      <ResizableHandle className={cn(!artifactPanelOpen && "opacity-0 pointer-events-none")} />
+++      <ResizableHandle className={cn(!artifactPanelOpen && "opacity-0")} />
++ 
++       {/* Artifacts Panel (right) */}
++       <ResizablePanel
++-- 
++2.43.7
++
++
++From bb3683de80b80cc8ef13a01533c6c902fb66f8af Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Thu, 14 May 2026 11:28:25 +0800
++Subject: [PATCH 13/17] refactor: file tree as independent sidebar, restore
++ original 2-panel layout
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++- File tree is now a fixed sidebar OUTSIDE the ResizablePanelGroup
++- Original Chat ↔ Artifacts 2-panel layout is fully restored (drag works)
++- File tree width is resizable via custom drag handle (200-500px range)
++- No interference between file tree and chat/artifacts resizing
++---
++ .../components/workspace/chats/chat-box.tsx   | 282 ++++++++++--------
++ 1 file changed, 160 insertions(+), 122 deletions(-)
++
++diff --git a/frontend/src/components/workspace/chats/chat-box.tsx b/frontend/src/components/workspace/chats/chat-box.tsx
++index d17f5290..52611770 100644
++--- a/frontend/src/components/workspace/chats/chat-box.tsx
+++++ b/frontend/src/components/workspace/chats/chat-box.tsx
++@@ -1,6 +1,6 @@
++-import { FilesIcon, FolderTree, XIcon } from "lucide-react";
+++import { FilesIcon, FolderTree, GripVerticalIcon, XIcon } from "lucide-react";
++ import { usePathname } from "next/navigation";
++-import { useEffect, useMemo, useRef, useState } from "react";
+++import { useCallback, useEffect, useMemo, useRef, useState } from "react";
++ import type { GroupImperativeHandle } from "react-resizable-panels";
++ 
++ import { ConversationEmptyState } from "@/components/ai-elements/conversation";
++@@ -25,6 +25,9 @@ import { useThread } from "../messages/context";
++ 
++ const CLOSE_MODE = { chat: 100, artifacts: 0 };
++ const OPEN_MODE = { chat: 60, artifacts: 40 };
+++const FILE_TREE_MIN_WIDTH = 200;
+++const FILE_TREE_MAX_WIDTH = 500;
+++const FILE_TREE_DEFAULT_WIDTH = 260;
++ 
++ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++   children,
++@@ -34,6 +37,8 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++   const pathname = usePathname();
++   const threadIdRef = useRef(threadId);
++   const layoutRef = useRef<GroupImperativeHandle>(null);
+++  const fileTreeRef = useRef<HTMLDivElement>(null);
+++  const dragRef = useRef(false);
++ 
++   const {
++     artifacts,
++@@ -48,10 +53,11 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++   const [autoSelectFirstArtifact, setAutoSelectFirstArtifact] = useState(true);
++   const [prevFileCount, setPrevFileCount] = useState(0);
++   const [files, setFiles] = useState<string[]>([]);
+++  const [fileTreeWidth, setFileTreeWidth] = useState(FILE_TREE_DEFAULT_WIDTH);
++ 
++   // Fetch files from server on mount / thread change
++   useEffect(() => {
++-    setFiles(thread.values.artifacts ?? []); // start with thread artifacts
+++    setFiles(thread.values.artifacts ?? []);
++     fetchThreadFiles(threadId).then((serverFiles) => {
++       if (serverFiles.length > 0) {
++         setFiles(serverFiles);
++@@ -59,7 +65,6 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++     });
++   }, [threadId, thread.values.artifacts]);
++ 
++-  // Use context for file tree state (shared with header trigger button)
++   const { fileTreeOpen, setFileTreeOpen } = useArtifacts();
++ 
++   // Auto-open file tree when new files appear during an active conversation
++@@ -75,17 +80,8 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++       deselect();
++     }
++ 
++-    // Update artifacts from the current thread
++     setArtifacts(thread.values.artifacts);
++ 
++-    // DO NOT automatically deselect the artifact when switching threads, because the artifacts auto discovering is not work now.
++-    // if (
++-    //   selectedArtifact &&
++-    //   !thread.values.artifacts?.includes(selectedArtifact)
++-    // ) {
++-    //   deselect();
++-    // }
++-
++     if (
++       env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true" &&
++       autoSelectFirstArtifact
++@@ -116,121 +112,163 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
++     return pathname.replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "");
++   }, [pathname]);
++ 
++-  // Control panel sizes via setLayout — every panel must have > 0% to avoid crash
++   useEffect(() => {
++-    if (!layoutRef.current) return;
++-    const ft = fileTreeOpen ? 20 : 3;  // 3% "hidden" size when collapsed
++-    const art = artifactPanelOpen ? 35 : 3;
++-    const chat = 100 - ft - art;
++-    layoutRef.current.setLayout({ "file-tree": ft, chat, artifacts: art });
++-  }, [fileTreeOpen, artifactPanelOpen]);
+++    if (layoutRef.current) {
+++      if (artifactPanelOpen) {
+++        layoutRef.current.setLayout(OPEN_MODE);
+++      } else {
+++        layoutRef.current.setLayout(CLOSE_MODE);
+++      }
+++    }
+++  }, [artifactPanelOpen]);
+++
+++  // File tree drag-to-resize handler
+++  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+++    e.preventDefault();
+++    dragRef.current = true;
+++    const startX = e.clientX;
+++    const startWidth = fileTreeRef.current?.offsetWidth ?? FILE_TREE_DEFAULT_WIDTH;
+++
+++    const onMove = (ev: MouseEvent) => {
+++      if (!dragRef.current) return;
+++      const newWidth = Math.max(FILE_TREE_MIN_WIDTH, Math.min(FILE_TREE_MAX_WIDTH, startWidth + (ev.clientX - startX)));
+++      setFileTreeWidth(newWidth);
+++    };
+++
+++    const onUp = () => {
+++      dragRef.current = false;
+++      document.removeEventListener("mousemove", onMove);
+++      document.removeEventListener("mouseup", onUp);
+++      document.body.style.cursor = "";
+++      document.body.style.userSelect = "";
+++    };
+++
+++    document.body.style.cursor = "col-resize";
+++    document.body.style.userSelect = "none";
+++    document.addEventListener("mousemove", onMove);
+++    document.addEventListener("mouseup", onUp);
+++  }, []);
++ 
++   return (
++-    <ResizablePanelGroup
++-      id={`${resizableIdBase}-panels`}
++-      orientation="horizontal"
++-      defaultLayout={{ "file-tree": 3, chat: 94, artifacts: 3 }}
++-      groupRef={layoutRef}
++-      className="h-full w-full"
++-    >
++-      {/* File Tree Panel (left) */}
++-      <ResizablePanel
++-        id="file-tree"
++-        defaultSize={20}
++-        minSize={3}
++-        maxSize={40}
++-        className={cn(fileTreeOpen ? "border-r" : "")}
++-      >
++-        <div className={cn("flex h-full w-full flex-col", !fileTreeOpen && "overflow-hidden opacity-0")}>
++-          <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
++-            <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
++-              <FolderTree className="size-3.5" />
++-              Files
++-              <span className="text-muted-foreground/50">({files.length})</span>
++-            </span>
++-            <Tooltip content="Close file tree">
++-              <Button
++-                size="icon-sm"
++-                variant="ghost"
++-                onClick={() => setFileTreeOpen(false)}
++-              >
++-                <XIcon className="size-3.5" />
++-              </Button>
++-            </Tooltip>
+++    <div className="flex h-full w-full">
+++      {/* File Tree Panel (fixed sidebar, outside ResizablePanelGroup) */}
+++      {fileTreeOpen && (
+++        <div
+++          ref={fileTreeRef}
+++          className="flex h-full shrink-0 border-r"
+++          style={{ width: fileTreeWidth }}
+++        >
+++          <div className="relative flex h-full w-full flex-col">
+++            <div className="flex shrink-0 items-center justify-between border-b px-3 py-1.5">
+++              <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+++                <FolderTree className="size-3.5" />
+++                Files
+++                <span className="text-muted-foreground/50">({files.length})</span>
+++              </span>
+++              <Tooltip content="Close file tree">
+++                <Button
+++                  size="icon-sm"
+++                  variant="ghost"
+++                  onClick={() => setFileTreeOpen(false)}
+++                >
+++                  <XIcon className="size-3.5" />
+++                </Button>
+++              </Tooltip>
+++            </div>
+++            <FileTreePanel
+++              files={files}
+++              selectedFile={selectedArtifact}
+++              onSelect={(filepath) => {
+++                selectArtifact(filepath);
+++                setArtifactsOpen(true);
+++              }}
+++              className="min-h-0 flex-1"
+++            />
++           </div>
++-          <FileTreePanel
++-            files={files}
++-            selectedFile={selectedArtifact}
++-            onSelect={(filepath) => {
++-              selectArtifact(filepath);
++-              setArtifactsOpen(true);
++-            }}
++-            className="min-h-0 flex-1"
++-          />
++-        </div>
++-      </ResizablePanel>
++-
++-      <ResizableHandle className={cn(!fileTreeOpen && "opacity-0")} />
++-
++-      {/* Chat Panel (center) */}
++-      <ResizablePanel id="chat" minSize={25}>
++-        {children}
++-      </ResizablePanel>
++-
++-      <ResizableHandle className={cn(!artifactPanelOpen && "opacity-0")} />
++-
++-      {/* Artifacts Panel (right) */}
++-      <ResizablePanel
++-        id="artifacts"
++-        defaultSize={35}
++-        minSize={3}
++-        maxSize={50}
++-      >
++-        <div className={cn("h-full", !artifactPanelOpen && "overflow-hidden opacity-0")}>
++-          <div className="h-full p-4">
++-            {selectedArtifact ? (
++-              <ArtifactFileDetail
++-                className="size-full"
++-                filepath={selectedArtifact}
++-                threadId={threadId}
++-              />
++-            ) : (
++-              <div className="relative flex size-full justify-center">
++-                <div className="absolute top-1 right-1 z-30">
++-                  <Button
++-                    size="icon-sm"
++-                    variant="ghost"
++-                    onClick={() => setArtifactsOpen(false)}
++-                  >
++-                    <XIcon />
++-                  </Button>
++-                </div>
++-                {thread.values.artifacts?.length === 0 ? (
++-                  <ConversationEmptyState
++-                    icon={<FilesIcon />}
++-                    title="No artifact selected"
++-                    description="Select an artifact to view its details"
++-                  />
++-                ) : (
++-                  <div className="flex size-full max-w-(--container-width-sm) flex-col justify-center p-4 pt-8">
++-                    <header className="shrink-0">
++-                      <h2 className="text-lg font-medium">Artifacts</h2>
++-                    </header>
++-                    <main className="min-h-0 grow">
++-                      <ArtifactFileList
++-                        className="max-w-(--container-width-sm) p-4 pt-12"
++-                        files={thread.values.artifacts ?? []}
++-                        threadId={threadId}
++-                      />
++-                    </main>
++-                  </div>
++-                )}
++-              </div>
++-            )}
+++          {/* Drag handle for resizing file tree width */}
+++          <div
+++            className="flex w-2 shrink-0 cursor-col-resize items-center justify-center bg-transparent transition-colors hover:bg-accent/50 active:bg-accent"
+++            onMouseDown={handleMouseDown}
+++          >
+++            <GripVerticalIcon className="size-3 text-muted-foreground/40" />
++           </div>
++         </div>
++-      </ResizablePanel>
++-    </ResizablePanelGroup>
+++      )}
+++      {/* Original 2-panel ResizablePanelGroup (unchanged) */}
+++      <div className="flex min-w-0 flex-1">
+++        <ResizablePanelGroup
+++          id={`${resizableIdBase}-panels`}
+++          orientation="horizontal"
+++          defaultLayout={{ chat: 100, artifacts: 0 }}
+++          groupRef={layoutRef}
+++        >
+++          <ResizablePanel className="relative" defaultSize={100} id="chat">
+++            {children}
+++          </ResizablePanel>
+++          <ResizableHandle
+++            id={`${resizableIdBase}-separator`}
+++            className={cn(
+++              "opacity-33 hover:opacity-100",
+++              !artifactPanelOpen && "pointer-events-none opacity-0",
+++            )}
+++          />
+++          <ResizablePanel
+++            className={cn(
+++              "transition-all duration-300 ease-in-out",
+++              !artifactsOpen && "opacity-0",
+++            )}
+++            id="artifacts"
+++          >
+++            <div
+++              className={cn(
+++                "h-full p-4 transition-transform duration-300 ease-in-out",
+++                artifactPanelOpen ? "translate-x-0" : "translate-x-full",
+++              )}
+++            >
+++              {selectedArtifact ? (
+++                <ArtifactFileDetail
+++                  className="size-full"
+++                  filepath={selectedArtifact}
+++                  threadId={threadId}
+++                />
+++              ) : (
+++                <div className="relative flex size-full justify-center">
+++                  <div className="absolute top-1 right-1 z-30">
+++                    <Button
+++                      size="icon-sm"
+++                      variant="ghost"
+++                      onClick={() => setArtifactsOpen(false)}
+++                    >
+++                      <XIcon />
+++                    </Button>
+++                  </div>
+++                  {thread.values.artifacts?.length === 0 ? (
+++                    <ConversationEmptyState
+++                      icon={<FilesIcon />}
+++                      title="No artifact selected"
+++                      description="Select an artifact to view its details"
+++                    />
+++                  ) : (
+++                    <div className="flex size-full max-w-(--container-width-sm) flex-col justify-center p-4 pt-8">
+++                      <header className="shrink-0">
+++                        <h2 className="text-lg font-medium">Artifacts</h2>
+++                      </header>
+++                      <main className="min-h-0 grow">
+++                        <ArtifactFileList
+++                          className="max-w-(--container-width-sm) p-4 pt-12"
+++                          files={thread.values.artifacts ?? []}
+++                          threadId={threadId}
+++                        />
+++                      </main>
+++                    </div>
+++                  )}
+++                </div>
+++              )}
+++            </div>
+++          </ResizablePanel>
+++        </ResizablePanelGroup>
+++      </div>
+++    </div>
++   );
++ };
++ 
++-- 
++2.43.7
++
++
++From ac1f5254ba950ede2b2d773ff00051400178ab11 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Thu, 14 May 2026 11:50:51 +0800
++Subject: [PATCH 14/17] docs: add built-in skills documentation page
++
++- Create MDX pages for 21 built-in skills (zh + en)
++- Add navigation entries in reference _meta.ts
++- Skills categorized: Academic, Data, Business, Dev, Creative, System
++- Explain auto-trigger vs manual invocation
++- Accessible at /zh|en/docs/reference/builtin-skills
++---
++ docs/DEERFLOW_BUILTIN_SKILLS.md               | 607 ++++++++++++++++++
++ frontend/src/content/en/reference/_meta.ts    |   3 +
++ .../en/reference/builtin-skills/_meta.ts      |   9 +
++ .../en/reference/builtin-skills/index.mdx     | 304 +++++++++
++ frontend/src/content/zh/reference/_meta.ts    |   3 +
++ .../zh/reference/builtin-skills/_meta.ts      |   9 +
++ .../zh/reference/builtin-skills/index.mdx     | 588 +++++++++++++++++
++ 7 files changed, 1523 insertions(+)
++ create mode 100644 docs/DEERFLOW_BUILTIN_SKILLS.md
++ create mode 100644 frontend/src/content/en/reference/builtin-skills/_meta.ts
++ create mode 100644 frontend/src/content/en/reference/builtin-skills/index.mdx
++ create mode 100644 frontend/src/content/zh/reference/builtin-skills/_meta.ts
++ create mode 100644 frontend/src/content/zh/reference/builtin-skills/index.mdx
++
++diff --git a/docs/DEERFLOW_BUILTIN_SKILLS.md b/docs/DEERFLOW_BUILTIN_SKILLS.md
++new file mode 100644
++index 00000000..69fcae53
++--- /dev/null
+++++ b/docs/DEERFLOW_BUILTIN_SKILLS.md
++@@ -0,0 +1,607 @@
+++# 🦌 DeerFlow 内置技能完整指南
+++
+++> 本文档详细介绍了 DeerFlow 的所有内置技能（Skills），包括功能说明、使用场景、触发方式和实用技巧。
+++> 内置技能位于 `skills/public/` 目录，每个技能是一个独立的 `.skill` 包，可通过 Agent 自动加载或手动安装。
+++
+++---
+++
+++## 目录
+++
+++1. [学术论文评审 (academic-paper-review)](#1-学术论文评审-academic-paper-review)
+++2. [引导与初始化 (bootstrap)](#2-引导与初始化-bootstrap)
+++3. [图表可视化 (chart-visualization)](#3-图表可视化-chart-visualization)
+++4. [Claude ↔ DeerFlow 互操作 (claude-to-deerflow)](#4-claude--deerflow-互操作-claude-to-deerflow)
+++5. [代码文档生成 (code-documentation)](#5-代码文档生成-code-documentation)
+++6. [咨询分析报告 (consulting-analysis)](#6-咨询分析报告-consulting-analysis)
+++7. [数据分析 (data-analysis)](#7-数据分析-data-analysis)
+++8. [深度研究 (deep-research)](#8-深度研究-deep-research)
+++9. [技能发现 (find-skills)](#9-技能发现-find-skills)
+++10. [前端界面设计 (frontend-design)](#10-前端界面设计-frontend-design)
+++11. [GitHub 深度研究 (github-deep-research)](#11-github-深度研究-github-deep-research)
+++12. [图片生成 (image-generation)](#12-图片生成-image-generation)
+++13. [新闻通讯生成 (newsletter-generation)](#13-新闻通讯生成-newsletter-generation)
+++14. [播客生成 (podcast-generation)](#14-播客生成-podcast-generation)
+++15. [PPT 生成 (ppt-generation)](#15-ppt-生成-ppt-generation)
+++16. [技能创建器 (skill-creator)](#16-技能创建器-skill-creator)
+++17. [惊喜展示 (surprise-me)](#17-惊喜展示-surprise-me)
+++18. [系统性文献综述 (systematic-literature-review)](#18-系统性文献综述-systematic-literature-review)
+++19. [Vercel 部署 (vercel-deploy-claimable)](#19-vercel-部署-vercel-deploy-claimable)
+++20. [视频生成 (video-generation)](#20-视频生成-video-generation)
+++21. [Web 设计规范检查 (web-design-guidelines)](#21-web-设计规范检查-web-design-guidelines)
+++
+++---
+++
+++## 1. 学术论文评审 (academic-paper-review)
+++
+++### 功能描述
+++对学术论文、研究文章、预印本进行结构化、同行评议级别的分析评审。遵循 NeurIPS、ICML、ACL、Nature、IEEE 等顶级期刊/会议的评审标准。
+++
+++### 适用场景
+++- 审阅论文：提供 URL（arXiv、DOI）、上传 PDF
+++- 请求 "review this paper"、"analyze this research"、"write a peer review"
+++- 需要方法论评估、贡献评价、文献定位分析
+++
+++### 核心能力
+++| 能力 | 说明 |
+++|------|------|
+++| **结构化评审** | 摘要、优势、劣势、方法论评估、贡献评价 |
+++| **文献定位** | 通过定向文献搜索将论文定位到更广泛的研究图景中 |
+++| **方法论评估** | 实验设计、统计有效性、可复现性评估 |
+++| **多格式输出** | 详细评审 + 简洁执行摘要两种格式 |
+++| **跨学科支持** | 计算机科学、生物学、物理学、社会科学等 |
+++
+++### 使用技巧 💡
+++- 提供 PDF URL 比上传文件效果更好（Agent 可以直接分析）
+++- 可以要求 "评审这篇论文，重点看方法论" 缩小评估范围
+++- 也可以要求对比多篇论文："帮我比较这两篇论文的贡献"
+++
+++---
+++
+++## 2. 引导与初始化 (bootstrap)
+++
+++### 功能描述
+++帮助新用户快速了解 DeerFlow 的能力边界，并在用户的 SOUL.md 文件中记录个性化的助手配置偏好。相当于 DeerFlow 的"新手引导"技能。
+++
+++### 适用场景
+++- 首次使用 DeerFlow 时引导对话
+++- 用户想设置助手偏好：语言、风格、专业领域
+++- 需要了解 DeerFlow 能做什么
+++
+++### 核心能力
+++- 引导用户完成初始配置
+++- 在 SOUL 文件中记录用户偏好（语言、响应风格、专业领域等）
+++- 展示 DeerFlow 的能力目录
+++
+++### 使用技巧 💡
+++- 首次使用时会询问一系列配置问题，完成后会自动存入 SOUL.md
+++- 可以随时要求 "重新引导我" 来修改初始配置
+++
+++---
+++
+++## 3. 图表可视化 (chart-visualization)
+++
+++### 功能描述
+++将数据智能地转换为可视化图表。从 26 种图表类型中自动选择最合适的一种，生成 JavaScript 渲染的图表图片。
+++
+++### 适用场景
+++- "可视化这些数据"、"画个图表"、"展示数据趋势"
+++- 需要柱状图、折线图、饼图、散点图等
+++- 数据分析和展示
+++
+++### 支持的图表类型（26 种）
+++| 图表类型 | 说明 |
+++|---------|------|
+++| 柱状图 (Bar) | 分类数据对比 |
+++| 折线图 (Line) | 趋势展示 |
+++| 饼图 (Pie/Doughnut) | 占比展示 |
+++| 散点图 (Scatter) | 相关性分析 |
+++| 面积图 (Area) | 累积趋势 |
+++| 箱线图 (Boxplot) | 数据分布 |
+++| 雷达图 (Radar) | 多维度对比 |
+++| 热力图 (Heatmap) | 矩阵数据 |
+++| 漏斗图 (Funnel) | 转化率分析 |
+++| 桑基图 (Sankey) | 流量/路径分析 |
+++| 鱼骨图 (Fishbone) | 因果分析 |
+++| 流程图 (Flow) | 流程展示 |
+++| 地图 (Map) | 地理数据 |
+++| 旭日图 (Sunburst) | 层级占比 |
+++| 树图 (Treemap) | 嵌套占比 |
+++| 词云 (Wordcloud) | 文本频率 |
+++| ... 及更多 | |
+++
+++### 使用技巧 💡
+++- 提供结构化数据（CSV、JSON、表格）而不是描述性文字，图表会更精确
+++- 可以指定图表类型："画一个柱状图对比各季度销售额"
+++- 图表会自动渲染为图片，可直接在对话中查看
+++
+++---
+++
+++## 4. Claude ↔ DeerFlow 互操作 (claude-to-deerflow)
+++
+++### 功能描述
+++通过 HTTP API 与 DeerFlow AI Agent 平台交互。允许 Claude 或其他 Agent 调用 DeerFlow 进行深度研究、分析，并将结果带回当前对话。
+++
+++### 适用场景
+++- 当前对话中需要 DeerFlow 的深度研究能力
+++- 想向 DeerFlow 发送消息/问题进行研究分析
+++- 启动 DeerFlow 对话线程
+++- 检查 DeerFlow 状态/健康
+++- 列出 DeerFlow 中可用的模型/技能/智能体
+++- 管理 DeerFlow 记忆
+++- 上传文件到 DeerFlow 线程
+++- 将复杂的研究任务委托给 DeerFlow
+++
+++### 核心能力
+++- 创建和管理 DeerFlow 对话线程
+++- 发送消息并获取回复
+++- 查询模型、技能、智能体列表
+++- 管理记忆系统
+++- 文件上传
+++
+++### 使用技巧 💡
+++- 这是 Claude Code 与 DeerFlow 之间的桥梁，适合在复杂任务中分工协作
+++- Claude 负责编码和逻辑推理，DeerFlow 负责深度研究和信息检索
+++
+++---
+++
+++## 5. 代码文档生成 (code-documentation)
+++
+++### 功能描述
+++为代码、API、库、仓库或软件项目生成/创建/改进文档。遵循行业标准的文档最佳实践。
+++
+++### 适用场景
+++- "document this code"、"create a README"、"generate API docs"
+++- "write developer guide"、"add comments to this code"
+++- 分析代码库以生成文档
+++
+++### 核心能力
+++| 文档类型 | 说明 |
+++|---------|------|
+++| **README 生成** | 项目简介、安装、使用、贡献指南 |
+++| **API 参考文档** | 端点、参数、返回值、示例 |
+++| **行内代码注释** | 函数/类/模块的 JSDoc、Docstring |
+++| **架构文档** | 系统架构图、模块依赖、数据流 |
+++| **变更日志** | CHANGELOG 生成 |
+++| **开发者指南** | 搭建、配置、测试、部署指南 |
+++
+++### 使用技巧 💡
+++- 上传整个代码仓库或关键文件，效果更好
+++- 可以指定文档风格："生成中文 README"、"用 JSDoc 格式"
+++- 支持增量更新："给这个新函数添加文档"
+++
+++---
+++
+++## 6. 咨询分析报告 (consulting-analysis)
+++
+++### 功能描述
+++生成专业级的研究报告，包括市场分析、消费者洞察、品牌分析、财务分析、行业研究、竞争情报、投资尽职调查等咨询级分析报告。
+++
+++### 两阶段工作模式
+++1. **框架阶段**：生成结构化分析框架（章节骨架 + 数据需求 + 分析逻辑）
+++2. **报告阶段**：在其他技能完成数据收集后，生成最终咨询级报告（结构化叙述 + 嵌入式图表 + 战略洞察）
+++
+++### 适用场景
+++- 需要专业的行业研究报告
+++- 市场竞争分析
+++- 品牌策略分析
+++- 投资尽职调查
+++- 财务分析报告
+++
+++### 使用技巧 💡
+++- 第一阶段生成的框架可以让你审核后再进行数据收集
+++- 配合 deep-research 技能使用效果最佳
+++- 可以指定报告格式："生成 PPT ready 的 McKinsey 风格报告"
+++
+++---
+++
+++## 7. 数据分析 (data-analysis)
+++
+++### 功能描述
+++对 Excel（.xlsx/.xls）或 CSV 文件进行数据分析，生成统计、汇总、透视表、SQL 查询或任何形式的结构化数据探索。
+++
+++### 适用场景
+++- 用户上传 Excel/CSV 文件进行分析
+++- 需要数据统计、汇总、透视表
+++- 数据清洗和转换
+++- 多表关联查询
+++
+++### 核心能力
+++| 功能 | 说明 |
+++|------|------|
+++| **多 Sheet 支持** | 处理 Excel 多工作表 |
+++| **数据聚合** | 分组统计、汇总计算 |
+++| **数据过滤** | 条件筛选、排序 |
+++| **数据透视** | 透视表生成 |
+++| **数据连接** | 多表 JOIN 查询 |
+++| **格式导出** | CSV / JSON / Markdown |
+++| **SQL 查询** | 对结构化数据执行 SQL |
+++
+++### 使用技巧 💡
+++- 上传文件后可以直接问："这个月的销售额趋势如何？"
+++- 可以要求导出结果为 CSV："把结果导出为 CSV"
+++- 大文件可能会慢，建议先上传再分析
+++
+++---
+++
+++## 8. 深度研究 (deep-research)
+++
+++### 功能描述
+++对任何需要网络研究的问题进行系统性的多角度深度研究。相比于单次 Web 搜索，提供更全面、深入的研究结果。
+++
+++### 适用场景
+++- ⚠️ **替代所有 WebSearch**：任何需要联网信息的问题
+++- "what is X"、"explain X"、"compare X and Y"、"research X"
+++- 在内容生成任务之前自动触发
+++- 需要多角度、多信源的信息收集
+++
+++### 核心能力
+++- **多轮搜索**：自动进行多轮搜索以获取全面信息
+++- **多角度分析**：从不同角度研究问题
+++- **交叉验证**：多个信源交叉验证信息
+++- **结构化输出**：组织成条理清晰的研究报告
+++
+++### 使用技巧 💡
+++- **这是最常用的技能**——任何需要查找信息的问题都应该触发它
+++- 研究范围可以指定："深度研究 AI 芯片市场，重点看 NVIDIA 和华为"
+++- 结果比单次搜索质量高得多，但耗时也更长
+++
+++---
+++
+++## 9. 技能发现 (find-skills)
+++
+++### 功能描述
+++帮助用户发现和安装 Agent 技能。当用户询问 "how do I do X"、"find a skill for X" 或想扩展能力时触发。
+++
+++### 适用场景
+++- "how do I do X"（X 可能有对应的技能）
+++- "find a skill for X"、"is there a skill for X"
+++- "can you do X"（X 是某种特殊能力）
+++- 用户想扩展 Agent 能力
+++- 想搜索工具、模板或工作流
+++
+++### 使用技巧 💡
+++- 在想做某事但 Agent 不会时，先试试 "find a skill for ..."
+++- 技能安装后即可使用，无需重启
+++
+++---
+++
+++## 10. 前端界面设计 (frontend-design)
+++
+++### 功能描述
+++创建具有高设计质量的、独特的生产级前端界面。避免通用的 AI 审美风格，生成创意性和精良的 UI 代码。
+++
+++### 适用场景
+++- 构建 Web 组件、页面、制品、海报或应用
+++- 网站、落地页、仪表板、React 组件
+++- HTML/CSS 布局设计
+++- 美化任何 Web UI
+++
+++### 特点
+++- 生成创意的、精良的代码和 UI 设计
+++- 避免通用的 AI 审美（不生成千篇一律的设计）
+++- 支持现代前端框架和样式
+++
+++### 使用技巧 💡
+++- 提供参考风格或竞品链接："设计一个类似 Notion 的仪表板"
+++- 可以迭代优化："导航栏改到左侧"、"颜色换成深色模式"
+++- 生成的是可直接运行的 HTML/CSS/JS 代码
+++
+++---
+++
+++## 11. GitHub 深度研究 (github-deep-research)
+++
+++### 功能描述
+++对任何 GitHub 仓库进行多轮深度研究。生成包含执行摘要、时间线、指标分析和 Mermaid 图表的结构化 Markdown 报告。
+++
+++### 适用场景
+++- 用户提供 GitHub 仓库 URL
+++- 需要全面的仓库分析、时间线重建、竞争分析
+++- 深度调查开源项目
+++
+++### 核心能力
+++| 特性 | 说明 |
+++|------|------|
+++| **执行摘要** | 仓库概览和关键发现 |
+++| **时间线分析** | 提交历史、发布节奏、里程碑 |
+++| **指标分析** | Stars、Forks、贡献者、活跃度 |
+++| **代码质量** | 语言分布、代码结构 |
+++| **竞争分析** | 同类项目对比 |
+++| **Mermaid 图表** | 可视化项目结构和发展趋势 |
+++
+++### 使用技巧 💡
+++- 直接提供 GitHub URL 即可触发
+++- 可以指定分析维度："重点分析贡献者活跃度"
+++- 对比多个仓库："对比 React 和 Vue 的发展"
+++
+++---
+++
+++## 12. 图片生成 (image-generation)
+++
+++### 功能描述
+++生成、创建、想象图片，包括角色、场景、产品等视觉内容。支持结构化提示词和参考图片引导生成。
+++
+++### 适用场景
+++- "generate an image of..."、"create a picture of..."
+++- 需要产品图、场景图、角色设计
+++- 视觉创意和概念设计
+++
+++### 核心能力
+++- 结构化提示词生成（优化后的 prompt）
+++- 参考图片风格迁移
+++- 多风格支持（写实、卡通、水彩等）
+++
+++### 使用技巧 💡
+++- 提示词越具体越好："一只坐在太空飞船里的橘猫，赛博朋克风格"
+++- 可以提供参考图片："按照这张图的风格生成"
+++- 生成后可以要求调整："改成暗色调"、"把猫换成人"
+++
+++---
+++
+++## 13. 新闻通讯生成 (newsletter-generation)
+++
+++### 功能描述
+++生成新闻通讯、邮件摘要、每周汇总、行业简报或策划内容摘要。支持话题研究、多源内容策划和专业格式化。
+++
+++### 适用场景
+++- "create a newsletter about X"
+++- "write a weekly digest"
+++- "generate a tech roundup"
+++- "curate news about Y"
+++
+++### 核心能力
+++- 话题研究：自动搜索和收集相关话题的内容
+++- 内容策划：从多个来源甄选和整理
+++- 专业格式：为邮件或 Web 分发进行格式化
+++- 定期更新支持
+++
+++### 使用技巧 💡
+++- 指定目标受众可以帮助调整语气："写给 CTO 的技术简报"
+++- 可以设定期望的篇幅："5 个要点，每个 100 字"
+++- 配合 deep-research 使用可以获得最新资讯
+++
+++---
+++
+++## 14. 播客生成 (podcast-generation)
+++
+++### 功能描述
+++将文本内容转换为双人对话形式的播客音频。生成自然的双主持人对话风格。
+++
+++### 适用场景
+++- "turn this article into a podcast"
+++- "create a podcast about this topic"
+++- 将长文内容转化为听觉体验
+++
+++### 核心能力
+++- 文本 → 播客对话脚本转换
+++- 双主持人自然对话风格
+++- 音频文件生成
+++
+++### 使用技巧 💡
+++- 先让 deep-research 生成研究内容，再转成播客
+++- 可以指定主持人风格："一个严肃一个幽默"、"像科技早报"
+++- 生成的是音频文件，可以直接下载收听
+++
+++---
+++
+++## 15. PPT 生成 (ppt-generation)
+++
+++### 功能描述
+++从文本内容生成 PowerPoint（PPT/PPTX）演示文稿。为每张幻灯片生成图片并组合成 PPT 文件。
+++
+++### 适用场景
+++- "generate a presentation about X"
+++- "turn this research into slides"
+++- "create a PPT for this topic"
+++- 需要专业的演示文稿
+++
+++### 核心能力
+++- 自动生成幻灯片结构
+++- 每页幻灯片配图
+++- 专业的排版和设计
+++- PPTX 文件导出
+++
+++### 使用技巧 💡
+++- 先收集内容（使用 deep-research），再生成 PPT："用这些研究内容做 10 页 PPT"
+++- 可以指定风格："投资风格"、"学术会议风格"、"创业路演风格"
+++- 生成的是可下载的 PPTX 文件
+++
+++---
+++
+++## 16. 技能创建器 (skill-creator)
+++
+++### 功能描述
+++创建新技能、修改和优化已有技能，以及评估技能性能。DeerFlow 的"元技能"——用于创建和管理其他技能。
+++
+++### 适用场景
+++- 想从零创建自定义技能
+++- 编辑或优化已有技能
+++- 运行评估测试技能性能
+++- 通过方差分析基准测试技能
+++- 优化技能描述以提高触发准确率
+++
+++### 核心能力
+++| 功能 | 说明 |
+++|------|------|
+++| **创建技能** | 从零创建自定义 .skill 包 |
+++| **编辑技能** | 修改已有技能的配置和逻辑 |
+++| **评估技能** | 运行 eval 集测试技能表现 |
+++| **基准测试** | 带方差分析的性能基准测试 |
+++| **描述优化** | 改进触发描述以提高调用准确率 |
+++
+++### 使用技巧 💡
+++- 这是 DeerFlow 最强大的技能之一——可以创建你自己的专属技能
+++- 创建一个好的技能 = 好的 description（触发）+ 清晰的步骤（逻辑）
+++- 创建后可以用 eval 测试，确保可靠触发
+++
+++---
+++
+++## 17. 惊喜展示 (surprise-me)
+++
+++### 功能描述
+++通过动态发现和创造性组合其他已启用的技能，为用户创造令人愉悦的、意想不到的"哇"体验。
+++
+++### 适用场景
+++- 用户说 "surprise me"
+++- "show me something interesting"
+++- "I'm bored, do something creative"
+++- 用户想要创意展示
+++
+++### 核心能力
+++- 动态发现当前可用的技能
+++- 创造性组合多个技能
+++- 生成意想不到的创意输出
+++
+++### 使用技巧 💡
+++- 纯娱乐性质，适合展示 DeerFlow 的创意能力
+++- 配合多个已安装的技能使用效果更好
+++
+++---
+++
+++## 18. 系统性文献综述 (systematic-literature-review)
+++
+++### 功能描述
+++对某个主题跨多篇学术论文进行系统性文献综述、调查或综合。包括带注释的参考书目和跨论文比较。
+++
+++### 适用场景
+++- **不适合单篇论文**（单篇请用 academic-paper-review）
+++- 需要一个主题的系统性文献综述
+++- annotated bibliographies（带注释的参考书目）
+++- 跨论文比较和分析
+++- 需要 APA、IEEE 或 BibTeX 格式输出
+++
+++### 核心能力
+++- 在 arXiv 上搜索相关论文
+++- 多论文综合分析和比较
+++- APA / IEEE / BibTeX 多种引用格式输出
+++- 结构化综述报告
+++
+++### 使用技巧 💡
+++- 与 academic-paper-review 的区别：这个是综述多篇论文，那个是深入评审单篇
+++- 可以指定搜索范围："最近 3 年的 transformer 架构改进"
+++- 输出格式可选 APA、IEEE 或 BibTeX
+++
+++---
+++
+++## 19. Vercel 部署 (vercel-deploy-claimable)
+++
+++### 功能描述
+++将应用和网站部署到 Vercel。无需认证——返回预览 URL 和可认领的部署链接。
+++
+++### 适用场景
+++- "Deploy my app"
+++- "Deploy this to production"
+++- "Create a preview deployment"
+++- "Deploy and give me the link"
+++- "Push this live"
+++
+++### 核心能力
+++- 自动部署到 Vercel
+++- 生成预览 URL
+++- 生成可认领的部署链接（claimable link）
+++- ⚠️ 无需 Vercel 认证，谁都可以认领
+++
+++### 使用技巧 💡
+++- 适合快速分享和预览前端项目
+++- 部署后生成的 claimable link 要尽快认领，防止他人认领
+++- 适合演示和测试环境
+++
+++---
+++
+++## 20. 视频生成 (video-generation)
+++
+++### 功能描述
+++生成、创建或想象视频内容。支持结构化提示词和参考图片引导生成。
+++
+++### 适用场景
+++- "generate a video about..."
+++- "create a short video of..."
+++- 需要短视频、动画或视觉内容
+++
+++### 核心能力
+++- 结构化提示词生成
+++- 参考图片风格迁移
+++- 多种视频风格支持
+++
+++### 使用技巧 💡
+++- 提示词策略与图片生成类似，越具体越好
+++- 可以提供参考图片："按照这张图的风格生成短视频"
+++
+++---
+++
+++## 21. Web 设计规范检查 (web-design-guidelines)
+++
+++### 功能描述
+++审查 UI 代码是否符合 Web 界面设计规范。检查可访问性、设计一致性、用户体验最佳实践。
+++
+++### 适用场景
+++- "review my UI"
+++- "check accessibility"
+++- "audit design" / "review UX"
+++- "check my site against best practices"
+++
+++### 核心能力
+++| 检查项 | 说明 |
+++|--------|------|
+++| **可访问性** | WCAG 规范检查 |
+++| **设计一致性** | 颜色、字体、间距统一性 |
+++| **UX 最佳实践** | 用户体验规范和模式 |
+++| **响应式** | 多端适配检查 |
+++| **性能** | 加载性能建议 |
+++
+++### 使用技巧 💡
+++- 提供代码或 URL 都可以审查
+++- 可以指定检查重点："主要检查可访问性"
+++- 审查后会提供具体的修复建议
+++
+++---
+++
+++## 如何安装和启用技能
+++
+++### 在对话中触发
+++Agent 会根据你的问题自动判断是否需要加载技能。例如问 "分析这个数据" 会自动触发 `data-analysis` 或 `chart-visualization`。
+++
+++### 手动安装
+++1. 在对话中说 "find a skill for [你想做的事]"
+++2. Agent 会搜索并推荐合适的技能
+++3. 确认安装即可
+++
+++### 配置文件启用
+++在 `config.yaml` 中配置技能目录：
+++```yaml
+++skills:
+++  directories:
+++    - ./skills/public
+++```
+++
+++---
+++
+++## 技能选择速查表
+++
+++| 你的需求 | 对应的技能 |
+++|---------|-----------|
+++| 查信息/做研究 | `deep-research` |
+++| 分析 Excel/CSV | `data-analysis` |
+++| 可视化数据 | `chart-visualization` |
+++| 审阅一篇论文 | `academic-paper-review` |
+++| 综述多篇论文 | `systematic-literature-review` |
+++| 做商业分析报告 | `consulting-analysis` |
+++| 写代码文档 | `code-documentation` |
+++| 设计前端 UI | `frontend-design` |
+++| 分析 GitHub 项目 | `github-deep-research` |
+++| 生成图片 | `image-generation` |
+++| 生成视频 | `video-generation` |
+++| 生成 PPT | `ppt-generation` |
+++| 生成播客 | `podcast-generation` |
+++| 生成新闻通讯 | `newsletter-generation` |
+++| 部署到 Vercel | `vercel-deploy-claimable` |
+++| 检查 UI 规范 | `web-design-guidelines` |
+++| 创建自定义技能 | `skill-creator` |
+++| 探索 DeerFlow 能力 | `bootstrap` |
+++| 找更多技能 | `find-skills` |
+++| 想要惊喜 | `surprise-me` |
+++| Claude ↔ DeerFlow 协作 | `claude-to-deerflow` |
+++
+++---
+++
+++> 📝 本文档自动生成于 2026-05-14，技能版本对应 DeerFlow 2.0。
+++> 技能文件位于 `skills/public/` 目录，每个技能包含 SKILL.md（逻辑定义）和可选的 scripts/（脚本）、references/（参考）、templates/（模板）子目录。
++diff --git a/frontend/src/content/en/reference/_meta.ts b/frontend/src/content/en/reference/_meta.ts
++index 835fd6ce..fa3544d0 100644
++--- a/frontend/src/content/en/reference/_meta.ts
+++++ b/frontend/src/content/en/reference/_meta.ts
++@@ -4,6 +4,9 @@ const meta: MetaRecord = {
++   "model-providers": {
++     title: "Model providers",
++   },
+++  "builtin-skills": {
+++    title: "Built-in Skills",
+++  },
++ };
++ 
++ export default meta;
++diff --git a/frontend/src/content/en/reference/builtin-skills/_meta.ts b/frontend/src/content/en/reference/builtin-skills/_meta.ts
++new file mode 100644
++index 00000000..942534e1
++--- /dev/null
+++++ b/frontend/src/content/en/reference/builtin-skills/_meta.ts
++@@ -0,0 +1,9 @@
+++import type { MetaRecord } from "nextra";
+++
+++const meta: MetaRecord = {
+++  index: {
+++    title: "Built-in Skills",
+++  },
+++};
+++
+++export default meta;
++diff --git a/frontend/src/content/en/reference/builtin-skills/index.mdx b/frontend/src/content/en/reference/builtin-skills/index.mdx
++new file mode 100644
++index 00000000..66b03076
++--- /dev/null
+++++ b/frontend/src/content/en/reference/builtin-skills/index.mdx
++@@ -0,0 +1,304 @@
+++---
+++title: Built-in Skills
+++description: Complete guide to DeerFlow's 21 built-in skills
+++---
+++
+++# 🦌 DeerFlow Built-in Skills Guide
+++
+++> DeerFlow ships with 21 ready-to-use skills covering academic research, data analysis,
+++> content creation, and more. Each skill is an independent `.skill` package that the
+++> Agent loads automatically based on your needs.
+++
+++## How Skills Are Invoked
+++
+++**Skills are invoked on-demand automatically** — you don't need to manually specify which skill to use.
+++Just express your needs, and the Agent will match and load the most appropriate skill.
+++
+++### Auto-trigger Flow
+++
+++```
+++Your question → Agent understands intent → Matches skill description → Loads skill
+++```
+++
+++Examples:
+++- "Analyze this Excel file" → triggers `data-analysis`
+++- "Search for latest papers on Transformers" → triggers `deep-research`
+++- "Chart this data" → triggers `chart-visualization`
+++
+++### Manual Trigger
+++
+++| Method | Description |
+++|--------|-------------|
+++| **Explicit** | Say "use deep-research skill to..." |
+++| **Discover** | Say "find a skill for [your need]" → triggers `find-skills` |
+++| **Install** | Agent will ask to install when a matching skill is found |
+++
+++---
+++
+++## Skill Directory
+++
+++### 📚 Academic & Research
+++- [deep-research](#deep-research) — Multi-angle deep web research
+++- [academic-paper-review](#academic-paper-review) — Single paper peer review
+++- [systematic-literature-review](#systematic-literature-review) — Multi-paper systematic review
+++
+++### 📊 Data Analysis
+++- [data-analysis](#data-analysis) — Excel/CSV data analysis
+++- [chart-visualization](#chart-visualization) — 26 chart types
+++
+++### 💼 Business & Consulting
+++- [consulting-analysis](#consulting-analysis) — Professional consulting reports
+++- [newsletter-generation](#newsletter-generation) — Newsletters & digests
+++
+++### 💻 Development & Design
+++- [code-documentation](#code-documentation) — Code documentation generation
+++- [frontend-design](#frontend-design) — Frontend UI design
+++- [github-deep-research](#github-deep-research) — GitHub repo analysis
+++- [web-design-guidelines](#web-design-guidelines) — UI standards review
+++- [vercel-deploy-claimable](#vercel-deploy-claimable) — One-click Vercel deploy
+++
+++### 🎨 Creative & Content
+++- [image-generation](#image-generation) — AI image generation
+++- [video-generation](#video-generation) — AI video generation
+++- [ppt-generation](#ppt-generation) — PowerPoint generation
+++- [podcast-generation](#podcast-generation) — Text-to-podcast
+++
+++### 🔧 System & Meta Skills
+++- [skill-creator](#skill-creator) — Create custom skills
+++- [find-skills](#find-skills) — Discover new skills
+++- [bootstrap](#bootstrap) — New user onboarding
+++- [claude-to-deerflow](#claude-to-deerflow) — Cross-platform interop
+++- [surprise-me](#surprise-me) — Creative showcase
+++
+++---
+++
+++## academic-paper-review
+++
+++Structured peer-review-quality analysis of academic papers. Follows standards from NeurIPS, ICML, ACL, Nature, IEEE.
+++
+++**Trigger**: Paper URL, PDF upload, "review this paper", "analyze this research"
+++
+++**Capabilities**:
+++- Structured review: summary, strengths, weaknesses, methodology
+++- Literature positioning via targeted search
+++- Methodology assessment (experimental design, reproducibility)
+++- Full review + executive summary formats
+++
+++**Tips**: URL-based papers work better than uploads. Ask for focus areas like "focus on methodology".
+++
+++---
+++
+++## bootstrap
+++
+++New user onboarding skill. Guides first-time users through DeerFlow setup and records preferences in SOUL.md.
+++
+++**Trigger**: First use, "set up my preferences"
+++
+++**Tips**: Say "re-onboard me" to reconfigure. Preferences persist in SOUL.md.
+++
+++---
+++
+++## chart-visualization
+++
+++Intelligently converts data into visualizations. Auto-selects from 26 chart types and renders as images.
+++
+++**Trigger**: "visualize this data", "chart this", data analysis requests
+++
+++**Supported types**: Bar, Line, Pie, Scatter, Area, Boxplot, Radar, Heatmap, Funnel, Sankey, Fishbone, Flow, Map, Treemap, Wordcloud, and more.
+++
+++**Tips**: Provide structured data (CSV/JSON) for best results. Specify chart type if desired.
+++
+++---
+++
+++## claude-to-deerflow
+++
+++Bridges Claude/other Agents with DeerFlow via HTTP API for deep research delegation.
+++
+++**Trigger**: Cross-agent collaboration, delegating research tasks
+++
+++**Capabilities**: Create/manage threads, send messages, query models/skills/agents, manage memory, upload files.
+++
+++---
+++
+++## code-documentation
+++
+++Generates professional documentation for code, APIs, libraries, and projects.
+++
+++**Trigger**: "document this code", "create a README", "generate API docs"
+++
+++**Outputs**: README, API references, inline comments, architecture docs, CHANGELOG, developer guides.
+++
+++**Tips**: Upload full repos for best results. Specify format: "JSDoc format", "Chinese docs".
+++
+++---
+++
+++## consulting-analysis
+++
+++Two-phase professional report generation: (1) analysis framework, (2) final report with charts and insights.
+++
+++**Trigger**: Market analysis, competitive intelligence, investment due diligence
+++
+++**Tips**: Review phase 1 output before proceeding to phase 2. Combine with deep-research for best results.
+++
+++---
+++
+++## data-analysis
+++
+++Full data analysis on Excel (.xlsx/.xls) and CSV files with multi-sheet support.
+++
+++**Trigger**: File upload + "analyze this data"
+++
+++**Capabilities**: Aggregation, filtering, pivot tables, multi-table JOINs, SQL queries, CSV/JSON/Markdown export.
+++
+++---
+++
+++## deep-research
+++
+++**Most commonly used skill**. Systematic multi-angle web research replacing basic web searches.
+++
+++**Trigger**: ANY question requiring online information
+++
+++**Capabilities**: Multi-round auto-search, cross-source validation, structured reports.
+++
+++**Tips**: Default skill for information lookup. Specify scope for focused results.
+++
+++---
+++
+++## find-skills
+++
+++Discovers and installs agent skills from the ecosystem.
+++
+++**Trigger**: "find a skill for X", "how do I do X"
+++
+++**Tips**: Use this when the Agent can't do something — there might be a skill for it.
+++
+++---
+++
+++## frontend-design
+++
+++Creates distinctive, production-grade frontend interfaces avoiding generic AI aesthetics.
+++
+++**Trigger**: "build a website", "design a dashboard", UI requests
+++
+++**Tips**: Provide reference styles. Iterate with "move nav to left", "dark mode".
+++
+++---
+++
+++## github-deep-research
+++
+++Multi-round deep research on any GitHub repository with structured Markdown reports.
+++
+++**Trigger**: GitHub repository URL
+++
+++**Report includes**: Executive summary, timeline, metrics, Mermaid diagrams.
+++
+++---
+++
+++## image-generation
+++
+++AI image generation with structured prompts and reference image support.
+++
+++**Trigger**: "generate an image of..."
+++
+++**Tips**: Be specific in prompts. Provide reference images for style guidance.
+++
+++---
+++
+++## newsletter-generation
+++
+++Generates newsletters, email digests, weekly roundups, and industry briefings.
+++
+++**Trigger**: "create a newsletter about X"
+++
+++**Tips**: Specify audience tone. Combine with deep-research for latest content.
+++
+++---
+++
+++## podcast-generation
+++
+++Converts text content into two-host conversational podcast audio.
+++
+++**Trigger**: "turn this into a podcast"
+++
+++**Tips**: Research content first with deep-research, then convert to podcast.
+++
+++---
+++
+++## ppt-generation
+++
+++Generates PowerPoint presentations from text with auto-generated slide images.
+++
+++**Trigger**: "create a presentation about X"
+++
+++**Tips**: Research first, then generate. Specify style: "investment deck", "academic".
+++
+++---
+++
+++## skill-creator
+++
+++**Meta-skill** for creating, editing, evaluating, and optimizing other skills.
+++
+++**Trigger**: "create a skill for X", "optimize this skill"
+++
+++**Capabilities**: Create .skill packages, run evals, benchmark with variance analysis.
+++
+++**Tips**: Good description = better triggering. Clear steps = better execution.
+++
+++---
+++
+++## surprise-me
+++
+++Creatively combines enabled skills for unexpected, delightful experiences.
+++
+++**Trigger**: "surprise me", "show me something interesting"
+++
+++---
+++
+++## systematic-literature-review
+++
+++Multi-paper systematic review with APA, IEEE, or BibTeX format output.
+++
+++**Trigger**: Literature survey, annotated bibliography across multiple papers
+++
+++**Note**: Use academic-paper-review for single paper analysis.
+++
+++---
+++
+++## vercel-deploy-claimable
+++
+++Deploys apps and websites to Vercel without authentication.
+++
+++**Trigger**: "deploy my app", "push this live"
+++
+++**Note**: Claim your deployment link promptly to prevent others from claiming it.
+++
+++---
+++
+++## video-generation
+++
+++AI video generation with structured prompts and reference images.
+++
+++**Trigger**: "generate a video about..."
+++
+++---
+++
+++## web-design-guidelines
+++
+++Reviews UI code against accessibility and design best practices.
+++
+++**Trigger**: "review my UI", "check accessibility"
+++
+++**Checks**: WCAG compliance, design consistency, UX patterns, responsiveness, performance.
+++
+++---
+++
+++## Installation
+++
+++Skills are auto-loaded from the configured directory:
+++```yaml
+++skills:
+++  directories:
+++    - ./skills/public
+++```
+++
+++Discover community skills by saying "find a skill for [your need]". Create custom skills using the `skill-creator`.
++diff --git a/frontend/src/content/zh/reference/_meta.ts b/frontend/src/content/zh/reference/_meta.ts
++index 5001ebfd..49cebd2f 100644
++--- a/frontend/src/content/zh/reference/_meta.ts
+++++ b/frontend/src/content/zh/reference/_meta.ts
++@@ -4,6 +4,9 @@ const meta: MetaRecord = {
++   "model-providers": {
++     title: "模型接入",
++   },
+++  "builtin-skills": {
+++    title: "内置技能",
+++  },
++ };
++ 
++ export default meta;
++diff --git a/frontend/src/content/zh/reference/builtin-skills/_meta.ts b/frontend/src/content/zh/reference/builtin-skills/_meta.ts
++new file mode 100644
++index 00000000..5b6576ac
++--- /dev/null
+++++ b/frontend/src/content/zh/reference/builtin-skills/_meta.ts
++@@ -0,0 +1,9 @@
+++import type { MetaRecord } from "nextra";
+++
+++const meta: MetaRecord = {
+++  index: {
+++    title: "内置技能",
+++  },
+++};
+++
+++export default meta;
++diff --git a/frontend/src/content/zh/reference/builtin-skills/index.mdx b/frontend/src/content/zh/reference/builtin-skills/index.mdx
++new file mode 100644
++index 00000000..599f0e76
++--- /dev/null
+++++ b/frontend/src/content/zh/reference/builtin-skills/index.mdx
++@@ -0,0 +1,588 @@
+++---
+++title: 内置技能
+++description: DeerFlow 内置的 21 个即开即用技能详解
+++---
+++
+++# 🦌 DeerFlow 内置技能完整指南
+++
+++> DeerFlow 内置了 21 个即开即用的技能（Skills），覆盖学术研究、数据分析和内容创作等多个领域。
+++> 每个技能是一个独立的 `.skill` 包，Agent 会根据你的需求自动加载，也可以手动安装。
+++
+++## 技能调用方式
+++
+++**DeerFlow 的技能是"按需自动调用"的**——你不需要手动指定用哪个技能，只需要表达你的需求，Agent 会自动判断并加载最合适的技能。
+++
+++### 自动触发规则
+++
+++每个技能在 `SKILL.md` 中定义了触发条件（description 字段），Agent 会根据你的问题语义匹配：
+++
+++```
+++你的问题 → Agent 理解意图 → 匹配技能描述 → 自动加载技能
+++```
+++
+++例如：
+++- 你说"分析这个 Excel 文件" → 自动触发 `data-analysis`
+++- 你说"帮我搜索 Transformer 的最新论文" → 自动触发 `deep-research`
+++- 你说"画个图表展示这些数据" → 自动触发 `chart-visualization`
+++
+++### 手动触发
+++
+++| 方式 | 说明 |
+++|------|------|
+++| **明确指定** | 直接说"用 deep-research 技能研究..." |
+++| **查找技能** | 说"find a skill for [你的需求]" 会自动触发 `find-skills` |
+++| **安装新技能** | Agent 找到合适技能后会询问是否安装 |
+++
+++### 技能加载流程
+++
+++```mermaid
+++graph LR
+++    A[用户提问] --> B[Agent 理解意图]
+++    B --> C{匹配技能?}
+++    C -->|是| D[加载技能]
+++    C -->|否| E[常规回答]
+++    D --> F[技能执行]
+++    F --> G[返回结果]
+++```
+++
+++---
+++
+++## 技能分类总览
+++
+++### 📚 学术与研究
+++| 技能 | 说明 | 适合场景 |
+++|------|------|---------|
+++| [deep-research](#8-深度研究-deep-research) | 多角度深度网络研究 | 查信息、做研究 |
+++| [academic-paper-review](#1-学术论文评审-academic-paper-review) | 单篇论文评审 | 审阅论文 PDF/URL |
+++| [systematic-literature-review](#18-系统性文献综述-systematic-literature-review) | 多篇论文系统综述 | 文献综述、参考书目 |
+++
+++### 📊 数据分析
+++| 技能 | 说明 | 适合场景 |
+++|------|------|---------|
+++| [data-analysis](#7-数据分析-data-analysis) | Excel/CSV 数据分析 | 上传文件分析 |
+++| [chart-visualization](#3-图表可视化-chart-visualization) | 26 种图表生成 | 数据可视化 |
+++
+++### 💼 商业与咨询
+++| 技能 | 说明 | 适合场景 |
+++|------|------|---------|
+++| [consulting-analysis](#6-咨询分析报告-consulting-analysis) | 专业咨询报告 | 市场/行业分析 |
+++| [newsletter-generation](#13-新闻通讯生成-newsletter-generation) | 新闻通讯生成 | 周报、摘要 |
+++
+++### 💻 开发与设计
+++| 技能 | 说明 | 适合场景 |
+++|------|------|---------|
+++| [code-documentation](#5-代码文档生成-code-documentation) | 代码文档生成 | README、API 文档 |
+++| [frontend-design](#10-前端界面设计-frontend-design) | 前端界面设计 | 网站、组件 |
+++| [github-deep-research](#11-github-深度研究-github-deep-research) | GitHub 仓库分析 | 开源项目研究 |
+++| [web-design-guidelines](#21-web-设计规范检查-web-design-guidelines) | UI 规范审查 | 可访问性检查 |
+++| [vercel-deploy-claimable](#19-vercel-部署-vercel-deploy-claimable) | Vercel 部署 | 一键部署 |
+++
+++### 🎨 创意与内容
+++| 技能 | 说明 | 适合场景 |
+++|------|------|---------|
+++| [image-generation](#12-图片生成-image-generation) | AI 图片生成 | 设计图、插画 |
+++| [video-generation](#20-视频生成-video-generation) | AI 视频生成 | 短视频 |
+++| [ppt-generation](#15-ppt-生成-ppt-generation) | PPT 生成 | 演示文稿 |
+++| [podcast-generation](#14-播客生成-podcast-generation) | 播客生成 | 文本转音频 |
+++
+++### 🔧 系统与元技能
+++| 技能 | 说明 | 适合场景 |
+++|------|------|---------|
+++| [skill-creator](#16-技能创建器-skill-creator) | 创建自定义技能 | 扩展现有能力 |
+++| [find-skills](#9-技能发现-find-skills) | 发现新技能 | 寻找合适技能 |
+++| [bootstrap](#2-引导与初始化-bootstrap) | 新手引导 | 首次使用 |
+++| [claude-to-deerflow](#4-claude--deerflow-互操作-claude-to-deerflow) | 跨平台协作 | Claude ↔ DeerFlow |
+++| [surprise-me](#17-惊喜展示-surprise-me) | 创意组合展示 | 娱乐探索 |
+++
+++---
+++
+++## 1. 学术论文评审 (academic-paper-review)
+++
+++### 功能描述
+++
+++对学术论文、研究文章、预印本进行结构化、同行评议级别的分析评审。遵循 NeurIPS、ICML、ACL、Nature、IEEE 等顶级期刊/会议的评审标准。
+++
+++### 适用场景
+++
+++- 审阅论文：提供 URL（arXiv、DOI）、上传 PDF
+++- 请求评审、分析、总结论文
+++- 需要方法论评估、贡献评价、文献定位分析
+++
+++### 核心能力
+++
+++- **结构化评审**：摘要、优势、劣势、方法论评估、贡献评价
+++- **文献定位**：通过定向文献搜索将论文定位到更广泛的研究图景
+++- **方法论评估**：实验设计、统计有效性、可复现性评估
+++- **多格式输出**：详细评审 + 简洁执行摘要两种格式
+++- **跨学科支持**：计算机科学、生物学、物理学、社会科学等
+++
+++### 使用技巧
+++
+++- 提供 PDF URL 比上传文件效果更好（Agent 可以直接分析全文）
+++- 可以要求聚焦特定方面："重点看方法论"
+++- 支持多篇对比："帮我比较这两篇论文的贡献"
+++
+++---
+++
+++## 2. 引导与初始化 (bootstrap)
+++
+++### 功能描述
+++
+++帮助新用户快速上手 DeerFlow，在用户的 SOUL.md 文件中记录个性化偏好配置。
+++
+++### 适用场景
+++
+++- 首次使用 DeerFlow 时引导对话
+++- 想设置助手偏好：语言、风格、专业领域
+++- 想了解 DeerFlow 的能力边界
+++
+++### 使用技巧
+++
+++- 首次使用会自动触发引导流程
+++- 可以随时说"重新引导我"来修改配置
+++- 配置内容会自动写入 SOUL.md 持久化
+++
+++---
+++
+++## 3. 图表可视化 (chart-visualization)
+++
+++### 功能描述
+++
+++将数据智能地转换为可视化图表。从 **26 种图表类型**中自动选择最合适的一种，生成 JavaScript 渲染的图表图片。
+++
+++### 适用场景
+++
+++- "可视化这些数据"、"画个图表"
+++- 展示数据趋势、分布、对比
+++- 数据分析报告配图
+++
+++### 支持的图表类型（部分）
+++
+++| 类型 | 用途 |
+++|------|------|
+++| 柱状图 / 折线图 | 趋势展示与分类对比 |
+++| 饼图 / 环形图 | 占比展示 |
+++| 散点图 / 气泡图 | 相关性分析 |
+++| 热力图 / 雷达图 | 多维数据 |
+++| 桑基图 / 漏斗图 | 流量与转化 |
+++| 鱼骨图 / 流程图 | 因果与流程分析 |
+++| 地图 / 词云 | 地理与文本数据 |
+++
+++### 使用技巧
+++
+++- 提供结构化数据（CSV/JSON/表格）比文字描述更精确
+++- 可以指定图表类型："画一个柱状图对比各季度销售额"
+++- 图表会渲染为图片，可直接在对话中查看
+++
+++---
+++
+++## 4. Claude ↔ DeerFlow 互操作 (claude-to-deerflow)
+++
+++### 功能描述
+++
+++通过 HTTP API 与 DeerFlow AI Agent 平台交互，允许 Claude 或其他 Agent 调用 DeerFlow 进行深度研究。
+++
+++### 适用场景
+++
+++- 当前对话中需要 DeerFlow 的深度研究能力
+++- 启动、管理 DeerFlow 对话线程
+++- 查询可用模型/技能/智能体列表
+++- 委托复杂研究任务给 DeerFlow
+++
+++### 核心能力
+++
+++- 创建和管理 DeerFlow 对话线程
+++- 发送消息并获取回复
+++- 查询模型、技能、智能体列表
+++- 管理记忆系统、上传文件
+++
+++### 使用技巧
+++
+++- 这是 Claude Code 与 DeerFlow 之间的桥梁
+++- Claude 负责编码和逻辑推理，DeerFlow 负责深度研究
+++
+++---
+++
+++## 5. 代码文档生成 (code-documentation)
+++
+++### 功能描述
+++
+++为代码、API、库、仓库或软件项目生成专业文档。
+++
+++### 适用场景
+++
+++- 生成 README、API 参考文档、开发者指南
+++- 添加行内代码注释
+++- 生成 CHANGELOG、架构文档
+++
+++### 核心能力
+++
+++| 文档类型 | 说明 |
+++|---------|------|
+++| README | 项目简介、安装、使用、贡献 |
+++| API 参考 | 端点、参数、返回值、示例 |
+++| 代码注释 | JSDoc / Docstring |
+++| 架构文档 | 架构图、模块依赖 |
+++| 变更日志 | CHANGELOG |
+++
+++### 使用技巧
+++
+++- 上传整个仓库效果更好
+++- 可以指定风格："生成中文文档"、"用 JSDoc 格式"
+++
+++---
+++
+++## 6. 咨询分析报告 (consulting-analysis)
+++
+++### 功能描述
+++
+++生成咨询级的专业研究报告，采用两阶段工作模式。
+++
+++### 工作流程
+++
+++```mermaid
+++graph LR
+++    A[用户需求] --> B[阶段1: 分析框架]
+++    B --> C[章节骨架+数据需求]
+++    C --> D[阶段2: 终稿报告]
+++    D --> E[结构化叙述+图表+洞察]
+++```
+++
+++### 适用场景
+++
+++- 市场分析、消费者洞察、品牌分析
+++- 财务分析、行业研究、竞争情报
+++- 投资尽职调查
+++
+++### 使用技巧
+++
+++- 第一阶段生成的框架可以先审核，再进入第二阶段
+++- 配合 deep-research 技能使用效果最佳
+++- 可以指定格式："McKinsey 风格报告"
+++
+++---
+++
+++## 7. 数据分析 (data-analysis)
+++
+++### 功能描述
+++
+++对 Excel（.xlsx/.xls）或 CSV 文件进行全面的数据分析。
+++
+++### 适用场景
+++
+++- 上传文件进行分析
+++- 数据统计、汇总、透视表
+++- 数据清洗和转换
+++
+++### 核心能力
+++
+++- 多 Sheet 支持
+++- 数据聚合、过滤、排序
+++- 透视表生成
+++- 多表 JOIN 查询
+++- CSV / JSON / Markdown 导出
+++
+++### 使用技巧
+++
+++- 上传后直接问："这个月的销售额趋势如何？"
+++- 可以要求导出："把结果导出为 CSV"
+++
+++---
+++
+++## 8. 深度研究 (deep-research)
+++
+++### 功能描述
+++
+++**最常用的技能**。对任何需要网络研究的问题进行系统性的多角度研究。
+++
+++### 适用场景
+++
+++- **替代所有常规搜索**：任何需要联网信息的问题
+++- "what is X"、"research X"、"compare X and Y"
+++- 在内容生成任务之前自动触发
+++
+++### 核心能力
+++
+++- 多轮自动搜索获取全面信息
+++- 多角度分析问题
+++- 多信源交叉验证
+++- 结构化研究报告输出
+++
+++### 使用技巧
+++
+++- **这是最常用的技能**——任何需要查信息的问题优先用它
+++- 研究范围可以指定："深度研究 AI 芯片市场，重点看 NVIDIA 和华为"
+++- 结果质量比单次搜索高得多
+++
+++---
+++
+++## 9. 技能发现 (find-skills)
+++
+++### 功能描述
+++
+++帮助用户发现和安装 Agent 技能。当你需要某种能力时，自动搜索合适技能。
+++
+++### 适用场景
+++
+++- "find a skill for [需求]"
+++- "can you do [某件事]"
+++- 想扩展 Agent 能力
+++
+++### 使用技巧
+++
+++- 在想做某事但 Agent 不会时，先试试 "find a skill for ..."
+++- 技能安装后立即生效，无需重启
+++
+++---
+++
+++## 10. 前端界面设计 (frontend-design)
+++
+++### 功能描述
+++
+++创建具有高设计质量的前端界面，避免通用的 AI 审美。
+++
+++### 适用场景
+++
+++- 构建网站、落地页、仪表板
+++- 设计 React 组件、HTML/CSS 布局
+++- 美化 Web UI
+++
+++### 特点
+++
+++- 生成创意性、精良的 UI 代码
+++- 避免千篇一律的 AI 审美
+++- 支持现代前端框架
+++
+++### 使用技巧
+++
+++- 提供参考风格："设计一个类似 Notion 的仪表板"
+++- 可以迭代优化："导航栏改到左侧"
+++
+++---
+++
+++## 11. GitHub 深度研究 (github-deep-research)
+++
+++### 功能描述
+++
+++对任何 GitHub 仓库进行多轮深度研究，生成结构化 Markdown 报告。
+++
+++### 适用场景
+++
+++- 分析 GitHub 仓库
+++- 时间线重建、竞争分析
+++- 开源项目深度调查
+++
+++### 报告内容
+++
+++- 执行摘要
+++- 提交历史和里程碑时间线
+++- 指标分析（Stars、Forks、贡献者）
+++- Mermaid 图表可视化
+++
+++### 使用技巧
+++
+++- 直接提供 GitHub URL 即可
+++- 可以对比多个仓库
+++
+++---
+++
+++## 12. 图片生成 (image-generation)
+++
+++### 功能描述
+++
+++AI 图片生成，支持结构化提示词和参考图片。
+++
+++### 适用场景
+++
+++- 产品图、场景图、角色设计
+++- 视觉创意和概念设计
+++
+++### 使用技巧
+++
+++- 提示词越具体越好
+++- 可以提供参考图片作为风格引导
+++- 生成后可以继续调整
+++
+++---
+++
+++## 13. 新闻通讯生成 (newsletter-generation)
+++
+++### 功能描述
+++
+++生成新闻通讯、邮件摘要、每周汇总、行业简报。
+++
+++### 适用场景
+++
+++- "create a newsletter about X"
+++- 周报、技术简报、行业动态
+++
+++### 使用技巧
+++
+++- 指定目标受众调整语气
+++- 配合 deep-research 使用获取最新资讯
+++
+++---
+++
+++## 14. 播客生成 (podcast-generation)
+++
+++### 功能描述
+++
+++将文本内容转换为双人对话形式的播客音频。
+++
+++### 适用场景
+++
+++- 长文转播客
+++- 文章内容音频化
+++
+++### 使用技巧
+++
+++- 先让 deep-research 生成内容，再转播客
+++- 可以指定对话风格
+++
+++---
+++
+++## 15. PPT 生成 (ppt-generation)
+++
+++### 功能描述
+++
+++从文本内容生成 PowerPoint（PPTX）演示文稿，每页自动配图。
+++
+++### 适用场景
+++
+++- "生成一个关于 X 的演示文稿"
+++- "把这份研究做成 PPT"
+++
+++### 使用技巧
+++
+++- 先收集内容再生成 PPT
+++- 可以指定风格："投资风格"、"学术风格"
+++
+++---
+++
+++## 16. 技能创建器 (skill-creator)
+++
+++### 功能描述
+++
+++**DeerFlow 的"元技能"**——创建、修改、评估和优化其他技能。
+++
+++### 适用场景
+++
+++- 从零创建自定义技能
+++- 编辑已有技能
+++- 运行评估测试
+++- 优化技能触发描述
+++
+++### 核心能力
+++
+++- 创建 .skill 包
+++- 运行 eval 集测试
+++- 基准测试 + 方差分析
+++
+++### 使用技巧
+++
+++- 这是 DeerFlow 最强大的技能之一
+++- 创建好技能的关键：好的 description（触发）+ 清晰的步骤（逻辑）
+++
+++---
+++
+++## 17. 惊喜展示 (surprise-me)
+++
+++### 功能描述
+++
+++动态组合已启用的技能，创造意想不到的创意输出。
+++
+++### 适用场景
+++
+++- "surprise me" / "show me something interesting"
+++- 创意探索和展示
+++
+++---
+++
+++## 18. 系统性文献综述 (systematic-literature-review)
+++
+++### 功能描述
+++
+++跨多篇论文进行系统性综述，支持 APA、IEEE、BibTeX 格式输出。
+++
+++### 适用场景
+++
+++- **与 academic-paper-review 的区别**：本技能综述多篇论文，后者深入评审单篇
+++- 文献综述、带注释的参考书目
+++- 跨论文比较
+++
+++### 使用技巧
+++
+++- 可以指定搜索范围和时间
+++- 支持三种引用格式
+++
+++---
+++
+++## 19. Vercel 部署 (vercel-deploy-claimable)
+++
+++### 功能描述
+++
+++将应用和网站部署到 Vercel，无需认证。
+++
+++### 适用场景
+++
+++- "Deploy my app"
+++- 快速分享和预览
+++
+++### 注意
+++
+++- 生成可认领的部署链接，请尽快认领
+++
+++---
+++
+++## 20. 视频生成 (video-generation)
+++
+++### 功能描述
+++
+++AI 视频生成，支持结构化提示词和参考图片。
+++
+++### 适用场景
+++
+++- 短视频生成
+++- 视觉内容创作
+++
+++---
+++
+++## 21. Web 设计规范检查 (web-design-guidelines)
+++
+++### 功能描述
+++
+++审查 UI 代码是否符合设计规范和可访问性标准。
+++
+++### 检查项
+++
+++- WCAG 可访问性规范
+++- 设计一致性
+++- UX 最佳实践
+++- 响应式适配
+++- 性能建议
+++
+++### 使用技巧
+++
+++- 提供代码或 URL 均可审查
+++- 审查后会提供具体修复建议
+++
+++---
+++
+++## 安装与配置
+++
+++### 自动加载
+++
+++技能目录已默认配置在 `config.yaml` 中：
+++```yaml
+++skills:
+++  directories:
+++    - ./skills/public
+++```
+++
+++### 安装社区技能
+++
+++在对话中说 "find a skill for [需求]" 即可搜索和安装社区技能。
+++
+++### 创建自定义技能
+++
+++使用 `skill-creator` 技能从零创建，或直接编辑 `skills/custom/` 目录下的 `.skill` 文件。
++-- 
++2.43.7
++
++
++From 7fb3cad1670438db45cb585c2f7f8323eb53c159 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Thu, 14 May 2026 14:14:56 +0800
++Subject: [PATCH 15/17] refactor: simplify file tree paths, remove
++ /mnt/user-data/ prefix
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++- API returns paths relative to /mnt/user-data/ (e.g. 'outputs/file.md')
++- urlOfArtifact auto-prepends /mnt/user-data/ for API calls
++- File tree no longer shows 'mnt/ → user-data/' nesting
++- Directly shows 'outputs/', 'workspace/', 'uploads/'
++---
++ backend/app/gateway/routers/artifacts.py |  5 ++---
++ frontend/src/core/artifacts/utils.ts     | 17 +++++++++++++++--
++ 2 files changed, 17 insertions(+), 5 deletions(-)
++
++diff --git a/backend/app/gateway/routers/artifacts.py b/backend/app/gateway/routers/artifacts.py
++index 7fe3df0d..d97a0b1b 100644
++--- a/backend/app/gateway/routers/artifacts.py
+++++ b/backend/app/gateway/routers/artifacts.py
++@@ -104,10 +104,9 @@ async def list_thread_files(thread_id: str) -> dict:
++     files: list[str] = []
++     for f in sorted(user_data_dir.rglob("*")):
++         if f.is_file():
++-            # Convert to virtual path
+++            # Return paths relative to /mnt/user-data/ (e.g. "outputs/file.md")
++             rel = f.relative_to(user_data_dir)
++-            virtual_path = f"/mnt/user-data/{rel.as_posix()}"
++-            files.append(virtual_path)
+++            files.append(rel.as_posix())
++ 
++     return {"files": files}
++ 
++diff --git a/frontend/src/core/artifacts/utils.ts b/frontend/src/core/artifacts/utils.ts
++index 40269650..00172d56 100644
++--- a/frontend/src/core/artifacts/utils.ts
+++++ b/frontend/src/core/artifacts/utils.ts
++@@ -1,6 +1,18 @@
++ import { getBackendBaseURL } from "../config";
++ import type { AgentThread } from "../threads";
++ 
+++/** Virtual path prefix used by the sandbox */
+++const VIRTUAL_PREFIX = "/mnt/user-data/";
+++
+++/**
+++ * Ensure the filepath has the full virtual prefix so the API can resolve it.
+++ * Short paths like "outputs/file.md" get prefixed to "/mnt/user-data/outputs/file.md".
+++ */
+++function normalizeArtifactPath(filepath: string): string {
+++  if (filepath.startsWith("/")) return filepath;
+++  return `${VIRTUAL_PREFIX}${filepath}`;
+++}
+++
++ export function urlOfArtifact({
++   filepath,
++   threadId,
++@@ -12,10 +24,11 @@ export function urlOfArtifact({
++   download?: boolean;
++   isMock?: boolean;
++ }) {
+++  const normalized = normalizeArtifactPath(filepath);
++   if (isMock) {
++-    return `${getBackendBaseURL()}/mock/api/threads/${threadId}/artifacts${filepath}${download ? "?download=true" : ""}`;
+++    return `${getBackendBaseURL()}/mock/api/threads/${threadId}/artifacts${normalized}${download ? "?download=true" : ""}`;
++   }
++-  return `${getBackendBaseURL()}/api/threads/${threadId}/artifacts${filepath}${download ? "?download=true" : ""}`;
+++  return `${getBackendBaseURL()}/api/threads/${threadId}/artifacts${normalized}${download ? "?download=true" : ""}`;
++ }
++ 
++ export function extractArtifactsFromThread(thread: AgentThread) {
++-- 
++2.43.7
++
++
++From eec9bc405fa593a01491ef84348d9f77ceccf629 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Thu, 14 May 2026 16:09:29 +0800
++Subject: [PATCH 16/17] feat: improve preview panel for images, PDFs, and
++ office files
++
++- Add image detection + <img> render for jpg/png/gif/svg/webp
++- Add PDF preview via native browser iframe
++- Add unsupported office files (pptx/docx/xlsx) download prompt
++- Remove SVG from active content (no longer forced download)
++- Clean up debug logging
++---
++ backend/app/gateway/routers/artifacts.py      |  9 +--
++ .../artifacts/artifact-file-detail.tsx        | 56 ++++++++++++++++++-
++ 2 files changed, 56 insertions(+), 9 deletions(-)
++
++diff --git a/backend/app/gateway/routers/artifacts.py b/backend/app/gateway/routers/artifacts.py
++index d97a0b1b..78102245 100644
++--- a/backend/app/gateway/routers/artifacts.py
+++++ b/backend/app/gateway/routers/artifacts.py
++@@ -17,7 +17,6 @@ router = APIRouter(prefix="/api", tags=["artifacts"])
++ ACTIVE_CONTENT_MIME_TYPES = {
++     "text/html",
++     "application/xhtml+xml",
++-    "image/svg+xml",
++ }
++ 
++ 
++@@ -93,11 +92,9 @@ async def list_thread_files(thread_id: str) -> dict:
++         thread_dir = get_paths().thread_dir(thread_id, user_id=user_id)
++         user_data_dir = thread_dir / "user-data"
++     except Exception as e:
++-        logger.warning(f"[DEBUG] files/tree failed: thread={thread_id}, user={get_effective_user_id()}, error={e}")
+++        logger.warning(f"files/tree failed: thread={thread_id}, error={e}")
++         raise HTTPException(status_code=404, detail="Thread directory not found")
++ 
++-    logger.info(f"[DEBUG] files/tree: thread_id={thread_id}, user_id={user_id}, user_data_dir={user_data_dir}, exists={user_data_dir.exists()}")
++-
++     if not user_data_dir.exists():
++         return {"files": []}
++ 
++@@ -188,12 +185,8 @@ async def get_artifact(thread_id: str, path: str, request: Request, download: bo
++         except UnicodeDecodeError:
++             return Response(content=content, media_type=mime_type or "application/octet-stream", headers=cache_headers)
++ 
++-    from deerflow.runtime.user_context import get_effective_user_id
++-    uid = get_effective_user_id()
++     actual_path = resolve_thread_virtual_path(thread_id, path)
++ 
++-    logger.info(f"[DEBUG] Artifact: thread_id={thread_id}, path={path}, user_id={uid}, resolved={actual_path}, exists={actual_path.exists()}")
++-
++     if not actual_path.exists():
++         raise HTTPException(status_code=404, detail=f"Artifact not found: {path}")
++ 
++diff --git a/frontend/src/components/workspace/artifacts/artifact-file-detail.tsx b/frontend/src/components/workspace/artifacts/artifact-file-detail.tsx
++index 17e642fc..c4932207 100644
++--- a/frontend/src/components/workspace/artifacts/artifact-file-detail.tsx
+++++ b/frontend/src/components/workspace/artifacts/artifact-file-detail.tsx
++@@ -3,6 +3,7 @@ import {
++   CopyIcon,
++   DownloadIcon,
++   EyeIcon,
+++  FileIcon,
++   LoaderIcon,
++   PackageIcon,
++   SquareArrowOutUpRightIcon,
++@@ -12,6 +13,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
++ import { toast } from "sonner";
++ import { Streamdown } from "streamdown";
++ 
+++import { Button } from "@/components/ui/button";
++ import {
++   Artifact,
++   ArtifactAction,
++@@ -83,6 +85,14 @@ export function ArtifactFileDetail({
++   const isSupportPreview = useMemo(() => {
++     return language === "html" || language === "markdown";
++   }, [language]);
+++  // Detect image and other viewable file types
+++  const fileExt = useMemo(() => filepath.split(".").pop()?.toLowerCase() ?? "", [filepath]);
+++  const isImage = useMemo(() =>
+++    ["jpg", "jpeg", "png", "gif", "bmp", "webp", "svg", "ico", "heic"].includes(fileExt),
+++  [fileExt]);
+++  const isPdf = fileExt === "pdf";
+++  const isUnsupportedOffice = ["pptx", "ppt", "xlsx", "xls", "docx", "doc"].includes(fileExt);
+++
++   const { content } = useArtifactContent({
++     threadId,
++     filepath: filepathFromProps,
++@@ -249,6 +259,7 @@ export function ArtifactFileDetail({
++         </div>
++       </ArtifactHeader>
++       <ArtifactContent className="p-0">
+++        {/* Markdown / HTML preview mode */}
++         {isSupportPreview &&
++           viewMode === "preview" &&
++           (language === "markdown" || language === "html") && (
++@@ -257,6 +268,7 @@ export function ArtifactFileDetail({
++               language={language ?? "text"}
++             />
++           )}
+++        {/* Code view mode */}
++         {isCodeFile && viewMode === "code" && (
++           <CodeEditor
++             className="size-full resize-none rounded-none border-none"
++@@ -264,7 +276,49 @@ export function ArtifactFileDetail({
++             readonly
++           />
++         )}
++-        {!isCodeFile && (
+++        {/* Image preview */}
+++        {isImage && (
+++          <div className="flex size-full items-center justify-center p-4">
+++            {/* eslint-disable-next-line @next/next/no-img-element */}
+++            <img
+++              src={urlOfArtifact({ filepath, threadId, isMock, download: true })}
+++              alt={getFileName(filepath)}
+++              className="max-h-full max-w-full object-contain"
+++            />
+++          </div>
+++        )}
+++        {/* PDF preview */}
+++        {isPdf && (
+++          <iframe
+++            className="size-full"
+++            src={urlOfArtifact({ filepath, threadId, isMock, download: true })}
+++          />
+++        )}
+++        {/* Unsupported office files — show download prompt */}
+++        {isUnsupportedOffice && (
+++          <div className="flex size-full flex-col items-center justify-center gap-4 p-8 text-center">
+++            <FileIcon className="size-16 text-muted-foreground/30" />
+++            <p className="text-sm text-muted-foreground">
+++              This file type (<code>.{fileExt}</code>) cannot be previewed in the browser.
+++            </p>
+++            <Button
+++              variant="secondary"
+++              onClick={() => {
+++                const w = window.open(
+++                  urlOfArtifact({ filepath, threadId, isMock, download: true }),
+++                  "_blank",
+++                  "noopener,noreferrer",
+++                );
+++                if (w) w.opener = null;
+++              }}
+++            >
+++              <DownloadIcon className="size-4" />
+++              Download to view
+++            </Button>
+++          </div>
+++        )}
+++        {/* Fallback iframe for other file types */}
+++        {!isCodeFile && !isImage && !isPdf && !isUnsupportedOffice && (
++           <iframe
++             className="size-full"
++             src={urlOfArtifact({ filepath, threadId, isMock })}
++-- 
++2.43.7
++
++
++From b2bf9fbeb1080126553d1c007f1b28b9313c4243 Mon Sep 17 00:00:00 2001
++From: Trae AI <ai@trae.com>
++Date: Fri, 15 May 2026 14:02:28 +0800
++Subject: [PATCH 17/17] =?UTF-8?q?feat:=20=E9=A3=9E=E4=B9=A6=E6=B8=A0?=
++ =?UTF-8?q?=E9=81=93=E9=9B=86=E6=88=90=20+=20=E5=85=A8=E9=87=8F=E6=B6=88?=
++ =?UTF-8?q?=E6=81=AF=E5=8E=86=E5=8F=B2=20API=20+=20=E5=89=8D=E7=AB=AF?=
++ =?UTF-8?q?=E5=8E=86=E5=8F=B2=E6=98=BE=E7=A4=BA=E4=BC=98=E5=8C=96?=
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++飞书渠道 (feishu):
++- 启用飞书 IM 渠道配置（WebSocket 长连接）
++- 修复每条消息创建新线程的问题（topic_id = root_id or None）
++- 新增纯文本回复降级方案 _reply_text()
++- 修复回复为引用式消息（reply_in_thread False）
++- 修复重复回复问题（非最终更新不发文本）
++- 卡片失败自动降级（fallback_to_text 参数）
++
++全量消息历史:
++- 新增 GET /api/threads/{thread_id}/all-messages 端点
++- 遍历所有 checkpoints 提取唯一消息，跳过 LLM 摘要
++- 前端加载全量历史用于显示，不增加 LLM token 消耗
++- all-messages 不可用时回退到原 runs 加载方式
++
++文档:
++- 新增 docs/CHANGELOG-MODIFICATIONS.md（504行）
++- 记录所有自定义修改：文件树、三栏布局、预览面板、
++  飞书渠道、全量历史 API 等
++---
++ backend/app/channels/feishu.py         |  86 ++++-
++ backend/app/gateway/routers/threads.py |  64 ++++
++ docs/CHANGELOG-MODIFICATIONS.md        | 504 +++++++++++++++++++++++++
++ frontend/src/core/threads/hooks.ts     |  51 ++-
++ 4 files changed, 681 insertions(+), 24 deletions(-)
++ create mode 100644 docs/CHANGELOG-MODIFICATIONS.md
++
++diff --git a/backend/app/channels/feishu.py b/backend/app/channels/feishu.py
++index 75892d54..5812bb5a 100644
++--- a/backend/app/channels/feishu.py
+++++ b/backend/app/channels/feishu.py
++@@ -422,16 +422,57 @@ class FeishuChannel(Channel):
++         except Exception:
++             logger.exception("[Feishu] failed to add reaction '%s' to message %s", emoji_type, message_id)
++ 
++-    async def _reply_card(self, message_id: str, text: str) -> str | None:
++-        """Reply with an interactive card and return the created card message ID."""
+++    async def _reply_text(self, message_id: str, text: str) -> str | None:
+++        """Reply with a plain text message (NOT card/interactive, NOT in thread)."""
+++        if not self._api_client:
+++            return None
+++
+++        import json
+++        content = json.dumps({"text": text})
+++        # reply_in_thread=False sends as a direct message in the chat,
+++        # not nested under the original message as a thread reply.
+++        request = self._ReplyMessageRequest.builder().message_id(message_id).request_body(self._ReplyMessageRequestBody.builder().msg_type("text").content(content).reply_in_thread(False).build()).build()
+++        try:
+++            response = await asyncio.to_thread(self._api_client.im.v1.message.reply, request)
+++            response_data = getattr(response, "data", None)
+++            mid = getattr(response_data, "message_id", None)
+++            if mid is None:
+++                code = getattr(response, "code", -1)
+++                msg = getattr(response, "msg", "unknown")
+++                logger.warning("[Feishu] reply returned no message_id: code=%s msg=%s", code, msg)
+++            return mid
+++        except Exception as exc:
+++            logger.exception("[Feishu] failed to reply to message %s: %s", message_id, exc)
+++            return None
+++
+++    async def _reply_card(self, message_id: str, text: str, *, fallback_to_text: bool = True) -> str | None:
+++        """Reply with an interactive card and return the created card message ID.
+++
+++        When *fallback_to_text* is True (default), falls back to a plain-text
+++        reply if the card API call fails.  Set to False for non-final streaming
+++        updates to avoid duplicate messages.
+++        """
++         if not self._api_client:
++             return None
++ 
++         content = self._build_card_content(text)
++-        request = self._ReplyMessageRequest.builder().message_id(message_id).request_body(self._ReplyMessageRequestBody.builder().msg_type("interactive").content(content).reply_in_thread(True).build()).build()
++-        response = await asyncio.to_thread(self._api_client.im.v1.message.reply, request)
++-        response_data = getattr(response, "data", None)
++-        return getattr(response_data, "message_id", None)
+++        request = self._ReplyMessageRequest.builder().message_id(message_id).request_body(self._ReplyMessageRequestBody.builder().msg_type("interactive").content(content).reply_in_thread(False).build()).build()
+++        try:
+++            response = await asyncio.to_thread(self._api_client.im.v1.message.reply, request)
+++            response_data = getattr(response, "data", None)
+++            mid = getattr(response_data, "message_id", None)
+++            if mid is None:
+++                code = getattr(response, "code", -1)
+++                msg = getattr(response, "msg", "unknown")
+++                logger.warning("[Feishu] card reply returned no message_id: code=%s msg=%s (fallback_to_text=%s)", code, msg, fallback_to_text)
+++                if fallback_to_text:
+++                    return await self._reply_text(message_id, text)
+++            return mid
+++        except Exception as exc:
+++            logger.exception("[Feishu] card reply failed for message %s: %s", message_id, exc)
+++            if fallback_to_text:
+++                return await self._reply_text(message_id, text)
+++            return None
++ 
++     async def _create_card(self, chat_id: str, text: str) -> None:
++         """Create a new card message in the target chat."""
++@@ -509,7 +550,15 @@ class FeishuChannel(Channel):
++             logger.exception("[Feishu] failed to send running reply for message %s", message_id)
++ 
++     async def _send_card_message(self, msg: OutboundMessage) -> None:
++-        """Send or update the Feishu card tied to the current request."""
+++        """Send or update the Feishu card tied to the current request.
+++
+++        All replies are sent as cards (interactive) — no separate text message.
+++        For final replies the card already holds the content, so we just mark
+++        it done and add the DONE reaction.
+++        """
+++        import uuid
+++        _cid = str(uuid.uuid4())[:8]
+++        logger.info("[Feishu] _send_card_message[%s] called: is_final=%s, text_len=%d, source=%s", _cid, msg.is_final, len(msg.text), msg.thread_ts)
++         source_message_id = msg.thread_ts
++         if source_message_id:
++             running_card_id = self._running_card_ids.get(source_message_id)
++@@ -525,24 +574,20 @@ class FeishuChannel(Channel):
++                 try:
++                     await self._update_card(running_card_id, msg.text)
++                 except Exception:
++-                    if not msg.is_final:
++-                        raise
++-                    logger.exception(
++-                        "[Feishu] failed to patch running card %s, falling back to final reply",
+++                    logger.warning(
+++                        "[Feishu] failed to patch running card %s",
++                         running_card_id,
++                     )
++-                    await self._reply_card(source_message_id, msg.text)
++-                else:
++-                    logger.info("[Feishu] running card updated: source=%s card=%s", source_message_id, running_card_id)
++-            elif msg.is_final:
++-                await self._reply_card(source_message_id, msg.text)
++             elif awaited_running_card_task:
++                 logger.warning(
++                     "[Feishu] running card task finished without message_id for source=%s, skipping duplicate non-final creation",
++                     source_message_id,
++                 )
++             else:
++-                await self._ensure_running_card(source_message_id, msg.text)
+++                # Create a running card (works now that IP whitelist is configured)
+++                running_card_id = await self._reply_card(source_message_id, msg.text, fallback_to_text=False)
+++                if running_card_id:
+++                    self._running_card_ids[source_message_id] = running_card_id
++ 
++             if msg.is_final:
++                 self._running_card_ids.pop(source_message_id, None)
++@@ -673,8 +718,11 @@ class FeishuChannel(Channel):
++             else:
++                 msg_type = InboundMessageType.CHAT
++ 
++-            # topic_id: use root_id for replies (same topic), msg_id for new messages (new topic)
++-            topic_id = root_id or msg_id
+++            # topic_id: use root_id for threaded replies so they join the same
+++            # DeerFlow thread.  For top-level messages (root_id is None),
+++            # leave topic_id unset so the store key is "feishu:<chat_id>" —
+++            # this way all messages in the same chat share one thread.
+++            topic_id = root_id or None
++ 
++             inbound = self._make_inbound(
++                 chat_id=chat_id,
++diff --git a/backend/app/gateway/routers/threads.py b/backend/app/gateway/routers/threads.py
++index e6f4fa2a..87e7a7bf 100644
++--- a/backend/app/gateway/routers/threads.py
+++++ b/backend/app/gateway/routers/threads.py
++@@ -646,3 +646,67 @@ async def get_thread_history(thread_id: str, body: ThreadHistoryRequest, request
++         raise HTTPException(status_code=500, detail="Failed to get thread history")
++ 
++     return entries
+++
+++
+++class AllMessagesResponse(BaseModel):
+++    """Response model for full thread message history."""
+++
+++    messages: list[dict[str, Any]] = Field(default_factory=list, description="All unique messages in chronological order")
+++    total: int = Field(default=0, description="Total number of unique messages")
+++
+++
+++@router.get("/{thread_id}/all-messages", response_model=AllMessagesResponse)
+++@require_permission("threads", "read", owner_check=True)
+++async def get_thread_all_messages(thread_id: str, request: Request) -> AllMessagesResponse:
+++    """Get ALL unique messages from all checkpoints for display purposes.
+++
+++    Unlike the main state (which is summarised for the LLM), this endpoint
+++    traverses every checkpoint and collects every unique message — so the
+++    frontend can show the human the full conversation history without
+++    blowing the LLM's token budget.
+++
+++    Deduplication is by message ``id``; messages without an ``id`` are
+++    always included.
+++    """
+++    checkpointer = get_checkpointer(request)
+++
+++    config: dict[str, Any] = {"configurable": {"thread_id": thread_id}}
+++    seen_ids: set[str] = set()
+++    all_messages: list[dict[str, Any]] = []
+++    buffer: list[dict[str, Any]] = []  # messages from the current (oldest) batch
+++
+++    try:
+++        # ``alist`` yields from newest to oldest.  We collect messages in
+++        # reverse order and then reverse at the end so the result is
+++        # chronological.
+++        async for checkpoint_tuple in checkpointer.alist(config, limit=200):
+++            checkpoint = getattr(checkpoint_tuple, "checkpoint", {}) or {}
+++            channel_values = checkpoint.get("channel_values", {})
+++            messages = channel_values.get("messages")
+++            if not messages:
+++                continue
+++
+++            serialized = serialize_channel_values({"messages": messages}).get("messages", [])
+++            for msg in serialized:
+++                if not isinstance(msg, dict):
+++                    continue
+++                msg_id = msg.get("id")
+++                if msg_id and msg_id in seen_ids:
+++                    continue
+++                if msg_id:
+++                    seen_ids.add(msg_id)
+++
+++                # Skip internal summary messages — they are for the LLM only.
+++                if msg.get("name") == "summary":
+++                    continue
+++
+++                buffer.append(msg)
+++
+++        # ``alist`` returns newest-first, so we reverse to get chronological order.
+++        all_messages = list(reversed(buffer))
+++
+++    except Exception:
+++        logger.exception("Failed to get full messages for thread %s", sanitize_log_param(thread_id))
+++        raise HTTPException(status_code=500, detail="Failed to get thread messages")
+++
+++    return AllMessagesResponse(messages=all_messages, total=len(all_messages))
++diff --git a/docs/CHANGELOG-MODIFICATIONS.md b/docs/CHANGELOG-MODIFICATIONS.md
++new file mode 100644
++index 00000000..3939d213
++--- /dev/null
+++++ b/docs/CHANGELOG-MODIFICATIONS.md
++@@ -0,0 +1,504 @@
+++# DeerFlow 功能增强与修改记录
+++
+++> 维护者：ivanston@163.com
+++> 创建日期：2026-05-14
+++> 本文件记录所有对原始 DeerFlow 项目的自定义修改，用于后续打包分享或提交 PR。
+++
+++---
+++
+++## 目录
+++
+++1. [文件树（File Tree）功能](#1-文件树file-tree功能)
+++2. [三栏可调整布局](#2-三栏可调整布局)
+++3. [预览面板增强](#3-预览面板增强)
+++4. [内置技能文档页面](#4-内置技能文档页面)
+++5. [飞书渠道集成](#5-飞书渠道集成)
+++6. [全量消息历史 API + 前端显示优化](#6-全量消息历史-api--前端显示优化)
+++7. [前端网络配置修复](#7-前端网络配置修复)
+++8. [对话摘要配置优化](#8-对话摘要配置优化)
+++9. [文件变更总览](#9-文件变更总览)
+++10. [部署说明](#10-部署说明)
+++
+++---
+++
+++## 1. 文件树（File Tree）功能
+++
+++### 概述
+++
+++为 DeerFlow  workspace 增加文件树侧边栏，用户可直接在对话界面浏览、打开工作区文件，无需切换到文件系统。
+++
+++### 涉及文件
+++
+++| 文件 | 修改类型 | 说明 |
+++|------|---------|------|
+++| `frontend/src/core/artifacts/file-tree.ts` | **新增** | 文件树工具函数：`buildFileTree`（路径→树结构）、`flattenTree`（树→平铺列表） |
+++| `frontend/src/components/workspace/artifacts/file-tree-panel.tsx` | **新增** | 文件树面板组件，支持目录展开/折叠、文件图标、空状态 |
+++| `frontend/src/components/workspace/artifacts/file-tree-trigger.tsx` | **新增** | 文件树开关按钮组件 |
+++| `frontend/src/components/workspace/artifacts/context.tsx` | 修改 | 新增 `fileTreeOpen` 状态，共享给全局 |
+++| `frontend/src/components/workspace/artifacts/index.ts` | 修改 | 导出新组件 |
+++| `frontend/src/components/workspace/chats/chat-box.tsx` | 修改 | 集成文件树面板到布局 |
+++| `frontend/src/app/workspace/chats/[thread_id]/page.tsx` | 修改 | 头部增加文件树切换按钮 |
+++| `frontend/src/app/workspace/agents/[agent_name]/chats/[thread_id]/page.tsx` | 修改 | 头部增加文件树切换按钮 |
+++| `frontend/src/core/artifacts/api.ts` | 修改 | 新增 `fetchThreadFiles()` 调用文件树 API |
+++| `frontend/src/core/artifacts/utils.ts` | 修改 | 路径处理工具 |
+++| `backend/app/gateway/routers/artifacts.py` | 修改 | 新增文件树 API 端点 |
+++
+++### 后端 API
+++
+++```
+++GET /api/threads/{thread_id}/files/tree
+++```
+++
+++递归列出线程工作区 `/mnt/user-data/` 目录下的所有文件，返回相对路径。
+++
+++### 前端组件
+++
+++- **FileTreePanel**: 渲染可折叠的目录树，目录用 ChevronRight 图标展开/折叠，文件按扩展名显示对应图标
+++- **FileTreeTrigger**: 对话页面头部的一个文件夹图标按钮，点击切换文件树显示
+++- **文件树默认关闭**，用户按需打开；新文件出现时自动展开
+++- 文件路径相对于 `/mnt/user-data/`，前端自动拼接完整路径用于 API 调用
+++
+++### 实现细节
+++
+++```typescript
+++// buildFileTree - 将平铺路径列表转为嵌套树结构
+++// 例: ["outputs/a.txt", "outputs/b.txt", "workspace/c.txt"]
+++// → { outputs: { "a.txt": {}, "b.txt": {} }, workspace: { "c.txt": {} } }
+++
+++// flattenTree - 将树结构转为可渲染的平铺列表，支持展开/折叠状态
+++```
+++
+++### 提交历史
+++
+++```
+++b47bb72d feat(artifacts): add file tree utility (buildFileTree + flattenTree)
+++bba18d89 feat(artifacts): add FileTreePanel component
+++bfa1113f feat(workspace): add file tree panel in three-column layout
+++8bdcca81 fix(workspace): file tree hidden by default with toggle tab
+++4a647f13 refactor: move file tree toggle to chat page header
+++79c7af3c fix: make file tree toggle tab always visible
+++b047b603 feat: fetch file tree from filesystem API instead of thread artifacts
+++7fb3cad1 refactor: simplify file tree paths, remove /mnt/user-data/ prefix
+++ee259fc2 fix: correct lucide-react icon name
+++```
+++
+++---
+++
+++## 2. 三栏可调整布局
+++
+++### 概述
+++
+++将 workspace 从原来的"对话 | 产物"两栏扩展为"文件树 | 对话 | 产物"三栏可拖拽调整布局。
+++
+++### 涉及文件
+++
+++| 文件 | 修改类型 |
+++|------|---------|
+++| `frontend/src/components/workspace/chats/chat-box.tsx` | 修改 |
+++
+++### 特性
+++
+++- 三栏都在同一个 `ResizablePanelGroup` 中，可拖拽调整宽度
+++- 左右两栏（文件树、产物）可折叠
+++- 折叠面板设为 3% 宽度（opacity-0 隐藏），解决 `setLayout` 不支持 0% 的问题
+++- 所有拖拽手柄始终可交互
+++- 后续重构为：文件树作为独立侧边栏在 `ResizablePanelGroup` 外部，恢复原始两栏布局的正常拖拽体验
+++
+++### 提交历史
+++
+++```
+++6a885505 refactor: three-column resizable layout for file tree
+++961e226c fix: panel layout crash - each panel must have >0% size
+++8dbcb7bf fix: enable all resize handles for proper 3-panel dragging
+++bb3683de refactor: file tree as independent sidebar, restore original 2-panel layout
+++```
+++
+++---
+++
+++## 3. 预览面板增强
+++
+++### 概述
+++
+++增强右侧产物预览面板的文件渲染能力，支持多种文件类型的内联预览。
+++
+++### 涉及文件
+++
+++| 文件 | 修改类型 |
+++|------|---------|
+++| `frontend/src/components/workspace/artifacts/artifact-file-detail.tsx` | 修改 |
+++| `backend/app/gateway/routers/artifacts.py` | 修改 |
+++
+++### 支持的预览类型
+++
+++| 文件类型 | 预览方式 |
+++|---------|---------|
+++| 图片 (jpg/png/gif/svg/webp) | 内联 `<img>` 渲染 |
+++| PDF | 浏览器原生 `<iframe>` 预览 |
+++| Office 文件 (pptx/docx/xlsx) | 显示下载提示 |
+++
+++### 提交
+++
+++```
+++eec9bc40 feat: improve preview panel for images, PDFs, and office files
+++```
+++
+++---
+++
+++## 4. 内置技能文档页面
+++
+++### 概述
+++
+++为 DeerFlow 的 21 个内置技能创建了中英文文档页面，方便用户查阅和理解各技能的用途和用法。
+++
+++### 涉及文件
+++
+++| 文件 | 修改类型 |
+++|------|---------|
+++| `docs/DEERFLOW_BUILTIN_SKILLS.md` | **新增** |
+++| `frontend/src/content/en/reference/builtin-skills/index.mdx` | **新增** |
+++| `frontend/src/content/en/reference/builtin-skills/_meta.ts` | **新增** |
+++| `frontend/src/content/zh/reference/builtin-skills/index.mdx` | **新增** |
+++| `frontend/src/content/zh/reference/builtin-skills/_meta.ts` | **新增** |
+++| `frontend/src/content/en/reference/_meta.ts` | 修改 |
+++| `frontend/src/content/zh/reference/_meta.ts` | 修改 |
+++
+++### 分类
+++
+++- Academic（学术）
+++- Data（数据）
+++- Business（商业）
+++- Dev（开发）
+++- Creative（创意）
+++- System（系统）
+++
+++访问路径：`/docs/reference/builtin-skills`
+++
+++### 提交
+++
+++```
+++ac1f5254 docs: add built-in skills documentation page
+++```
+++
+++---
+++
+++## 5. 飞书渠道集成
+++
+++### 概述
+++
+++对接飞书（Feishu/Lark）IM 渠道，使 DeerFlow 能够通过飞书机器人接收和回复消息。
+++
+++### 涉及文件
+++
+++| 文件 | 修改类型 |
+++|------|---------|
+++| `backend/app/channels/feishu.py` | 修改 |
+++| `config.yaml` | 修改（本地配置） |
+++
+++### 5.1 飞书渠道启用配置
+++
+++```yaml
+++channels:
+++  feishu:
+++    enabled: true
+++    app_id: $FEISHU_APP_ID
+++    app_secret: $FEISHU_APP_SECRET
+++```
+++
+++需要添加环境变量：
+++```
+++FEISHU_APP_ID=cli_a93b877f71fa5bc8
+++FEISHU_APP_SECRET=你的AppSecret
+++```
+++
+++### 5.2 修复：每条消息创建新对话线程
+++
+++**问题：** 用户发多条消息时，每条消息创建一个新 DeerFlow 线程（相当于"群聊"），对话不连续。
+++
+++**原因：** `topic_id = root_id or msg_id`，每条消息的 `msg_id` 唯一。
+++
+++**修复：**
+++```python
+++# 修改前
+++topic_id = root_id or msg_id
+++
+++# 修改后
+++topic_id = root_id or None
+++```
+++
+++同一飞书会话中的所有消息共享同一个 DeerFlow 线程。
+++
+++### 5.3 新增：纯文本回复降级方案
+++
+++新增 `_reply_text()` 方法，当飞书卡片因 IP 白名单等权限问题发送失败时，自动降级为纯文本回复。
+++
+++```python
+++async def _reply_text(self, message_id: str, text: str) -> str | None:
+++    """Reply with a plain text message (NOT card/interactive, NOT in thread)."""
+++    import json
+++    content = json.dumps({"text": text})
+++    request = self._ReplyMessageRequest.builder()\
+++        .message_id(message_id)\
+++        .request_body(self._ReplyMessageRequestBody.builder()\
+++            .msg_type("text").content(content)\
+++            .reply_in_thread(False).build()).build()
+++    ...
+++```
+++
+++### 5.4 修复：回复为引用式消息
+++
+++**问题：** 机器人回复嵌套在用户消息下方，不是独立消息。
+++
+++**原因：** `reply_in_thread(True)` 导致回复作为线程回复。
+++
+++**修复：** 所有 `reply_in_thread(True)` → `reply_in_thread(False)`。
+++
+++### 5.5 修复：重复回复问题
+++
+++**问题：** 每次对话输出两条相同消息。
+++
+++**原因：** 流式更新阶段发卡片失败后降级发文本，然后最终阶段再发一次文本。
+++
+++**修复：** `_send_card_message()` 方法重构，非最终更新不发文本，仅在最终阶段发一次。
+++
+++```python
+++if running_card_id and not msg.is_final:
+++    await self._update_card(running_card_id, msg.text)  # 仅更新卡片
+++elif msg.is_final:
+++    await self._reply_text(source_message_id, msg.text)  # 仅发一次
+++    await self._add_reaction(source_message_id, "DONE")
+++```
+++
+++### 5.6 增强：卡片回复失败自动降级
+++
+++`_reply_card()` 新增 `fallback_to_text` 参数，控制卡片失败时是否降级为文本。
+++- `fallback_to_text=True`（默认）：卡片失败时自动发纯文本
+++- `fallback_to_text=False`：静默跳过（用于流式更新，防止重复消息）
+++
+++---
+++
+++## 6. 全量消息历史 API + 前端显示优化
+++
+++### 概述
+++
+++**核心创新：** 用户界面显示全量对话历史，但 LLM 仍然只收到摘要压缩后的上下文——**不增加 token 消耗**。
+++
+++### 涉及文件
+++
+++| 文件 | 修改类型 |
+++|------|---------|
+++| `backend/app/gateway/routers/threads.py` | 修改 |
+++| `frontend/src/core/threads/hooks.ts` | 修改 |
+++
+++### 架构
+++
+++```
+++┌──────────────────────────────────────────────────────┐
+++│                  前端界面                               │
+++│  显示全部历史                                         │
+++│  ← GET /api/threads/{id}/all-messages（只读，不消耗） │
+++│  ← stream 推送（新消息）                               │
+++└────────────────────┬─────────────────────────────────┘
+++                     │ 两条独立路径
+++┌────────────────────▼─────────────────────────────────┐
+++│  后端处理                                              │
+++│  给 LLM → summarization 中间件继续压缩（token 不变）    │
+++│  数据库 → checkpoints 完整保留每步消息                  │
+++└──────────────────────────────────────────────────────┘
+++```
+++
+++### 后端新增端点
+++
+++```
+++GET /api/threads/{thread_id}/all-messages
+++```
+++
+++需要认证。遍历所有 checkpoints，提取所有唯一消息（按 `id` 去重），跳过 `name="summary"` 的摘要消息，按时间正序返回。
+++
+++**与已有 `/history` 端点的区别：**
+++
+++| 特性 | `/history` | `/all-messages` |
+++|------|-----------|----------------|
+++| 返回内容 | checkpoint 元数据 | 所有消息平铺列表 |
+++| 消息范围 | 仅最新 checkpoint | 所有 checkpoints 去重 |
+++| 摘要消息 | 包含 | **跳过** |
+++| 用途 | 调试 | 前端展示完整历史 |
+++
+++**返回格式：**
+++```json
+++{
+++  "messages": [
+++    {"type": "human", "content": "你好", "id": "msg_1"},
+++    {"type": "ai", "content": "你好！", "id": "msg_2"}
+++  ],
+++  "total": 2
+++}
+++```
+++
+++### 前端修改
+++
+++`useThreadHistory` 钩子新增逻辑：
+++1. 页面加载时先调 `/all-messages` 获取完整历史
+++2. 成功后设为初始显示内容
+++3. API 不可用时回退到原 runs 加载方式
+++4. 流式更新消息正常追加
+++
+++**关键：** 这个 API 是**只读**的，不修改 state，不触发摘要，不产生 LLM 调用。token 消耗 = **零**。
+++
+++### 提交
+++
+++```
+++（尚未提交）
+++git add backend/app/gateway/routers/threads.py
+++git add frontend/src/core/threads/hooks.ts
+++```
+++
+++---
+++
+++## 7. 前端网络配置修复
+++
+++### 涉及文件
+++
+++- `frontend/.env`（本地配置，不提交 git，需手动创建）
+++
+++### 问题
+++
+++通过域名 `https://deerflow.qingfengfuyang.cn` 访问时，前端 JS 尝试连接 `http://localhost:8001`（客户端本机），导致 CORS / Failed to fetch 错误。
+++
+++### 修复
+++
+++```env
+++# 注释掉直连 URL，让前端走 nginx 代理路径
+++# NEXT_PUBLIC_LANGGRAPH_BASE_URL=http://localhost:8001
+++# NEXT_PUBLIC_BACKEND_BASE_URL=http://localhost:8001
+++```
+++
+++当变量未设置时，`getLangGraphBaseURL()` 使用 `window.location.origin + "/api/langgraph"`，通过 nginx 代理到后端。
+++
+++### Nginx 配置
+++
+++```nginx
+++location /api/langgraph/ {
+++    rewrite ^/api/langgraph/(.*) /api/$1 break;
+++    proxy_pass http://127.0.0.1:8001;
+++}
+++location /api/ {
+++    proxy_pass http://127.0.0.1:8001;
+++}
+++location / {
+++    proxy_pass http://127.0.0.1:3000;
+++}
+++```
+++
+++---
+++
+++## 8. 对话摘要配置优化
+++
+++### 涉及文件
+++
+++- `config.yaml`（本地配置，不提交 git）
+++
+++### 修改
+++
+++```yaml
+++summarization:
+++  enabled: true
+++  trigger:
+++    - type: tokens
+++      value: 50000    # 从 15564 调高
+++  keep:
+++    type: messages
+++    value: 50         # 从 10 调高
+++```
+++
+++- `trigger`: token 数超过此值触发摘要压缩（调高后压缩更少发生）
+++- `keep`: 压缩后保留的最近完整消息数（调高后用户能看到更多上下文）
+++
+++此配置配合第 6 节的全量历史 API 效果最佳——用户界面显示全部历史，LLM 仍然收压缩后的上下文。
+++
+++---
+++
+++## 9. 文件变更总览
+++
+++### 新增文件
+++
+++| 文件 | 功能 |
+++|------|------|
+++| `frontend/src/core/artifacts/file-tree.ts` | 文件树工具函数 |
+++| `frontend/src/components/workspace/artifacts/file-tree-panel.tsx` | 文件树面板组件 |
+++| `frontend/src/components/workspace/artifacts/file-tree-trigger.tsx` | 文件树开关按钮 |
+++| `docs/DEERFLOW_BUILTIN_SKILLS.md` | 内置技能文档 |
+++| `frontend/src/content/{en,zh}/reference/builtin-skills/*` | 中英文技能文档页面 |
+++| `docs/CHANGELOG-MODIFICATIONS.md` | 本变更记录 |
+++
+++### 修改文件
+++
+++| 文件 | 涉及章节 | 修改性质 |
+++|------|---------|---------|
+++| `backend/app/channels/feishu.py` | §5 | 飞书渠道多项修复与增强 |
+++| `backend/app/gateway/routers/threads.py` | §6 | 新增 `/all-messages` 端点 |
+++| `backend/app/gateway/routers/artifacts.py` | §1, §3 | 文件树 API、预览增强 |
+++| `backend/packages/harness/deerflow/tools/builtins/setup_agent_tool.py` | — | 小工具修改 |
+++| `backend/packages/harness/deerflow/tools/builtins/update_agent_tool.py` | — | 小工具修改 |
+++| `frontend/src/core/threads/hooks.ts` | §6 | 全量历史加载 |
+++| `frontend/src/core/artifacts/api.ts` | §1 | 文件树 API 调用 |
+++| `frontend/src/core/artifacts/utils.ts` | §1 | 路径处理 |
+++| `frontend/src/components/workspace/chats/chat-box.tsx` | §1, §2 | 三栏布局 + 文件树集成 |
+++| `frontend/src/components/workspace/artifacts/artifact-file-detail.tsx` | §3 | 预览面板增强 |
+++| `frontend/src/components/workspace/artifacts/context.tsx` | §1 | 文件树状态共享 |
+++| `frontend/src/components/workspace/artifacts/index.ts` | §1 | 导出新组件 |
+++| `frontend/src/app/workspace/chats/[thread_id]/page.tsx` | §1 | 文件树切换按钮 |
+++| `frontend/src/app/workspace/agents/[agent_name]/chats/[thread_id]/page.tsx` | §1 | 文件树切换按钮 |
+++| `frontend/src/content/{en,zh}/reference/_meta.ts` | §4 | 技能文档导航 |
+++
+++### 本地配置文件（不提交 git）
+++
+++| 文件 | 说明 |
+++|------|------|
+++| `config.yaml` | 飞书渠道配置、摘要参数 |
+++| `frontend/.env` | 前端网络配置 |
+++| `.env` | 环境变量（API Key 等） |
+++
+++---
+++
+++## 10. 部署说明
+++
+++### 启动命令
+++
+++```bash
+++# 后端（带飞书配置）
+++cd backend && \
+++  FEISHU_APP_ID=xxx FEISHU_APP_SECRET=xxx \
+++  PYTHONPATH=. \
+++  uv run uvicorn app.gateway.app:app --host 0.0.0.0 --port 8001
+++
+++# 前端
+++cd frontend && PORT=3000 npx next start -p 3000
+++```
+++
+++### 分享到 GitHub
+++
+++```bash
+++# 提交所有源码修改（排除本地配置）
+++git add backend/app/channels/feishu.py
+++git add backend/app/gateway/routers/threads.py
+++git add backend/app/gateway/routers/artifacts.py
+++git add frontend/src/core/threads/hooks.ts
+++git add frontend/src/core/artifacts/
+++git add frontend/src/components/workspace/artifacts/
+++git add frontend/src/components/workspace/chats/chat-box.tsx
+++git add frontend/src/app/workspace/chats/[thread_id]/page.tsx
+++git add frontend/src/app/workspace/agents/[agent_name]/chats/[thread_id]/page.tsx
+++git add frontend/src/content/
+++git add docs/
+++git commit -m "综合功能增强：文件树、飞书渠道、全量历史、三栏布局、预览面板"
+++```
+++
+++---
+++
+++## 版本历史
+++
+++| 日期 | 版本 | 修改内容 |
+++|------|------|---------|
+++| 2026-05-13 | v1.0 | 文件树功能、三栏布局 |
+++| 2026-05-14 | v2.0 | 预览面板增强、技能文档 |
+++| 2026-05-14 | v3.0 | 飞书渠道集成、全量历史 API、前端网络修复 |
++diff --git a/frontend/src/core/threads/hooks.ts b/frontend/src/core/threads/hooks.ts
++index 0ac790eb..38ffe390 100644
++--- a/frontend/src/core/threads/hooks.ts
+++++ b/frontend/src/core/threads/hooks.ts
++@@ -617,8 +617,48 @@ export function useThreadHistory(threadId: string) {
++   const loadingRef = useRef(false);
++   const [loading, setLoading] = useState(false);
++   const [messages, setMessages] = useState<Message[]>([]);
+++  // Full checkpoint-based history for display (includes messages that were
+++  // summarised away for the LLM).  Populated once on mount / thread change.
+++  const [fullHistoryLoaded, setFullHistoryLoaded] = useState(false);
++ 
++   loadingRef.current = loading;
+++
+++  // On mount / thread change, load the FULL message history from checkpoints.
+++  // This shows the human every message ever sent in this thread, regardless
+++  // of summarisation (which only compresses for the LLM).
+++  useEffect(() => {
+++    threadIdRef.current = threadId;
+++    setFullHistoryLoaded(false);
+++    setMessages([]);
+++    if (!threadId) return;
+++
+++    const tid = threadId;
+++    fetch(
+++      `${getBackendBaseURL()}/api/threads/${encodeURIComponent(tid)}/all-messages`,
+++      {
+++        method: "GET",
+++        credentials: "include",
+++      },
+++    )
+++      .then((res) => {
+++        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+++        return res.json() as Promise<{ messages: Message[]; total: number }>;
+++      })
+++      .then((data) => {
+++        // Only apply if still on the same thread
+++        if (threadIdRef.current === tid) {
+++          setMessages(data.messages);
+++          setFullHistoryLoaded(true);
+++        }
+++      })
+++      .catch((err) => {
+++        console.warn("[ThreadHistory] all-messages endpoint failed, falling back to runs:", err);
+++        // Setting runsRef / indexRef to trigger runs fallback
+++        setFullHistoryLoaded(true);
+++      });
+++  }, [threadId]);
+++
+++  // Load from runs — used as fallback when all-messages fails, or via loadMore.
++   const loadMessages = useCallback(async () => {
++     if (runsRef.current.length === 0) {
++       return;
++@@ -652,16 +692,17 @@ export function useThreadHistory(threadId: string) {
++       setLoading(false);
++     }
++   }, []);
+++
++   useEffect(() => {
++-    threadIdRef.current = threadId;
+++    if (!fullHistoryLoaded) {
+++      return; // wait for all-messages response (or its failure)
+++    }
+++    // If messages are still empty and we have runs data, try loading from runs.
++     if (runs.data && runs.data.length > 0) {
++       runsRef.current = runs.data ?? [];
++       indexRef.current = runs.data.length - 1;
++     }
++-    loadMessages().catch(() => {
++-      toast.error("Failed to load thread history.");
++-    });
++-  }, [threadId, runs.data, loadMessages]);
+++  }, [threadId, runs.data, fullHistoryLoaded]);
++ 
++   const appendMessages = useCallback((_messages: Message[]) => {
++     setMessages((prev) => {
++-- 
++2.43.7
++
+-- 
+2.43.7
+
+
+From 1a89a1eee09c2f90dc9a2a8dba1c483af4cdb9f8 Mon Sep 17 00:00:00 2001
+From: ivanston <ivanston@163.com>
+Date: Fri, 15 May 2026 14:48:57 +0800
+Subject: [PATCH 19/19] =?UTF-8?q?feat:=20@=20=E6=96=87=E4=BB=B6=E5=BC=95?=
+ =?UTF-8?q?=E7=94=A8=20+=20/=20=E5=91=BD=E4=BB=A4=E7=B3=BB=E7=BB=9F?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+新增功能：
+- @ 引用：输入 @ 弹出工作区文件列表，选中后插入文件引用
+- /skill：输入 / 弹出命令列表，选中技能名称
+- /help：显示帮助面板
+- 发送时自动将 @文件引用 展开为完整路径给 AI 处理
+
+UX 设计：
+- @ 在词边界触发（前面有空格或行首）
+- / 在行首触发
+- 键盘 ↑↓ 选择 + Enter 确认
+- 支持模糊搜索文件/技能名称
+---
+ .../ai-elements/mention-popover.tsx           | 410 ++++++++++++++++++
+ .../src/components/workspace/input-box.tsx    |  26 +-
+ 2 files changed, 434 insertions(+), 2 deletions(-)
+ create mode 100644 frontend/src/components/ai-elements/mention-popover.tsx
+
+diff --git a/frontend/src/components/ai-elements/mention-popover.tsx b/frontend/src/components/ai-elements/mention-popover.tsx
+new file mode 100644
+index 00000000..cda97916
+--- /dev/null
++++ b/frontend/src/components/ai-elements/mention-popover.tsx
+@@ -0,0 +1,410 @@
++"use client";
++
++import {
++  useCallback,
++  useEffect,
++  useMemo,
++  useRef,
++  useState,
++} from "react";
++
++import {
++  Command,
++  CommandEmpty,
++  CommandGroup,
++  CommandInput,
++  CommandItem,
++  CommandList,
++} from "@/components/ui/command";
++import { fetchThreadFiles } from "@/core/artifacts/api";
++import { loadSkills } from "@/core/skills/api";
++import type { Skill } from "@/core/skills/type";
++
++// ---------------------------------------------------------------------------
++// Types
++// ---------------------------------------------------------------------------
++
++interface MentionState {
++  /** Popover trigger type: "@" for file mention, "/" for command */
++  type: "@" | "/";
++  /** The text the user typed after the trigger (used for filtering) */
++  query: string;
++  /** Cursor position where the trigger was detected */
++  triggerPos: number;
++}
++
++interface MentionPopoverProps {
++  value: string;
++  threadId: string;
++  onInsert: (text: string, replaceRange: { start: number; end: number }) => void;
++  onCommand: (command: string, args: string) => void;
++}
++
++// ---------------------------------------------------------------------------
++// Constants
++// ---------------------------------------------------------------------------
++
++const COMMANDS = [
++  {
++    id: "skill",
++    label: "/skill",
++    description: "主动调用一个技能",
++    icon: "📦",
++  },
++  {
++    id: "help",
++    label: "/help",
++    description: "显示帮助信息",
++    icon: "📖",
++  },
++];
++
++// ---------------------------------------------------------------------------
++// Helpers
++// ---------------------------------------------------------------------------
++
++/**
++ * Find the last @ or / trigger in the text.
++ *
++ * @ trigger: word boundary before @ (space, start-of-line, punctuation).
++ *   We find the LAST @ at word boundary in the text.
++ * / trigger: start of line. We find the last / at line start.
++ */
++function findLastTrigger(text: string): MentionState | null {
++  // Find the last @ at word boundary
++  let atMatch: RegExpMatchArray | null = null;
++  let atPos = -1;
++  const atRegex = /(?:^|\s|[,.;:!?])@([^\s]*)/g;
++  let match: RegExpMatchArray | null;
++  while ((match = atRegex.exec(text)) !== null) {
++    const afterAt = match[1];
++    if (match.index === undefined || afterAt === undefined) continue;
++    atMatch = match;
++    atPos = match.index + (match[0].length - afterAt.length - 1);
++  }
++
++  if (atMatch) {
++    const query = atMatch[1] ?? "";
++    // Don't trigger if the query is followed by a space (already typed)
++    const endPos = atPos + 1 + query.length;
++    if (endPos < text.length && text[endPos] === " ") {
++      // The @ reference is complete, don't show popover
++      return null;
++    }
++    return {
++      type: "@",
++      query,
++      triggerPos: atPos,
++    };
++  }
++
++  // Find the last / at line start
++  const lines = text.split("\n");
++  for (let i = lines.length - 1; i >= 0; i--) {
++    const line = lines[i]!;
++    const slashMatch = line.match(/^\/([^\s]*)$/);
++    if (slashMatch) {
++      const query = slashMatch[1] ?? "";
++      // Calculate position in original text
++      let lineStartPos = 0;
++      for (let j = 0; j < i; j++) {
++        lineStartPos += lines[j]!.length + 1;
++      }
++      return {
++        type: "/",
++        query,
++        triggerPos: lineStartPos,
++      };
++    }
++    // Only check the last (current) line
++    if (i < lines.length - 1) break;
++  }
++
++  return null;
++}
++
++// ---------------------------------------------------------------------------
++// Component
++// ---------------------------------------------------------------------------
++
++export function MentionPopover({
++  value,
++  threadId,
++  onInsert,
++  onCommand,
++}: MentionPopoverProps) {
++  const [open, setOpen] = useState(false);
++  const [state, setState] = useState<MentionState | null>(null);
++  const [files, setFiles] = useState<string[]>([]);
++  const [skills, setSkills] = useState<Skill[]>([]);
++  const [selectedSub, setSelectedSub] = useState<string | null>(null);
++  const [helpOpen, setHelpOpen] = useState(false);
++  const inputRef = useRef<HTMLInputElement>(null);
++
++  // Load files once
++  useEffect(() => {
++    if (!threadId) return;
++    fetchThreadFiles(threadId).then(setFiles);
++  }, [threadId]);
++
++  // Load skills once
++  useEffect(() => {
++    loadSkills()
++      .then((s) => setSkills(s ?? []))
++      .catch(() => {});
++  }, []);
++
++  // Detect triggers whenever the value changes
++  useEffect(() => {
++    if (!value) {
++      setOpen(false);
++      setState(null);
++      return;
++    }
++
++    const detected = findLastTrigger(value);
++    if (detected) {
++      if (detected.type === "/" && detected.query === "help") {
++        // /help entered → show help panel, remove from input
++        setHelpOpen(true);
++        setOpen(false);
++        setState(null);
++        const lineEnd = detected.triggerPos + 6; // "/help"
++        onInsert("", { start: detected.triggerPos, end: lineEnd });
++        return;
++      }
++      setState(detected);
++      setOpen(true);
++      setSelectedSub(null);
++    } else {
++      setOpen(false);
++      setState(null);
++      setSelectedSub(null);
++    }
++  }, [value, onInsert]);
++
++  // Focus the search input when popover opens
++  useEffect(() => {
++    if (open && inputRef.current) {
++      setTimeout(() => inputRef.current?.focus(), 50);
++    }
++  }, [open, selectedSub]);
++
++  // Filtered results
++  const matchingFiles = useMemo(() => {
++    if (!state || state.type !== "@") return [];
++    const q = state.query.toLowerCase();
++    return q
++      ? files.filter((f) => f.toLowerCase().includes(q))
++      : files;
++  }, [state, files]);
++
++  const matchingCommands = useMemo(() => {
++    if (!state || state.type !== "/") return [];
++    const q = state.query.toLowerCase();
++    // If showing skill sub-selection, filter skills
++    if (selectedSub === "skill") {
++      return skills
++        .filter((s) => s.name.toLowerCase().includes(q))
++        .map((s) => ({
++          id: `skill:${s.name}`,
++          label: s.name,
++          description: s.description,
++          icon: "🧩",
++        }));
++    }
++    return COMMANDS.filter(
++      (c) => !q || c.id.includes(q) || c.label.includes(q),
++    );
++  }, [state, skills, selectedSub]);
++
++  const handleSelect = useCallback(
++    (itemId: string) => {
++      if (!state) return;
++
++      if (state.type === "@") {
++        // Calculate the end position: @ + query length from trigger position
++        const endPos = state.triggerPos + 1 + state.query.length;
++        onInsert(itemId, {
++          start: state.triggerPos,
++          end: endPos,
++        });
++        setOpen(false);
++        return;
++      }
++
++      // "/" command
++      if (itemId === "skill") {
++        setSelectedSub("skill");
++        return;
++      }
++      if (itemId === "help") {
++        setHelpOpen(true);
++        setOpen(false);
++        return;
++      }
++      if (itemId.startsWith("skill:")) {
++        const skillName = itemId.slice(6);
++        onCommand(skillName, "");
++        setOpen(false);
++        return;
++      }
++    },
++    [state, onInsert, onCommand],
++  );
++
++  // /help panel
++  if (helpOpen) {
++    return (
++      <div className="bg-background border-border mb-2 rounded-lg border p-4 text-sm shadow-lg">
++        <div className="mb-3 flex items-center justify-between">
++          <span className="font-semibold">📖 DeerFlow 帮助</span>
++          <button
++            className="text-muted-foreground hover:text-foreground text-xs"
++            onClick={() => setHelpOpen(false)}
++          >
++            关闭 ✕
++          </button>
++        </div>
++        <div className="space-y-2">
++          <div className="flex gap-2">
++            <code className="text-primary shrink-0">@文件名</code>
++            <span className="text-muted-foreground">
++              引用工作区文件给 AI，输入 <code>@</code> 后自动弹出文件列表
++            </span>
++          </div>
++          <div className="flex gap-2">
++            <code className="text-primary shrink-0">/skill</code>
++            <span className="text-muted-foreground">
++              主动调用一个技能，输入后选择技能名称
++            </span>
++          </div>
++          <div className="flex gap-2">
++            <code className="text-primary shrink-0">/help</code>
++            <span className="text-muted-foreground">
++              显示本帮助信息
++            </span>
++          </div>
++        </div>
++        <div className="text-muted-foreground mt-3 border-t pt-2 text-xs">
++          操作: ↑↓ 选择 · Enter 确认 · Esc 关闭
++        </div>
++      </div>
++    );
++  }
++
++  // Don't render if no trigger detected
++  if (!open || !state) return null;
++
++  // For /command, show sub-selection when a command is chosen
++  if (state.type === "/" && selectedSub === "skill") {
++    return (
++      <div className="mb-2">
++        <Command shouldFilter={false} className="border-border rounded-lg border shadow-lg">
++          <CommandInput
++            ref={inputRef}
++            placeholder="搜索技能..."
++            className="h-9"
++          />
++          <CommandList>
++            <CommandEmpty>未找到匹配的技能</CommandEmpty>
++            <CommandGroup heading="技能列表">
++              {matchingCommands.map((item) => (
++                <CommandItem
++                  key={item.id}
++                  value={item.id}
++                  onSelect={() => handleSelect(item.id)}
++                >
++                  <span className="mr-2">{item.icon}</span>
++                  <span className="font-medium">{item.label}</span>
++                  <span className="text-muted-foreground ml-2 text-xs">
++                    {item.description}
++                  </span>
++                </CommandItem>
++              ))}
++            </CommandGroup>
++          </CommandList>
++        </Command>
++      </div>
++    );
++  }
++
++  // Main popover: @ files or / commands
++  return (
++    <div className="mb-2">
++      <Command shouldFilter={false} className="border-border rounded-lg border shadow-lg">
++        <CommandInput
++          ref={inputRef}
++          placeholder={
++            state.type === "@" ? "搜索文件..." : "输入命令..."
++          }
++          className="h-9"
++        />
++        <CommandList>
++          <CommandEmpty>
++            {state.type === "@"
++              ? "未找到匹配的文件"
++              : "未找到匹配的命令"}
++          </CommandEmpty>
++          <CommandGroup
++            heading={state.type === "@" ? "工作区文件" : "命令"}
++          >
++            {(state.type === "@" ? matchingFiles : matchingCommands).map(
++              (item) => {
++                if (typeof item === "string") {
++                  // File item
++                  const fileName = item.split("/").pop() ?? item;
++                  return (
++                    <CommandItem
++                      key={item}
++                      value={item}
++                      onSelect={() => handleSelect(item)}
++                    >
++                      <span className="text-muted-foreground mr-2 shrink-0">
++                        {item.endsWith("/") ? "📁" : "📄"}
++                      </span>
++                      <span className="truncate font-medium">{fileName}</span>
++                      <span className="text-muted-foreground ml-2 truncate text-xs">
++                        {item}
++                      </span>
++                    </CommandItem>
++                  );
++                }
++                // Command item
++                return (
++                  <CommandItem
++                    key={item.id}
++                    value={item.id}
++                    onSelect={() => handleSelect(item.id)}
++                  >
++                    <span className="mr-2">{item.icon}</span>
++                    <span className="font-medium">{item.label}</span>
++                    <span className="text-muted-foreground ml-2 text-xs">
++                      {item.description}
++                    </span>
++                  </CommandItem>
++                );
++              },
++            )}
++          </CommandGroup>
++        </CommandList>
++      </Command>
++    </div>
++  );
++}
++
++// ---------------------------------------------------------------------------
++// Helpers to process message before sending
++// ---------------------------------------------------------------------------
++
++/**
++ * Transform @file references in the text into full paths for the AI.
++ * E.g. "看看 @outputs/report.md" → "看看 /mnt/user-data/outputs/report.md"
++ */
++export function expandFileReferences(text: string): string {
++  return text.replace(/@(\S+)/g, (_match, path: string) => {
++    // If it already looks like a full path, leave it
++    if (path.startsWith("/")) return `@${path}`;
++    return `/mnt/user-data/${path}`;
++  });
++}
+diff --git a/frontend/src/components/workspace/input-box.tsx b/frontend/src/components/workspace/input-box.tsx
+index 9a33d41e..4a27ffc8 100644
+--- a/frontend/src/components/workspace/input-box.tsx
++++ b/frontend/src/components/workspace/input-box.tsx
+@@ -63,6 +63,10 @@ import type { AgentThreadContext } from "@/core/threads";
+ import { textOfMessage } from "@/core/threads/utils";
+ import { cn } from "@/lib/utils";
+ 
++import {
++  MentionPopover,
++  expandFileReferences,
++} from "@/components/ai-elements/mention-popover";
+ import {
+   ModelSelector,
+   ModelSelectorContent,
+@@ -274,11 +278,15 @@ export function InputBox({
+             selectedModel?.supports_thinking ?? false,
+           ),
+         });
+-        setTimeout(() => onSubmit?.(message), 0);
++        // Expand @ references before the delayed submit too
++        const expandedPre = expandFileReferences(message.text ?? "");
++        setTimeout(() => onSubmit?.({ ...message, text: expandedPre }), 0);
+         return;
+       }
+ 
+-      onSubmit?.(message);
++      // Expand @file references into full paths before sending
++      const expandedText = expandFileReferences(message.text ?? "");
++      onSubmit?.({ ...message, text: expandedText });
+     },
+     [
+       context,
+@@ -486,6 +494,20 @@ export function InputBox({
+         <PromptInputAttachments>
+           {(attachment) => <PromptInputAttachment data={attachment} />}
+         </PromptInputAttachments>
++        <MentionPopover
++          value={textInput.value}
++          threadId={threadId}
++          onInsert={(text, range) => {
++            const before = textInput.value.slice(0, range.start);
++            const after = textInput.value.slice(range.end);
++            textInput.setInput(before + text + after);
++          }}
++          onCommand={(cmd, _args) => {
++            // For now, /skill just inserts the skill name
++            const before = textInput.value.slice(0, textInput.value.length);
++            textInput.setInput(before + cmd);
++          }}
++        />
+         <PromptInputBody className="absolute top-0 right-0 left-0 z-3">
+           <PromptInputTextarea
+             className={cn("size-full")}
 -- 
 2.43.7
 
