@@ -324,7 +324,7 @@ export function MentionPopover({
   if (state.type === "/" && selectedSub === "skill") {
     return (
       <div className="mb-2">
-        <Command shouldFilter={false} className="border-border rounded-lg border shadow-lg">
+        <Command className="border-border rounded-lg border shadow-lg">
           <CommandInput
             ref={inputRef}
             placeholder="搜索技能..."
@@ -357,9 +357,11 @@ export function MentionPopover({
   }
 
   // Main popover: @ files or / commands
+  // NOTE: shouldFilter is NOT set to false so the Command component's native
+  // filtering works — typing in the search box filters items by their `value` prop.
   return (
     <div className="mb-2">
-      <Command shouldFilter={false} className="border-border rounded-lg border shadow-lg">
+      <Command className="border-border rounded-lg border shadow-lg">
         <CommandInput
           ref={inputRef}
           placeholder={
