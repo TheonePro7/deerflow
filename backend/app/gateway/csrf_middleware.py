@@ -42,6 +42,9 @@ def should_check_csrf(request: Request) -> bool:
     # Exempt /api/v1/auth/me endpoint
     if path == "/api/v1/auth/me":
         return False
+    # Exempt voice transcription (file upload from frontend)
+    if path.startswith("/api/voice/"):
+        return False
     return True
 
 

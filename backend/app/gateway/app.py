@@ -27,6 +27,7 @@ from app.gateway.routers import (
     thread_runs,
     threads,
     uploads,
+    voice,
 )
 from deerflow.config import app_config as deerflow_app_config
 from deerflow.config.app_config import apply_logging_level
@@ -357,6 +358,9 @@ This gateway provides runtime endpoints for agent runs plus custom endpoints for
 
     # Channels API is mounted at /api/channels
     app.include_router(channels.router)
+
+    # Voice API is mounted at /api/voice
+    app.include_router(voice.router)
 
     # Assistants compatibility API (LangGraph Platform stub)
     app.include_router(assistants_compat.router)

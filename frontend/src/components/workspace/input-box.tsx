@@ -67,6 +67,7 @@ import {
   MentionPopover,
   expandFileReferences,
 } from "@/components/ai-elements/mention-popover";
+import { isSpeechSupported, VoiceInput } from "@/components/workspace/voice-input";
 import {
   ModelSelector,
   ModelSelectorContent,
@@ -529,6 +530,14 @@ export function InputBox({
             </PromptInputActionMenuContent>
           </PromptInputActionMenu> */}
             <AddAttachmentsButton className="px-2!" />
+            <VoiceInput
+              supported={isSpeechSupported()}
+              onTranscript={(text) => {
+                const current = textInput.value;
+                const sep = current && !current.endsWith(" ") ? " " : "";
+                textInput.setInput(current + sep + text);
+              }}
+            />
             <PromptInputActionMenu>
               <ModeHoverGuide
                 mode={
