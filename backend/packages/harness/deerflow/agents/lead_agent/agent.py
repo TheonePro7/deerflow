@@ -286,11 +286,12 @@ def _build_middlewares(
     # Add MemoryMiddleware (after TitleMiddleware)
     middlewares.append(MemoryMiddleware(agent_name=agent_name, memory_config=resolved_app_config.memory))
 
-    # Add ViewImageMiddleware only if the current model supports vision.
-    # Use the resolved runtime model_name from make_lead_agent to avoid stale config values.
-    model_config = resolved_app_config.get_model_config(model_name) if model_name else None
-    if model_config is not None and model_config.supports_vision:
-        middlewares.append(ViewImageMiddleware())
+    # Add ViewImageMiddleware — always registered so it can:
+    # 1. For vision models: inject image data so the LLM can "see" images
+    # 2. For non-vision models (e.g. DeepSeek V4 Flash): strip legacy image_url
+    #    blocks from messages to prevent 400 errors from the LLM provider.
+    # The middleware checks the runtime model at each call to decide behavior.
+    middlewares.append(ViewImageMiddleware())
 
     # Add DeferredToolFilterMiddleware to hide deferred tool schemas from model binding
     if resolved_app_config.tool_search.enabled:

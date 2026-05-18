@@ -236,6 +236,9 @@ export interface Translations {
     input: string;
     output: string;
     total: string;
+    cost: string;
+    inputCost: string;
+    outputCost: string;
     view: string;
     unavailable: string;
     unavailableShort: string;

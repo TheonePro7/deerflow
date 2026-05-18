@@ -1,6 +1,6 @@
 "use client";
 
-import { BotIcon, MessagesSquare } from "lucide-react";
+import { BotIcon, BrainCircuitIcon, BookOpenIcon, CalendarIcon, MessagesSquare, WrenchIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -34,6 +34,50 @@ export function WorkspaceNavChatList() {
             <Link className="text-muted-foreground" href="/workspace/agents">
               <BotIcon />
               <span>{t.sidebar.agents}</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            isActive={pathname.startsWith("/workspace/knowledge")}
+            asChild
+          >
+            <Link className="text-muted-foreground" href="/workspace/knowledge">
+              <BookOpenIcon />
+              <span>知识库</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            isActive={pathname.startsWith("/workspace/memory")}
+            asChild
+          >
+            <Link className="text-muted-foreground" href="/workspace/memory">
+              <BrainCircuitIcon />
+              <span>记忆</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            isActive={pathname.startsWith("/workspace/plans")}
+            asChild
+          >
+            <Link className="text-muted-foreground" href="/workspace/plans">
+              <CalendarIcon />
+              <span>自动化</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            isActive={pathname.startsWith("/workspace/skills")}
+            asChild
+          >
+            <Link className="text-muted-foreground" href="/workspace/skills">
+              <WrenchIcon />
+              <span>Skills</span>
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>

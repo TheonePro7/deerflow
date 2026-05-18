@@ -1,6 +1,6 @@
 ---
 name: podcast-generation
-description: Use this skill when the user requests to generate, create, or produce podcasts from text content. Converts written content into a two-host conversational podcast audio format with natural dialogue.
+description: 当用户请求从文本内容生成、创建或制作播客时使用。将书面内容转换为双人对话式播客音频格式，具有自然的对话风格。
 ---
 
 # Podcast Generation Skill

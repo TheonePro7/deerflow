@@ -306,6 +306,9 @@ export const enUS: Translations = {
     input: "Input",
     output: "Output",
     total: "Total",
+    cost: "Est. Cost",
+    inputCost: "Input cost",
+    outputCost: "Output cost",
     view: "Display",
     unavailable:
       "No token usage yet. Usage appears only after a successful model response when the provider returns usage_metadata.",

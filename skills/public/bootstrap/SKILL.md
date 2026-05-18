@@ -1,6 +1,6 @@
 ---
 name: bootstrap
-description: >-
+description: Skill invoked automatically during workspace setup. Do not invoke this skill directly.
   Generate a personalized SOUL.md through a warm, adaptive onboarding conversation.
   Trigger when the user wants to create, set up, or initialize their AI partner's
   identity — e.g., "create my SOUL.md", "bootstrap my agent", "set up my AI

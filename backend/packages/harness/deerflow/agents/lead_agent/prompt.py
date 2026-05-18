@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 import threading
 from functools import lru_cache
 from typing import TYPE_CHECKING
@@ -576,19 +577,101 @@ def _get_memory_context(agent_name: str | None = None, *, app_config: AppConfig 
         if not config.enabled or not config.injection_enabled:
             return ""
 
+        # ── Existing JSON memory ──
         memory_data = get_memory_data(agent_name, user_id=get_effective_user_id())
         memory_content = format_memory_for_injection(memory_data, max_tokens=config.max_injection_tokens)
 
-        if not memory_content.strip():
+        # ── LangMem memories ──
+        langmem_content = _get_langmem_memories(get_effective_user_id(), config.max_injection_tokens)
+
+        if not memory_content.strip() and not langmem_content:
             return ""
 
-        return f"""<memory>
-{memory_content}
-</memory>
-"""
+        parts = []
+        if memory_content.strip():
+            parts.append(memory_content.strip())
+        if langmem_content:
+            parts.append(langmem_content)
+
+        return "<memory>\n" + "\n".join(parts) + "\n</memory>"
     except Exception:
         logger.exception("Failed to load memory context")
         return ""
+
+
+async def _fetch_langmem_memories(user_id: str, max_tokens: int) -> str:
+    """Async: fetch LangMem memories and format for injection."""
+    try:
+        from deerflow.agents.memory.langmem_adapter import is_available
+
+        if not is_available():
+            return ""
+        from deerflow.config.paths import get_paths
+        from langgraph.store.sqlite.aio import AsyncSqliteStore
+
+        db_path = f"{get_paths().base_dir}/langmem.db"
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
+        async with AsyncSqliteStore.from_conn_string(db_path) as store:
+            results = await store.asearch(
+                ("memories", user_id, "semantic"),
+                query=None,  # None = list all
+                limit=20,
+            )
+            if not results:
+                return ""
+
+            lines = []
+            for r in results:
+                value = r.value if hasattr(r, "value") else {}
+                content = ""
+                if isinstance(value, dict):
+                    content = value.get("content", "") or ""
+                elif hasattr(value, "content"):
+                    content = value.content or ""
+
+                text = str(content).strip()
+                if text and len(text) > 5:
+                    clean = text.split("]", 1)[-1].strip() if "]" in text else text
+                    lines.append(f"- {clean}")
+
+            if not lines:
+                return ""
+
+            result = "\n".join(lines)
+            if len(result.encode("utf-8")) > max_tokens * 4:
+                result = result[:max_tokens * 4]
+                last_nl = result.rfind("\n")
+                if last_nl > 0:
+                    result = result[:last_nl]
+
+            return f"【长期记忆】\n{result}"
+    except Exception:
+        logger.debug("Failed to fetch LangMem memories", exc_info=True)
+        return ""
+
+
+def _get_langmem_memories(user_id: str, max_tokens: int) -> str:
+    """Sync wrapper: fetch LangMem memories and format for injection.
+
+    Picks the right execution strategy at runtime:
+    - Inside a running event loop → run in a separate thread (avoids loop nesting)
+    - Outside any loop → create a temp loop and run directly
+    """
+    import asyncio
+    import concurrent.futures
+
+    async def _run():
+        return await _fetch_langmem_memories(user_id, max_tokens)
+
+    try:
+        asyncio.get_running_loop()
+        # Already inside an event loop — run in a separate thread
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+            future = pool.submit(asyncio.run, _run())
+            return future.result()
+    except RuntimeError:
+        # No running loop — create one inline
+        return asyncio.run(_run())
 
 
 @lru_cache(maxsize=32)

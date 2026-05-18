@@ -278,29 +278,6 @@ async def rollback_custom_skill(skill_name: str, request: SkillRollbackRequest, 
         raise HTTPException(status_code=500, detail=f"Failed to roll back custom skill: {str(e)}")
 
 
-@router.get(
-    "/skills/{skill_name}",
-    response_model=SkillResponse,
-    summary="Get Skill Details",
-    description="Retrieve detailed information about a specific skill by its name.",
-)
-async def get_skill(skill_name: str, config: AppConfig = Depends(get_config)) -> SkillResponse:
-    try:
-        skill_name = skill_name.replace("\r\n", "").replace("\n", "")
-        skills = get_or_new_skill_storage(app_config=config).load_skills(enabled_only=False)
-        skill = next((s for s in skills if s.name == skill_name), None)
-
-        if skill is None:
-            raise HTTPException(status_code=404, detail=f"Skill '{skill_name}' not found")
-
-        return _skill_to_response(skill)
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Failed to get skill {skill_name}: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Failed to get skill: {str(e)}")
-
-
 @router.put(
     "/skills/{skill_name}",
     response_model=SkillResponse,
@@ -350,3 +327,108 @@ async def update_skill(skill_name: str, request: SkillUpdateRequest, config: App
     except Exception as e:
         logger.error(f"Failed to update skill {skill_name}: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Failed to update skill: {str(e)}")
+
+
+class TrendingItem(BaseModel):
+    repo: str
+    description: str
+    stars: int
+    url: str
+    since: str
+
+
+class TrendingResponse(BaseModel):
+    items: list[TrendingItem]
+
+
+@router.get(
+    "/skills/trending",
+    response_model=TrendingResponse,
+    summary="GitHub Trending Skills",
+    description="Fetch trending AI/agent/skills repositories from GitHub.",
+)
+async def trending_skills(since: str = "daily") -> TrendingResponse:
+    """Fetch trending repositories from GitHub's trending page.
+    
+    Args:
+        since: Time range — "daily", "weekly", or "monthly".
+    """
+    try:
+        import httpx
+
+        # GitHub trending — search for popular AI/agent repos by creation recency
+        url = "https://api.github.com/search/repositories"
+        from datetime import datetime, timedelta, timezone
+        days_map = {"daily": 30, "weekly": 90, "monthly": 365}
+        since_date = (datetime.now(timezone.utc) - timedelta(days=days_map.get(since, 30))).strftime("%Y-%m-%d")
+        # Cast to int so LLM formatter doesn't break
+        stars_min = 100
+        topics = ["ai-agent", "mcp-server", "agentic"]
+        seen = set()
+        items = []
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            for topic in topics:
+                try:
+                    resp = await client.get(url, params={
+                        "q": f"topic:{topic} stars:>{stars_min} created:>={since_date}",
+                        "sort": "stars", "order": "desc", "per_page": 10,
+                    })
+                    if resp.status_code != 200:
+                        continue
+                    for repo in resp.json().get("items", []):
+                        if repo["full_name"] not in seen:
+                            seen.add(repo["full_name"])
+                            items.append(repo)
+                except Exception:
+                    continue
+                try:
+                    resp = await client.get(url, params={"q": q, "sort": "stars", "order": "desc", "per_page": 8})
+                    if resp.status_code != 200:
+                        continue
+                    for repo in resp.json().get("items", []):
+                        if repo["full_name"] not in seen:
+                            seen.add(repo["full_name"])
+                            items.append(repo)
+                except Exception:
+                    continue
+        # Sort by stars and take top results
+        items.sort(key=lambda r: r.get("stargazers_count", 0), reverse=True)
+        result = []
+        for repo in items[:20]:
+            result.append(TrendingItem(
+                repo=repo["full_name"],
+                description=repo.get("description") or "",
+                stars=repo.get("stargazers_count", 0),
+                url=repo["html_url"],
+                since=since,
+            ))
+        return TrendingResponse(items=result)
+
+    except Exception as e:
+        logger.warning("Failed to fetch GitHub trending: %s", e)
+        return TrendingResponse(items=[])
+
+@router.get(
+    "/skills/{skill_name}",
+    response_model=SkillResponse,
+    summary="Get Skill Details",
+    description="Retrieve detailed information about a specific skill by its name.",
+)
+async def get_skill(skill_name: str, config: AppConfig = Depends(get_config)) -> SkillResponse:
+    try:
+        skill_name = skill_name.replace("\r\n", "").replace("\n", "")
+        skills = get_or_new_skill_storage(app_config=config).load_skills(enabled_only=False)
+        skill = next((s for s in skills if s.name == skill_name), None)
+
+        if skill is None:
+            raise HTTPException(status_code=404, detail=f"Skill '{skill_name}' not found")
+
+        return _skill_to_response(skill)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get skill {skill_name}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Failed to get skill: {str(e)}")
+
+
+

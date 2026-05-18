@@ -1,0 +1,304 @@
+---
+title: Built-in Skills
+description: Complete guide to DeerFlow's 21 built-in skills
+---
+
+# 🦌 DeerFlow Built-in Skills Guide
+
+> DeerFlow ships with 21 ready-to-use skills covering academic research, data analysis,
+> content creation, and more. Each skill is an independent `.skill` package that the
+> Agent loads automatically based on your needs.
+
+## How Skills Are Invoked
+
+**Skills are invoked on-demand automatically** — you don't need to manually specify which skill to use.
+Just express your needs, and the Agent will match and load the most appropriate skill.
+
+### Auto-trigger Flow
+
+```
+Your question → Agent understands intent → Matches skill description → Loads skill
+```
+
+Examples:
+- "Analyze this Excel file" → triggers `data-analysis`
+- "Search for latest papers on Transformers" → triggers `deep-research`
+- "Chart this data" → triggers `chart-visualization`
+
+### Manual Trigger
+
+| Method | Description |
+|--------|-------------|
+| **Explicit** | Say "use deep-research skill to..." |
+| **Discover** | Say "find a skill for [your need]" → triggers `find-skills` |
+| **Install** | Agent will ask to install when a matching skill is found |
+
+---
+
+## Skill Directory
+
+### 📚 Academic & Research
+- [deep-research](#deep-research) — Multi-angle deep web research
+- [academic-paper-review](#academic-paper-review) — Single paper peer review
+- [systematic-literature-review](#systematic-literature-review) — Multi-paper systematic review
+
+### 📊 Data Analysis
+- [data-analysis](#data-analysis) — Excel/CSV data analysis
+- [chart-visualization](#chart-visualization) — 26 chart types
+
+### 💼 Business & Consulting
+- [consulting-analysis](#consulting-analysis) — Professional consulting reports
+- [newsletter-generation](#newsletter-generation) — Newsletters & digests
+
+### 💻 Development & Design
+- [code-documentation](#code-documentation) — Code documentation generation
+- [frontend-design](#frontend-design) — Frontend UI design
+- [github-deep-research](#github-deep-research) — GitHub repo analysis
+- [web-design-guidelines](#web-design-guidelines) — UI standards review
+- [vercel-deploy-claimable](#vercel-deploy-claimable) — One-click Vercel deploy
+
+### 🎨 Creative & Content
+- [image-generation](#image-generation) — AI image generation
+- [video-generation](#video-generation) — AI video generation
+- [ppt-generation](#ppt-generation) — PowerPoint generation
+- [podcast-generation](#podcast-generation) — Text-to-podcast
+
+### 🔧 System & Meta Skills
+- [skill-creator](#skill-creator) — Create custom skills
+- [find-skills](#find-skills) — Discover new skills
+- [bootstrap](#bootstrap) — New user onboarding
+- [claude-to-deerflow](#claude-to-deerflow) — Cross-platform interop
+- [surprise-me](#surprise-me) — Creative showcase
+
+---
+
+## academic-paper-review
+
+Structured peer-review-quality analysis of academic papers. Follows standards from NeurIPS, ICML, ACL, Nature, IEEE.
+
+**Trigger**: Paper URL, PDF upload, "review this paper", "analyze this research"
+
+**Capabilities**:
+- Structured review: summary, strengths, weaknesses, methodology
+- Literature positioning via targeted search
+- Methodology assessment (experimental design, reproducibility)
+- Full review + executive summary formats
+
+**Tips**: URL-based papers work better than uploads. Ask for focus areas like "focus on methodology".
+
+---
+
+## bootstrap
+
+New user onboarding skill. Guides first-time users through DeerFlow setup and records preferences in SOUL.md.
+
+**Trigger**: First use, "set up my preferences"
+
+**Tips**: Say "re-onboard me" to reconfigure. Preferences persist in SOUL.md.
+
+---
+
+## chart-visualization
+
+Intelligently converts data into visualizations. Auto-selects from 26 chart types and renders as images.
+
+**Trigger**: "visualize this data", "chart this", data analysis requests
+
+**Supported types**: Bar, Line, Pie, Scatter, Area, Boxplot, Radar, Heatmap, Funnel, Sankey, Fishbone, Flow, Map, Treemap, Wordcloud, and more.
+
+**Tips**: Provide structured data (CSV/JSON) for best results. Specify chart type if desired.
+
+---
+
+## claude-to-deerflow
+
+Bridges Claude/other Agents with DeerFlow via HTTP API for deep research delegation.
+
+**Trigger**: Cross-agent collaboration, delegating research tasks
+
+**Capabilities**: Create/manage threads, send messages, query models/skills/agents, manage memory, upload files.
+
+---
+
+## code-documentation
+
+Generates professional documentation for code, APIs, libraries, and projects.
+
+**Trigger**: "document this code", "create a README", "generate API docs"
+
+**Outputs**: README, API references, inline comments, architecture docs, CHANGELOG, developer guides.
+
+**Tips**: Upload full repos for best results. Specify format: "JSDoc format", "Chinese docs".
+
+---
+
+## consulting-analysis
+
+Two-phase professional report generation: (1) analysis framework, (2) final report with charts and insights.
+
+**Trigger**: Market analysis, competitive intelligence, investment due diligence
+
+**Tips**: Review phase 1 output before proceeding to phase 2. Combine with deep-research for best results.
+
+---
+
+## data-analysis
+
+Full data analysis on Excel (.xlsx/.xls) and CSV files with multi-sheet support.
+
+**Trigger**: File upload + "analyze this data"
+
+**Capabilities**: Aggregation, filtering, pivot tables, multi-table JOINs, SQL queries, CSV/JSON/Markdown export.
+
+---
+
+## deep-research
+
+**Most commonly used skill**. Systematic multi-angle web research replacing basic web searches.
+
+**Trigger**: ANY question requiring online information
+
+**Capabilities**: Multi-round auto-search, cross-source validation, structured reports.
+
+**Tips**: Default skill for information lookup. Specify scope for focused results.
+
+---
+
+## find-skills
+
+Discovers and installs agent skills from the ecosystem.
+
+**Trigger**: "find a skill for X", "how do I do X"
+
+**Tips**: Use this when the Agent can't do something — there might be a skill for it.
+
+---
+
+## frontend-design
+
+Creates distinctive, production-grade frontend interfaces avoiding generic AI aesthetics.
+
+**Trigger**: "build a website", "design a dashboard", UI requests
+
+**Tips**: Provide reference styles. Iterate with "move nav to left", "dark mode".
+
+---
+
+## github-deep-research
+
+Multi-round deep research on any GitHub repository with structured Markdown reports.
+
+**Trigger**: GitHub repository URL
+
+**Report includes**: Executive summary, timeline, metrics, Mermaid diagrams.
+
+---
+
+## image-generation
+
+AI image generation with structured prompts and reference image support.
+
+**Trigger**: "generate an image of..."
+
+**Tips**: Be specific in prompts. Provide reference images for style guidance.
+
+---
+
+## newsletter-generation
+
+Generates newsletters, email digests, weekly roundups, and industry briefings.
+
+**Trigger**: "create a newsletter about X"
+
+**Tips**: Specify audience tone. Combine with deep-research for latest content.
+
+---
+
+## podcast-generation
+
+Converts text content into two-host conversational podcast audio.
+
+**Trigger**: "turn this into a podcast"
+
+**Tips**: Research content first with deep-research, then convert to podcast.
+
+---
+
+## ppt-generation
+
+Generates PowerPoint presentations from text with auto-generated slide images.
+
+**Trigger**: "create a presentation about X"
+
+**Tips**: Research first, then generate. Specify style: "investment deck", "academic".
+
+---
+
+## skill-creator
+
+**Meta-skill** for creating, editing, evaluating, and optimizing other skills.
+
+**Trigger**: "create a skill for X", "optimize this skill"
+
+**Capabilities**: Create .skill packages, run evals, benchmark with variance analysis.
+
+**Tips**: Good description = better triggering. Clear steps = better execution.
+
+---
+
+## surprise-me
+
+Creatively combines enabled skills for unexpected, delightful experiences.
+
+**Trigger**: "surprise me", "show me something interesting"
+
+---
+
+## systematic-literature-review
+
+Multi-paper systematic review with APA, IEEE, or BibTeX format output.
+
+**Trigger**: Literature survey, annotated bibliography across multiple papers
+
+**Note**: Use academic-paper-review for single paper analysis.
+
+---
+
+## vercel-deploy-claimable
+
+Deploys apps and websites to Vercel without authentication.
+
+**Trigger**: "deploy my app", "push this live"
+
+**Note**: Claim your deployment link promptly to prevent others from claiming it.
+
+---
+
+## video-generation
+
+AI video generation with structured prompts and reference images.
+
+**Trigger**: "generate a video about..."
+
+---
+
+## web-design-guidelines
+
+Reviews UI code against accessibility and design best practices.
+
+**Trigger**: "review my UI", "check accessibility"
+
+**Checks**: WCAG compliance, design consistency, UX patterns, responsiveness, performance.
+
+---
+
+## Installation
+
+Skills are auto-loaded from the configured directory:
+```yaml
+skills:
+  directories:
+    - ./skills/public
+```
+
+Discover community skills by saying "find a skill for [your need]". Create custom skills using the `skill-creator`.

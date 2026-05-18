@@ -582,6 +582,35 @@ class SubagentExecutor:
             result.status = SubagentStatus.COMPLETED
             result.completed_at = datetime.now()
 
+            # ── Auto-sync: mark corresponding todos as completed ──────────────
+            # When a subagent finishes, update the thread's todo list so the
+            # frontend doesn't show stale "running" status. This bypasses the
+            # LLM's unreliable self-reporting via write_todos.
+            if self.thread_id:
+                try:
+                    from deerflow.runtime.store import get_thread_store
+                    store = get_thread_store()
+                    state = store.get_state(self.thread_id)
+                    if state and "todos" in state:
+                        todos = state["todos"]
+                        changed = False
+                        for todo in todos:
+                            if isinstance(todo, dict) and todo.get("status") in ("pending", "in_progress"):
+                                # Match by content substring or mark all incomplete
+                                todo["status"] = "completed"
+                                changed = True
+                        if changed:
+                            store.update_state(self.thread_id, {"todos": todos})
+                            logger.info(
+                                "[trace=%s] Auto-completed todos for subagent %s (thread=%s)",
+                                self.trace_id, self.config.name, self.thread_id,
+                            )
+                except Exception as sync_err:
+                    logger.warning(
+                        "[trace=%s] Failed to sync todo status: %s",
+                        self.trace_id, sync_err,
+                    )
+
         except Exception as e:
             logger.exception(f"[trace={self.trace_id}] Subagent {self.config.name} async execution failed")
             result.status = SubagentStatus.FAILED

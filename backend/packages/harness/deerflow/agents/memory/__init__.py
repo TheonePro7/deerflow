@@ -4,8 +4,13 @@ This module provides a global memory mechanism that:
 - Stores user context and conversation history in memory.json
 - Uses LLM to summarize and extract facts from conversations
 - Injects relevant memory into system prompts for personalized responses
+- Integrates LangMem for semantic long-term memory extraction and injection
 """
 
+from deerflow.agents.memory.langmem_adapter import (
+    LangMemManager,
+    is_available,
+)
 from deerflow.agents.memory.prompt import (
     FACT_EXTRACTION_PROMPT,
     MEMORY_UPDATE_PROMPT,
@@ -33,6 +38,9 @@ from deerflow.agents.memory.updater import (
 )
 
 __all__ = [
+    # LangMem adapter
+    "LangMemManager",
+    "is_available",
     # Prompt utilities
     "MEMORY_UPDATE_PROMPT",
     "FACT_EXTRACTION_PROMPT",

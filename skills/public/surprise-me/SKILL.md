@@ -1,6 +1,6 @@
 ---
 name: surprise-me
-description: Create a delightful, unexpected "wow" experience for the user by dynamically discovering and creatively combining other enabled skills. Triggers when the user says "surprise me" or any request expressing a desire for an unexpected creative showcase. Also triggers when the user is bored, wants inspiration, or asks for "something interesting".
+description: 通过动态发现和创造性地组合其他已启用的技能，为用户创造愉悦、意想不到的惊喜体验。当用户说给我惊喜或任何表达期望意外创意展示的请求时触发。当用户感到无聊、想要灵感或要求一些有趣的东西时也会触发。
 ---
 
 # Surprise Me

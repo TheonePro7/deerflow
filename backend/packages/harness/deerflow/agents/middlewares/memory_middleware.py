@@ -49,17 +49,8 @@ class MemoryMiddleware(AgentMiddleware[MemoryMiddlewareState]):
         self._agent_name = agent_name
         self._memory_config = memory_config
 
-    @override
-    def after_agent(self, state: MemoryMiddlewareState, runtime: Runtime) -> dict | None:
-        """Queue conversation for memory update after agent completes.
-
-        Args:
-            state: The current agent state.
-            runtime: The runtime context.
-
-        Returns:
-            None (no state changes needed from this middleware).
-        """
+    def _do_after_agent(self, state: MemoryMiddlewareState, runtime: Runtime) -> dict | None:
+        """Common logic for after_agent / aafter_agent."""
         config = self._memory_config or get_memory_config()
         if not config.enabled:
             return None
@@ -83,7 +74,6 @@ class MemoryMiddleware(AgentMiddleware[MemoryMiddlewareState]):
         filtered_messages = filter_messages_for_memory(messages)
 
         # Only queue if there's meaningful conversation
-        # At minimum need one user message and one assistant response
         user_messages = [m for m in filtered_messages if getattr(m, "type", None) == "human"]
         assistant_messages = [m for m in filtered_messages if getattr(m, "type", None) == "ai"]
 
@@ -93,9 +83,6 @@ class MemoryMiddleware(AgentMiddleware[MemoryMiddlewareState]):
         # Queue the filtered conversation for memory update
         correction_detected = detect_correction(filtered_messages)
         reinforcement_detected = not correction_detected and detect_reinforcement(filtered_messages)
-        # Capture user_id at enqueue time while the request context is still alive.
-        # threading.Timer fires on a different thread where ContextVar values are not
-        # propagated, so we must store user_id explicitly in ConversationContext.
         user_id = get_effective_user_id()
         queue = get_memory_queue()
         queue.add(
@@ -108,3 +95,13 @@ class MemoryMiddleware(AgentMiddleware[MemoryMiddlewareState]):
         )
 
         return None
+
+    @override
+    def after_agent(self, state: MemoryMiddlewareState, runtime: Runtime) -> dict | None:
+        """Queue conversation for memory update after agent completes (sync)."""
+        return self._do_after_agent(state, runtime)
+
+    @override
+    async def aafter_agent(self, state: MemoryMiddlewareState, runtime: Runtime) -> dict | None:
+        """Queue conversation for memory update after agent completes (async)."""
+        return self._do_after_agent(state, runtime)

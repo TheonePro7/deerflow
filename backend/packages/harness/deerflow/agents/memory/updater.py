@@ -7,6 +7,7 @@ import copy
 import json
 import logging
 import math
+import os
 import re
 import uuid
 from typing import Any
@@ -424,13 +425,19 @@ class MemoryUpdater:
             current_memory, prompt = prepared
             model = self._get_model()
             response = model.invoke(prompt, config={"run_name": "memory_agent"})
-            return self._finalize_update(
+            success = self._finalize_update(
                 current_memory=current_memory,
                 response_content=response.content,
                 thread_id=thread_id,
                 agent_name=agent_name,
                 user_id=user_id,
             )
+
+            # ⚡ Best-effort LangMem extraction — runs AFTER JSON memory update
+            if success and user_id:
+                _run_langmem_extraction(messages, user_id)
+
+            return success
         except json.JSONDecodeError as e:
             logger.warning("Failed to parse LLM response for memory update: %s", e)
             return False
@@ -608,4 +615,69 @@ def update_memory_from_conversation(
         True if successful, False otherwise.
     """
     updater = MemoryUpdater()
-    return updater.update_memory(messages, thread_id, agent_name, correction_detected, reinforcement_detected, user_id=user_id)
+    result = updater.update_memory(messages, thread_id, agent_name, correction_detected, reinforcement_detected, user_id=user_id)
+
+    # Also run LangMem extraction if available (best-effort, non-blocking)
+    try:
+        from deerflow.agents.memory.langmem_adapter import is_available
+
+        if is_available():
+            effective_user = user_id or "default"
+            logger.info("LangMem: submitting extraction for user %s", effective_user)
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                pool.submit(_run_langmem_extraction, messages, effective_user)
+        else:
+            logger.info("LangMem: not available (langmem package not installed)")
+    except Exception:
+        logger.info("LangMem extraction skipped", exc_info=True)
+
+    return result
+
+
+def _run_langmem_extraction(
+    messages: list[Any],
+    user_id: str,
+) -> None:
+    """Run LangMem memory extraction in a background thread."""
+    import logging
+    _log = logging.getLogger(__name__)
+    _log.info("LangMem extraction started for user %s (%d messages)", user_id, len(messages))
+    try:
+        import asyncio
+        from deerflow.config.paths import get_paths
+        from deerflow.agents.memory.langmem_adapter import LangMemManager
+        from langgraph.store.sqlite.aio import AsyncSqliteStore
+
+        db_path = f"{get_paths().base_dir}/langmem.db"
+        # Ensure parent directory exists (sandbox starts with empty /mnt/user-data/)
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
+
+        async def _extract():
+            async with AsyncSqliteStore.from_conn_string(db_path) as store:
+                manager = LangMemManager(
+                    store=store,
+                    model_name="deepseek-v4-flash",
+                    user_id=user_id,
+                )
+                langmem_messages = [
+                    m for m in messages
+                    if hasattr(m, "type") and m.type in ("human", "ai")
+                ]
+                if len(langmem_messages) < 2:
+                    logger.debug("LangMem: skipping extraction (< 2 messages)")
+                    return
+                logger.debug("LangMem: extracting %d messages for user %s", len(langmem_messages), user_id)
+                memories = await manager.extract(langmem_messages)
+                if memories:
+                    logger.info(
+                        "LangMem: extracted %d memories for user %s",
+                        len(memories), user_id,
+                    )
+
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(_extract())
+        loop.close()
+    except Exception:
+        logger.info("LangMem extraction failed", exc_info=True)

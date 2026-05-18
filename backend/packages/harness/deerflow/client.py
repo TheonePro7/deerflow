@@ -577,6 +577,8 @@ class DeerFlowClient:
         context = {"thread_id": thread_id}
         if self._agent_name:
             context["agent_name"] = self._agent_name
+        if self._model_name:
+            context["model_name"] = self._model_name
 
         seen_ids: set[str] = set()
         # Cross-mode handoff: ids already streamed via LangGraph ``messages``

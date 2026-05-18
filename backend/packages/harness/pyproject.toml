@@ -39,6 +39,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+langmem = ["langmem"]
 ollama = ["langchain-ollama>=0.3.0"]
 postgres = [
     "asyncpg>=0.29",

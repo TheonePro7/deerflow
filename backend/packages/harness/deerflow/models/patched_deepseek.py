@@ -7,11 +7,14 @@ subsequent API calls, which causes errors with APIs that require reasoning_conte
 on all assistant messages when thinking mode is enabled.
 """
 
+import logging
 from typing import Any
 
 from langchain_core.language_models import LanguageModelInput
 from langchain_core.messages import AIMessage
 from langchain_deepseek import ChatDeepSeek
+
+logger = logging.getLogger(__name__)
 
 
 class PatchedChatDeepSeek(ChatDeepSeek):
@@ -30,6 +33,34 @@ class PatchedChatDeepSeek(ChatDeepSeek):
     @property
     def lc_secrets(self) -> dict[str, str]:
         return {"api_key": "DEEPSEEK_API_KEY", "openai_api_key": "DEEPSEEK_API_KEY"}
+
+    @staticmethod
+    def _strip_image_url_from_content(content: Any) -> Any:
+        """Remove ``image_url`` content blocks from message content.
+
+        DeepSeek models do NOT support ``image_url`` content blocks. If such blocks
+        reach the API they cause a ``400`` error. This method strips them from
+        both list-based and string-based message content, regardless of source
+        (middleware injection, legacy threads, readability, etc.).
+
+        Args:
+            content: Raw message content (string or list of content blocks).
+
+        Returns:
+            Cleaned content with all ``image_url`` blocks removed.
+        """
+        if isinstance(content, list):
+            filtered = [
+                b for b in content
+                if not (isinstance(b, dict) and b.get("type") == "image_url")
+            ]
+            if len(filtered) != len(content):
+                logger.info(
+                    "Stripped %d image_url block(s) from DeepSeek payload",
+                    len(content) - len(filtered),
+                )
+            return filtered
+        return content
 
     def _get_request_payload(
         self,
@@ -69,5 +100,13 @@ class PatchedChatDeepSeek(ChatDeepSeek):
                 reasoning_content = ai_msg.additional_kwargs.get("reasoning_content")
                 if reasoning_content is not None:
                     payload_messages[idx]["reasoning_content"] = reasoning_content
+
+        # Strip image_url blocks from ALL messages before sending to DeepSeek API.
+        # DeepSeek models do NOT support image_url; if any reach the API they
+        # return a 400 error. This is the last line of defense regardless of
+        # where the image_url blocks came from (middleware, readability, etc.).
+        for msg in payload_messages:
+            if "content" in msg:
+                msg["content"] = self._strip_image_url_from_content(msg["content"])
 
         return payload

@@ -15,17 +15,21 @@ from app.gateway.routers import (
     artifacts,
     assistants_compat,
     auth,
+    billing,
     channels,
     feedback,
+    knowledge_base,
     mcp,
     memory,
     models,
+    plans,
     runs,
     skills,
     suggestions,
     thread_runs,
     threads,
     uploads,
+    voice,
 )
 from deerflow.config import app_config as deerflow_app_config
 from deerflow.config.app_config import apply_logging_level
@@ -324,6 +328,9 @@ This gateway provides runtime endpoints for agent runs plus custom endpoints for
         )
 
     # Include routers
+    # Billing API is mounted at /api/billing
+    app.include_router(billing.router)
+
     # Models API is mounted at /api/models
     app.include_router(models.router)
 
@@ -335,6 +342,9 @@ This gateway provides runtime endpoints for agent runs plus custom endpoints for
 
     # Skills API is mounted at /api/skills
     app.include_router(skills.router)
+
+    # Plans API is mounted at /api/plans
+    app.include_router(plans.router)
 
     # Artifacts API is mounted at /api/threads/{thread_id}/artifacts
     app.include_router(artifacts.router)
@@ -351,8 +361,14 @@ This gateway provides runtime endpoints for agent runs plus custom endpoints for
     # Suggestions API is mounted at /api/threads/{thread_id}/suggestions
     app.include_router(suggestions.router)
 
+    # Knowledge Base API is mounted at /api/knowledge-base
+    app.include_router(knowledge_base.router)
+
     # Channels API is mounted at /api/channels
     app.include_router(channels.router)
+
+    # Voice API is mounted at /api/voice
+    app.include_router(voice.router)
 
     # Assistants compatibility API (LangGraph Platform stub)
     app.include_router(assistants_compat.router)

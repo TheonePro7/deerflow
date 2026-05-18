@@ -354,3 +354,160 @@ async def get_memory_status() -> MemoryStatusResponse:
         ),
         data=MemoryResponse(**memory_data),
     )
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# LangMem Memory CRUD
+# ══════════════════════════════════════════════════════════════════════════════
+
+class LangMemItem(BaseModel):
+    """A single LangMem memory item."""
+    id: str = Field(default="", description="Item key in the store")
+    content: str = Field(default="", description="Memory content text")
+    type: str = Field(default="general", description="Memory type")
+    updated_at: str = Field(default="", description="Last update timestamp")
+
+
+class LangMemListResponse(BaseModel):
+    """List of LangMem memories."""
+    memories: list[LangMemItem] = Field(default_factory=list)
+    total: int = Field(default=0)
+
+
+class LangMemCreateRequest(BaseModel):
+    """Request to create a new LangMem memory."""
+    content: str = Field(..., min_length=1, description="Memory content")
+    type: str = Field(default="general", description="Memory type")
+
+
+class LangMemUpdateRequest(BaseModel):
+    """Request to update an existing LangMem memory."""
+    content: str = Field(..., min_length=1, description="Memory content")
+    type: str = Field(default="general", description="Memory type")
+
+
+@router.get(
+    "/langmem",
+    response_model=LangMemListResponse,
+    summary="List LangMem Memories",
+    description="List LangMem memories for the current user, with pagination.",
+)
+async def list_langmem(
+    offset: int = 0,
+    limit: int = 100,
+) -> LangMemListResponse:
+    """List LangMem memories with pagination."""
+    user_id = get_effective_user_id()
+    limit = min(limit, 500)  # cap at 500 per page
+    memories = await _fetch_langmem_memories(user_id, offset=offset, limit=limit)
+    return LangMemListResponse(memories=memories, total=len(memories))
+
+
+@router.post(
+    "/langmem",
+    response_model=LangMemListResponse,
+    summary="Create LangMem Memory",
+    description="Manually create a new LangMem memory.",
+)
+async def create_langmem(request: LangMemCreateRequest) -> LangMemListResponse:
+    """Create a new LangMem memory manually."""
+    user_id = get_effective_user_id()
+    import uuid
+    key = f"manual_{uuid.uuid4().hex[:8]}"
+    await _put_langmem_memory(user_id, key, request.content, request.type)
+    memories = await _fetch_langmem_memories(user_id)
+    return LangMemListResponse(memories=memories, total=len(memories))
+
+
+@router.put(
+    "/langmem/{memory_id}",
+    response_model=LangMemListResponse,
+    summary="Update LangMem Memory",
+    description="Update an existing LangMem memory.",
+)
+async def update_langmem(memory_id: str, request: LangMemUpdateRequest) -> LangMemListResponse:
+    """Update an existing LangMem memory."""
+    user_id = get_effective_user_id()
+    await _put_langmem_memory(user_id, memory_id, request.content, request.type)
+    memories = await _fetch_langmem_memories(user_id)
+    return LangMemListResponse(memories=memories, total=len(memories))
+
+
+@router.delete(
+    "/langmem/{memory_id}",
+    response_model=LangMemListResponse,
+    summary="Delete LangMem Memory",
+    description="Delete a LangMem memory by its ID.",
+)
+async def delete_langmem(memory_id: str) -> LangMemListResponse:
+    """Delete a LangMem memory."""
+    user_id = get_effective_user_id()
+    try:
+        from langgraph.store.sqlite.aio import AsyncSqliteStore
+        from deerflow.config.paths import get_paths
+        db_path = f"{get_paths().base_dir}/langmem.db"
+        async with AsyncSqliteStore.from_conn_string(db_path) as store:
+            await store.adelete(
+                ("memories", user_id, "semantic"),
+                memory_id,
+            )
+    except Exception:
+        pass
+    memories = await _fetch_langmem_memories(user_id)
+    return LangMemListResponse(memories=memories, total=len(memories))
+
+
+# ── helpers ────────────────────────────────────────────────────────────────
+
+async def _fetch_langmem_memories(user_id: str, offset: int = 0, limit: int = 100) -> list[LangMemItem]:
+    """Fetch LangMem memories with pagination."""
+    try:
+        from deerflow.agents.memory.langmem_adapter import is_available
+        if not is_available():
+            return []
+        from langgraph.store.sqlite.aio import AsyncSqliteStore
+        from deerflow.config.paths import get_paths
+        db_path = f"{get_paths().base_dir}/langmem.db"
+        async with AsyncSqliteStore.from_conn_string(db_path) as store:
+            results = await store.asearch(
+                ("memories", user_id, "semantic"),
+                query=None,
+                limit=limit,
+                offset=offset,
+            )
+            items = []
+            for r in results:
+                val = r.value if hasattr(r, "value") else {}
+                content = ""
+                if isinstance(val, dict):
+                    content = val.get("content", "") or ""
+                items.append(LangMemItem(
+                    id=r.key,
+                    content=str(content),
+                    type=(val.get("type", "general") if isinstance(val, dict) else "general"),
+                    updated_at=(val.get("updated_at", "") if isinstance(val, dict) else ""),
+                ))
+            return items
+    except Exception:
+        return []
+
+
+async def _put_langmem_memory(user_id: str, key: str, content: str, mem_type: str = "general"):
+    """Store a LangMem memory."""
+    try:
+        from langgraph.store.sqlite.aio import AsyncSqliteStore
+        from deerflow.config.paths import get_paths
+        from datetime import datetime, timezone
+        db_path = f"{get_paths().base_dir}/langmem.db"
+        async with AsyncSqliteStore.from_conn_string(db_path) as store:
+            await store.aput(
+                ("memories", user_id, "semantic"),
+                key,
+                {
+                    "content": content,
+                    "type": mem_type,
+                    "updated_at": datetime.now(timezone.utc).isoformat(),
+                },
+            )
+    except Exception:
+        pass

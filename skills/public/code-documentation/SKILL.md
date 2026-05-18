@@ -1,6 +1,6 @@
 ---
 name: code-documentation
-description: Use this skill when the user requests to generate, create, or improve documentation for code, APIs, libraries, repositories, or software projects. Supports README generation, API reference documentation, inline code comments, architecture documentation, changelog generation, and developer guides. Trigger on requests like "document this code", "create a README", "generate API docs", "write developer guide", or when analyzing codebases for documentation purposes.
+description: 当用户请求为代码、API、库、仓库或软件项目生成、创建或改进文档时使用。支持README生成、API参考文档、内联代码注释、架构文档、更新日志生成和开发者指南。触发场景包括：给这段代码写文档、创建README、生成API文档、写开发者指南等请求。
 ---
 
 # Code Documentation Skill

@@ -1,12 +1,16 @@
+"use client";
+
 import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useState,
   type ReactNode,
 } from "react";
 
 import { useSidebar } from "@/components/ui/sidebar";
+import { usePersistedState } from "@/core/hooks/use-persisted-state";
 import { env } from "@/env";
 
 export interface ArtifactsContextType {
@@ -21,6 +25,10 @@ export interface ArtifactsContextType {
   open: boolean;
   autoOpen: boolean;
   setOpen: (open: boolean) => void;
+
+  /** File tree panel visibility */
+  fileTreeOpen: boolean;
+  setFileTreeOpen: (open: boolean) => void;
 }
 
 const ArtifactsContext = createContext<ArtifactsContextType | undefined>(
@@ -33,12 +41,26 @@ interface ArtifactsProviderProps {
 
 export function ArtifactsProvider({ children }: ArtifactsProviderProps) {
   const [artifacts, setArtifacts] = useState<string[]>([]);
-  const [selectedArtifact, setSelectedArtifact] = useState<string | null>(null);
-  const [autoSelect, setAutoSelect] = useState(true);
-  const [open, setOpen] = useState(
+  const [selectedArtifact, setSelectedArtifact] = usePersistedState<string | null>(
+    "artifacts:selectedArtifact",
+    null,
+  );
+  const [autoSelect, setAutoSelect] = usePersistedState<boolean>(
+    "artifacts:autoSelect",
+    true,
+  );
+  const [open, setOpen] = usePersistedState<boolean>(
+    "artifacts:artifactsOpen",
     env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true",
   );
-  const [autoOpen, setAutoOpen] = useState(true);
+  const [autoOpen, setAutoOpen] = usePersistedState<boolean>(
+    "artifacts:autoOpen",
+    true,
+  );
+  const [fileTreeOpen, setFileTreeOpen] = usePersistedState<boolean>(
+    "artifacts:fileTreeOpen",
+    false,
+  );
   const { setOpen: setSidebarOpen } = useSidebar();
 
   const select = useCallback(
@@ -74,6 +96,9 @@ export function ArtifactsProvider({ children }: ArtifactsProviderProps) {
       }
       setOpen(isOpen);
     },
+
+    fileTreeOpen,
+    setFileTreeOpen,
 
     selectedArtifact,
     select,

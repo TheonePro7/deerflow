@@ -292,6 +292,9 @@ export const zhCN: Translations = {
     input: "输入",
     output: "输出",
     total: "总计",
+    cost: "预估费用",
+    inputCost: "输入费用",
+    outputCost: "输出费用",
     view: "显示方式",
     unavailable:
       "暂无 Token 用量。只有模型成功返回且供应商提供 usage_metadata 时才会显示。",

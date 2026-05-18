@@ -9,6 +9,9 @@ export const DEFAULT_LOCAL_SETTINGS: LocalSettings = {
     headerTotal: true,
     inlineMode: "per_turn",
   },
+  voice: {
+    shortcut: "Space",
+  },
   context: {
     model_name: undefined,
     mode: undefined,
@@ -30,6 +33,10 @@ export interface LocalSettings {
   tokenUsage: {
     headerTotal: boolean;
     inlineMode: TokenUsageInlineMode;
+  };
+  voice: {
+    /** Keyboard shortcut to toggle voice recording. "Space" | "Ctrl+Space" | "Alt+V" | "Off" */
+    shortcut: string;
   };
   context: Omit<
     AgentThreadContext,
@@ -60,6 +67,10 @@ function mergeLocalSettings(settings?: Partial<LocalSettings>): LocalSettings {
     notification: {
       ...DEFAULT_LOCAL_SETTINGS.notification,
       ...settings?.notification,
+    },
+    voice: {
+      ...DEFAULT_LOCAL_SETTINGS.voice,
+      ...settings?.voice,
     },
   };
 }

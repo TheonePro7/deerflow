@@ -1,4 +1,12 @@
-"""Middleware for injecting image details into conversation before LLM call."""
+"""Middleware for injecting image details into conversation before LLM call.
+
+This middleware adapts its behavior based on the current model's capabilities:
+- If the model supports vision (supports_vision=True in config): injects full image
+  data (base64 image_url blocks) so the LLM can "see" the images.
+- If the model does NOT support vision (e.g. DeepSeek V4 Flash): only injects text
+  descriptions of the images, and strips any legacy image_url blocks from messages
+  to prevent 400 errors from the LLM provider.
+"""
 
 import logging
 from typing import override
@@ -8,6 +16,7 @@ from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 from langgraph.runtime import Runtime
 
 from deerflow.agents.thread_state import ThreadState
+from deerflow.config import get_app_config
 
 logger = logging.getLogger(__name__)
 
@@ -91,14 +100,51 @@ class ViewImageMiddleware(AgentMiddleware[ViewImageMiddlewareState]):
         # Check if all tool calls have been completed
         return tool_call_ids.issubset(completed_tool_ids)
 
-    def _create_image_details_message(self, state: ViewImageMiddlewareState) -> list[str | dict]:
+    def _model_supports_vision(self, runtime: Runtime) -> bool:
+        """Check whether the current model supports vision/image inputs.
+
+        Looks up the model by name from ``runtime.context`` against the
+        AppConfig model list. Falls back to ``False`` when the model name
+        is unknown so that unsupported models are handled conservatively.
+
+        Args:
+            runtime: Runtime context containing the current model name.
+
+        Returns:
+            True if the model supports vision, False otherwise.
+        """
+        model_name = (runtime.context or {}).get("model_name") if runtime else None
+        if not model_name:
+            return False
+
+        try:
+            config = get_app_config()
+            if not config:
+                return False
+            for m in config.models:
+                if m.name == model_name:
+                    return getattr(m, "supports_vision", False)
+        except Exception:
+            logger.debug("Could not check model vision support", exc_info=True)
+        logger.debug("Unknown model '%s' — assuming no vision support", model_name)
+        return False
+
+    def _create_image_details_message(
+        self,
+        state: ViewImageMiddlewareState,
+        *,
+        include_images: bool = True,
+    ) -> list[str | dict]:
         """Create a formatted message with all viewed image details.
 
         Args:
             state: Current state containing viewed_images
+            include_images: If True, includes base64 image_url blocks so the LLM
+                can see the actual images. If False, only text descriptions are
+                included (for models that don't support vision).
 
         Returns:
-            List of content blocks (text and images) for the HumanMessage
+            List of content blocks (text and optionally images) for the HumanMessage
         """
         viewed_images = state.get("viewed_images", {})
         if not viewed_images:
@@ -115,8 +161,8 @@ class ViewImageMiddleware(AgentMiddleware[ViewImageMiddlewareState]):
             # Add text description
             content_blocks.append({"type": "text", "text": f"\n- **{image_path}** ({mime_type})"})
 
-            # Add the actual image data so LLM can "see" it
-            if base64_data:
+            # Add the actual image data so LLM can "see" it (only if supported)
+            if include_images and base64_data:
                 content_blocks.append(
                     {
                         "type": "image_url",
@@ -164,11 +210,18 @@ class ViewImageMiddleware(AgentMiddleware[ViewImageMiddlewareState]):
 
         return True
 
-    def _inject_image_message(self, state: ViewImageMiddlewareState) -> dict | None:
+    def _inject_image_message(
+        self,
+        state: ViewImageMiddlewareState,
+        *,
+        supports_vision: bool = True,
+    ) -> dict | None:
         """Internal helper to inject image details message.
 
         Args:
             state: Current state
+            supports_vision: Whether the current model supports vision. When False,
+                only text descriptions are injected (no image_url blocks).
 
         Returns:
             State update with additional human message, or None if no update needed
@@ -176,13 +229,16 @@ class ViewImageMiddleware(AgentMiddleware[ViewImageMiddlewareState]):
         if not self._should_inject_image_message(state):
             return None
 
-        # Create the image details message with text and image content
-        image_content = self._create_image_details_message(state)
+        # Create the image details message — include image data only if supported
+        image_content = self._create_image_details_message(state, include_images=supports_vision)
 
-        # Create a new human message with mixed content (text + images)
+        # Create a new human message with mixed content (text + optionally images)
         human_msg = HumanMessage(content=image_content)
 
-        logger.debug("Injecting image details message with images before LLM call")
+        if supports_vision:
+            logger.debug("Injecting image details message with images before LLM call")
+        else:
+            logger.debug("Injecting image details message with text only (model does not support vision)")
 
         # Return state update with the new message
         return {"messages": [human_msg]}
@@ -191,32 +247,65 @@ class ViewImageMiddleware(AgentMiddleware[ViewImageMiddlewareState]):
     def before_model(self, state: ViewImageMiddlewareState, runtime: Runtime) -> dict | None:
         """Inject image details message before LLM call if view_image tools have completed (sync version).
 
-        This runs before each LLM call, checking if the previous turn included view_image
-        tool calls that have all completed. If so, it injects a human message with the image
-        details so the LLM can see and analyze the images.
+        Adapts behavior to the current model's capabilities:
+        - If the model supports vision: injects full image data (image_url blocks).
+        - If the model does NOT support vision: strips legacy image_url blocks from
+          messages and only injects text descriptions (avoids LLM 400 errors).
 
         Args:
             state: Current state
-            runtime: Runtime context (unused but required by interface)
+            runtime: Runtime context (used to check model vision support)
 
         Returns:
             State update with additional human message, or None if no update needed
         """
-        return self._inject_image_message(state)
+        supports_vision = self._model_supports_vision(runtime)
+        if not supports_vision:
+            # Strip legacy image_url blocks for models that don't support vision
+            # (e.g. DeepSeek V4 Flash) to prevent 400 errors from the LLM provider
+            self._sanitize_image_blocks(state)
+        return self._inject_image_message(state, supports_vision=supports_vision)
+
+    def _sanitize_image_blocks(self, state: ViewImageMiddlewareState) -> None:
+        """Remove image_url content blocks from messages.
+
+        Strips image_url blocks from existing messages to handle legacy threads
+        where images were stored in message content but the current model does
+        not support vision (e.g. DeepSeek V4 Flash).
+        """
+        try:
+            messages = state.get("messages", [])
+            modified = False
+            for msg in messages:
+                content = getattr(msg, "content", None)
+                if isinstance(content, list):
+                    filtered = [
+                        b for b in content
+                        if not (isinstance(b, dict) and b.get("type") == "image_url")
+                    ]
+                    if len(filtered) != len(content):
+                        msg.content = filtered
+                        modified = True
+
+            if modified:
+                logger.info("Stripped image_url content blocks from messages (model does not support vision)")
+        except Exception:
+            logger.debug("image_url sanitization failed", exc_info=True)
 
     @override
     async def abefore_model(self, state: ViewImageMiddlewareState, runtime: Runtime) -> dict | None:
         """Inject image details message before LLM call if view_image tools have completed (async version).
 
-        This runs before each LLM call, checking if the previous turn included view_image
-        tool calls that have all completed. If so, it injects a human message with the image
-        details so the LLM can see and analyze the images.
+        Adapts behavior to the current model's capabilities (same as before_model).
 
         Args:
             state: Current state
-            runtime: Runtime context (unused but required by interface)
+            runtime: Runtime context (used to check model vision support)
 
         Returns:
             State update with additional human message, or None if no update needed
         """
-        return self._inject_image_message(state)
+        supports_vision = self._model_supports_vision(runtime)
+        if not supports_vision:
+            self._sanitize_image_blocks(state)
+        return self._inject_image_message(state, supports_vision=supports_vision)

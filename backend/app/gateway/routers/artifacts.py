@@ -1,3 +1,4 @@
+import io
 import logging
 import mimetypes
 import zipfile
@@ -17,7 +18,6 @@ router = APIRouter(prefix="/api", tags=["artifacts"])
 ACTIVE_CONTENT_MIME_TYPES = {
     "text/html",
     "application/xhtml+xml",
-    "image/svg+xml",
 }
 
 
@@ -75,6 +75,92 @@ def _extract_file_from_skill_archive(zip_path: Path, internal_path: str) -> byte
             return None
     except (zipfile.BadZipFile, KeyError):
         return None
+
+
+@router.get(
+    "/threads/{thread_id}/files/tree",
+    summary="List Thread File Tree",
+    description="Recursively list all files in the thread's user-data directory. Returns paths relative to /mnt/user-data/.",
+)
+@require_permission("threads", "read", owner_check=True)
+async def list_thread_files(thread_id: str) -> dict:
+    """List all files in the thread's user-data directory (recursive)."""
+    from deerflow.config.paths import get_paths
+    from deerflow.runtime.user_context import get_effective_user_id
+
+    try:
+        user_id = get_effective_user_id()
+        thread_dir = get_paths().thread_dir(thread_id, user_id=user_id)
+        user_data_dir = thread_dir / "user-data"
+    except Exception as e:
+        logger.warning(f"files/tree failed: thread={thread_id}, error={e}")
+        raise HTTPException(status_code=404, detail="Thread directory not found")
+
+    if not user_data_dir.exists():
+        thread_files = []
+    else:
+        thread_files = []
+        for f in sorted(user_data_dir.rglob("*")):
+            if f.is_file():
+                rel = f.relative_to(user_data_dir)
+                thread_files.append(rel.as_posix())
+
+    # Include shared knowledge base files
+    shared_files: list[str] = []
+    shared_name = "公司知识库"
+    try:
+        from deerflow.knowledge_base.store import get_knowledge_base_config, list_shared_files
+        kb = get_knowledge_base_config()
+        if kb:
+            shared_files = list_shared_files(kb["path"])
+            shared_name = kb.get("display_name", "公司知识库")
+    except Exception as e:
+        logger.debug("knowledge_base not available: %s", e)
+
+    return {
+        "files": thread_files,
+        "shared": {
+            "name": shared_name,
+            "files": shared_files,
+        },
+    }
+
+
+@router.get(
+    "/threads/{thread_id}/files/download-all",
+    summary="Download All Files as ZIP",
+    description="Download all thread files as a ZIP archive.",
+)
+@require_permission("threads", "read", owner_check=True)
+async def download_all_files(thread_id: str) -> Response:
+    """Download all files in the thread's user-data directory as a ZIP archive."""
+    from deerflow.config.paths import get_paths
+    from deerflow.runtime.user_context import get_effective_user_id
+
+    try:
+        user_id = get_effective_user_id()
+        thread_dir = get_paths().thread_dir(thread_id, user_id=user_id)
+        user_data_dir = thread_dir / "user-data"
+    except Exception as e:
+        logger.warning(f"download-all failed: thread={thread_id}, error={e}")
+        raise HTTPException(status_code=404, detail="Thread directory not found")
+
+    if not user_data_dir.exists():
+        raise HTTPException(status_code=404, detail="No files to download")
+
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        for f in sorted(user_data_dir.rglob("*")):
+            if f.is_file():
+                rel = f.relative_to(user_data_dir)
+                zf.write(f, str(rel))
+
+    buf.seek(0)
+    return Response(
+        content=buf.getvalue(),
+        media_type="application/zip",
+        headers={"Content-Disposition": f'attachment; filename="{thread_id}.zip"'},
+    )
 
 
 @router.get(
@@ -155,8 +241,6 @@ async def get_artifact(thread_id: str, path: str, request: Request, download: bo
             return Response(content=content, media_type=mime_type or "application/octet-stream", headers=cache_headers)
 
     actual_path = resolve_thread_virtual_path(thread_id, path)
-
-    logger.info(f"Resolving artifact path: thread_id={thread_id}, requested_path={path}, actual_path={actual_path}")
 
     if not actual_path.exists():
         raise HTTPException(status_code=404, detail=f"Artifact not found: {path}")

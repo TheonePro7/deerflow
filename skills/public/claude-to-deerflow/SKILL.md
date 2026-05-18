@@ -1,6 +1,6 @@
 ---
 name: claude-to-deerflow
-description: "Interact with DeerFlow AI agent platform via its HTTP API. Use this skill when the user wants to send messages or questions to DeerFlow for research/analysis, start a DeerFlow conversation thread, check DeerFlow status or health, list available models/skills/agents in DeerFlow, manage DeerFlow memory, upload files to DeerFlow threads, or delegate complex research tasks to DeerFlow. Also use when the user mentions deerflow, deer flow, or wants to run a deep research task that DeerFlow can handle."
+description: 通过HTTP API与DeerFlow AI代理平台交互。当用户想要向DeerFlow发送消息或问题以进行研究分析、启动DeerFlow对话线程、检查DeerFlow状态或健康、列出DeerFlow中可用的模型技能代理、管理DeerFlow记忆、上传文件到DeerFlow线程、或将复杂研究任务委托给DeerFlow时使用。
 ---
 
 # DeerFlow Skill
