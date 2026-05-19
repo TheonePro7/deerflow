@@ -382,6 +382,16 @@ class SubagentExecutor:
         for skill_msg in skill_messages:
             system_parts.append(skill_msg.content)
 
+        # ── 错误处理指导：防止子代理在失败操作上无限重试 ─────
+        system_parts.append(
+            "## Error Handling Rules\n"
+            "- If a tool returns an error or times out, do NOT retry the same operation.\n"
+            "- Move on and use the information you already have from previous successful calls.\n"
+            "- If web_fetch fails, rely on web_search snippets and your own knowledge.\n"
+            "- Wasting time on repeated retries is worse than having incomplete data.\n"
+            "- Aim to produce the best result with what you have, rather than failing completely."
+        )
+
         messages: list[Any] = []
         if system_parts:
             messages.append(SystemMessage(content="\n\n".join(system_parts)))
