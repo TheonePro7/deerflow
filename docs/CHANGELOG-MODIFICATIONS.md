@@ -1535,3 +1535,45 @@ except Exception:
 ```
 (当前提交)
 ```
+
+---
+
+## 28. 子代理孤立事件循环崩溃修复
+
+### 概述
+
+修复 DeerFlow 原始代码中子代理系统的一个架构缺陷：全局共享的 `_isolated_subagent_loop` 在超时后不会自动恢复，导致所有后续子代理任务卡死。
+
+### 根因
+
+```python
+# 原始代码（executor.py）
+_isolated_subagent_loop: asyncio.AbstractEventLoop | None = None  # 全局共享
+_isolated_subagent_loop_thread: threading.Thread | None = None     # 所有子代理共用
+```
+
+所有子代理在同一个守护线程的同一个事件循环中执行。当一次执行超时（如 DeepSeek API 挂起）后，该事件循环进入坏状态，**后续所有子代理调用全部卡死**，直到 Gateway 重启。
+
+### 修复
+
+在 `FuturesTimeoutError` 捕获后，自动销毁并重建孤立事件循环：
+
+```python
+except FuturesTimeoutError:
+    # ... 原有超时处理 ...
+    # 新增：自动重建循环，防止后续子代理卡死
+    _shutdown_isolated_subagent_loop()
+    _get_isolated_subagent_loop()  # 创建全新循环
+```
+
+### 涉及文件
+
+| 文件 | 修改类型 | 说明 |
+|------|---------|------|
+| `backend/packages/harness/deerflow/subagents/executor.py` | 修改 | 超时后自动重建孤立事件循环 |
+
+### 提交
+
+```
+3beea403 fix: restart isolated subagent loop after timeout
+```
