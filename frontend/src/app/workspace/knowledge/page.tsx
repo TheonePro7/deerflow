@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -10,15 +10,17 @@ import {
   WorkspaceHeader,
 } from "@/components/workspace/workspace-container";
 import { getFileName, checkCodeFile } from "@/core/utils/files";
+import { FileIcon } from "lucide-react";
+import { Streamdown } from "streamdown";
+import { CodeEditor } from "@/components/workspace/code-editor";
+import { ThreadContext } from "@/components/workspace/messages/context";
+import { streamdownPlugins } from "@/core/streamdown";
 
 // CSRF token helper (required for all state-changing API requests)
 function csrf(): Record<string, string> {
   const m = document.cookie.match(/csrf_token=([^;]+)/);
   return m?.[1] ? { "X-CSRF-Token": m[1] } : {};
 }
-import { FileIcon } from "lucide-react";
-import { ThreadContext } from "@/components/workspace/messages/context";
-import { Textarea } from "@/components/ui/textarea";
 
 const API_BASE = "/api";
 
@@ -126,6 +128,14 @@ export default function KnowledgeBasePage() {
                     onSelect={handleFileSelect}
                     threadId=""
                     className="h-full"
+                    selectableDirs
+                    onMove={(filePath, targetDir) => {
+                      const fileName = filePath.includes("/") ? filePath.split("/").pop()! : filePath;
+                      const newPath = `${targetDir}/${fileName}`;
+                      fetch(`${API_BASE}/knowledge-base/files?path=${encodeURIComponent(filePath)}&new_path=${encodeURIComponent(newPath)}`, {
+                        method: "PUT", credentials: "include", headers: {...csrf()},
+                      }).then((r) => { if (r.ok) { toast.success("已移动"); setSelectedFile(newPath); load(); } else toast.error("移动失败"); });
+                    }}
                   />
                 </div>
 
@@ -193,14 +203,14 @@ export default function KnowledgeBasePage() {
                         </button>
                       </div>
                     </div>
-                    <div className="min-h-0 flex-1 p-0">
+                    <div className="min-h-0 flex-1 overflow-auto">
                       {previewLoading ? (
                         <div className="flex items-center justify-center py-16 text-sm text-muted-foreground">加载中...</div>
                       ) : (
-                        <Textarea
-                          className="h-full w-full resize-none rounded-none border-none bg-transparent font-mono text-sm leading-relaxed text-zinc-300 focus-visible:ring-0"
-                          value={previewContent ?? ""}
-                          readOnly
+                        <KBPreviewContent
+                          filepath={selectedFile}
+                          content={previewContent ?? ""}
+                          threadId=""
                         />
                       )}
                     </div>
@@ -226,5 +236,68 @@ export default function KnowledgeBasePage() {
         </div>
       </main>
     </WorkspaceContainer>
+  );
+}
+
+/* ── KB 文件预览（复用对话页面的 CodeEditor + 图片/PDF 渲染） ── */
+
+function KBPreviewContent({ filepath, content, threadId }: { filepath: string; content: string; threadId: string }) {
+  const ext = filepath.split(".").pop()?.toLowerCase() ?? "";
+  const isMd = ext === "md";
+  const isCode = useMemo(() => checkCodeFile(filepath), [filepath]);
+  const isImage = ["jpg", "jpeg", "png", "gif", "webp", "svg"].includes(ext);
+  const isPdf = ext === "pdf";
+
+  if (isImage) {
+    return (
+      <div className="flex size-full items-center justify-center p-4">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`/api/knowledge-base/files/content?path=${encodeURIComponent(filepath)}`}
+          alt={getFileName(filepath)}
+          className="max-h-full max-w-full object-contain"
+        />
+      </div>
+    );
+  }
+
+  if (isPdf) {
+    return (
+      <iframe
+        className="size-full"
+        src={`/api/knowledge-base/files/content?path=${encodeURIComponent(filepath)}`}
+      />
+    );
+  }
+
+  if (isMd) {
+    return (
+      <div className="prose prose-invert max-w-none p-6">
+        <Streamdown {...streamdownPlugins}>
+          {content}
+        </Streamdown>
+      </div>
+    );
+  }
+
+  if (isCode.isCodeFile) {
+    const mockThread = { isLoading: false } as any;
+    return (
+      <ThreadContext.Provider value={{ thread: mockThread, isMock: false }}>
+        <div className="size-full">
+          <CodeEditor
+            className="size-full resize-none rounded-none border-none"
+            value={content}
+            readonly
+          />
+        </div>
+      </ThreadContext.Provider>
+    );
+  }
+
+  return (
+    <pre className="size-full overflow-auto p-4 font-mono text-sm text-foreground/80">
+      {content}
+    </pre>
   );
 }

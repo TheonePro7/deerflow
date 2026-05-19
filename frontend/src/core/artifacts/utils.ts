@@ -24,6 +24,12 @@ export function urlOfArtifact({
   download?: boolean;
   isMock?: boolean;
 }) {
+  // 知识库文件（kb: 前缀）→ 使用 KB API
+  if (filepath.startsWith("kb:")) {
+    const kbPath = filepath.slice(3);
+    return `/api/knowledge-base/files/content?path=${encodeURIComponent(kbPath)}`;
+  }
+
   const normalized = normalizeArtifactPath(filepath);
   if (isMock) {
     return `${getBackendBaseURL()}/mock/api/threads/${threadId}/artifacts${normalized}${download ? "?download=true" : ""}`;

@@ -6,7 +6,7 @@ import {
   FileIcon,
   FolderIcon,
 } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -29,9 +29,13 @@ export interface FileTreePanelProps {
   /** Shared knowledge base files (shown when kbOpen is true) */
   sharedFiles?: { name: string; files: string[] } | null;
   kbOpen?: boolean;
+  /** Allow clicking directories to select them (in addition to expand/collapse) */
+  selectableDirs?: boolean;
+  /** Callback when a file is dragged and dropped onto a directory: (filePath, targetDir) */
+  onMove?: (filePath: string, targetDir: string) => void;
 }
 
-export function FileTreePanel({
+const FileTreePanelInner = ({
   files,
   selectedFile,
   onSelect,
@@ -39,7 +43,9 @@ export function FileTreePanel({
   className,
   sharedFiles,
   kbOpen,
-}: FileTreePanelProps) {
+  selectableDirs,
+  onMove,
+}: FileTreePanelProps) => {
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(
     () => new Set(),
   );
@@ -66,11 +72,14 @@ export function FileTreePanel({
     (node: FlatTreeNode) => {
       if (node.isDirectory) {
         toggleExpand(node.path);
+        if (selectableDirs) {
+          onSelect(node.path);
+        }
       } else {
         onSelect(node.path);
       }
     },
-    [toggleExpand, onSelect],
+    [toggleExpand, onSelect, selectableDirs],
   );
 
   const handleDownloadAll = useCallback(() => {
@@ -115,6 +124,7 @@ export function FileTreePanel({
                 node={node}
                 isSelected={node.path === selectedFile}
                 onSelect={handleClick}
+                onMove={onMove}
               />
             ))
           )}
@@ -138,21 +148,59 @@ export function FileTreePanel({
       )}
     </div>
   );
-}
+};
+
+export const FileTreePanel = memo(FileTreePanelInner);
 
 interface FileTreeRowProps {
   node: FlatTreeNode;
   isSelected: boolean;
   onSelect: (node: FlatTreeNode) => void;
+  onMove?: (filePath: string, targetDir: string) => void;
 }
 
-const FileTreeRow = ({ node, isSelected, onSelect }: FileTreeRowProps) => {
+const FileTreeRow = ({ node, isSelected, onSelect, onMove }: FileTreeRowProps) => {
+  const [dragOver, setDragOver] = useState(false);
+
+  const handleDragStart = useCallback((e: React.DragEvent) => {
+    if (node.isDirectory) return;
+    e.dataTransfer.setData("text/plain", node.path);
+    e.dataTransfer.effectAllowed = "move";
+  }, [node.path, node.isDirectory]);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    if (!onMove || !node.isDirectory) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDragOver(true);
+  }, [onMove, node.isDirectory]);
+
+  const handleDragLeave = useCallback(() => {
+    setDragOver(false);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    if (!onMove || !node.isDirectory) return;
+    const filePath = e.dataTransfer.getData("text/plain");
+    if (filePath) {
+      onMove(filePath, node.path);
+    }
+  }, [onMove, node.path, node.isDirectory]);
+
   return (
     <button
       type="button"
+      draggable={!node.isDirectory && !!onMove}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
       className={cn(
         "flex w-full items-center gap-1 px-3 py-1 text-left text-xs transition-colors hover:bg-accent/50",
         isSelected && "bg-accent text-accent-foreground",
+        dragOver && "bg-primary/20 ring-1 ring-primary/40",
       )}
       style={{ paddingLeft: `${12 + node.depth * 16}px` }}
       onClick={() => onSelect(node)}
@@ -207,24 +255,38 @@ function SharedFileTreeItems({
     return { items: [...dirs.entries()], rootFiles };
   }, [files]);
 
+  const [expanded, setExpanded] = useState(new Set<string>());
+
+  const toggle = useCallback((dir: string) => {
+    setExpanded(prev => {
+      const next = new Set(prev);
+      if (next.has(dir)) next.delete(dir); else next.add(dir);
+      return next;
+    });
+  }, []);
+
   return (
     <>
       {items.map(([dir, children]) => (
         <div key={dir}>
-          <div
-            className="flex cursor-pointer items-center gap-1 px-3 py-1 text-xs text-muted-foreground hover:bg-accent/30"
+          <button
+            type="button"
+            onClick={() => toggle(dir)}
+            className="flex w-full cursor-pointer items-center gap-1 px-3 py-1 text-xs text-muted-foreground hover:bg-accent/30"
             style={{ paddingLeft: `${12 + prefix.split("/").filter(Boolean).length * 16}px` }}
           >
-            <ChevronRightIcon className="size-3 shrink-0" />
+            <ChevronRightIcon className={cn("size-3 shrink-0 transition-transform", expanded.has(dir) && "rotate-90")} />
             <FolderIcon className="size-4 shrink-0" />
             <span>{dir}</span>
-          </div>
-          <SharedFileTreeItems
-            files={children}
-            selectedFile={selectedFile}
-            onSelect={onSelect}
-            prefix={`${prefix}${dir}/`}
-          />
+          </button>
+          {expanded.has(dir) && (
+            <SharedFileTreeItems
+              files={children}
+              selectedFile={selectedFile}
+              onSelect={onSelect}
+              prefix={`${prefix}${dir}/`}
+            />
+          )}
         </div>
       ))}
       {rootFiles.map((f) => (

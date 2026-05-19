@@ -57,9 +57,8 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
   const [kbOpen, setKbOpen] = useState(false);
   const [fileTreeWidth, setFileTreeWidth] = useState(FILE_TREE_DEFAULT_WIDTH);
 
-  // Fetch files from server on thread change only (not on every artifact update)
-  useEffect(() => {
-    setFiles(thread.values.artifacts ?? []);
+  // Fetch files from server — on thread change + periodically while streaming
+  const refreshFiles = useCallback(() => {
     fetchThreadFiles(threadId).then((result) => {
       if (result.files.length > 0) {
         setFiles(result.files);
@@ -68,8 +67,24 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
         setSharedFiles(result.shared);
       }
     });
+  }, [threadId]);
+
+  // Initial load on thread change
+  useEffect(() => {
+    refreshFiles();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [threadId]);
+
+  // Refresh file list when conversation finishes (loading → done)
+  const prevLoading = useRef(thread.isLoading);
+  useEffect(() => {
+    const wasLoading = prevLoading.current;
+    const nowLoading = thread.isLoading ?? false;
+    prevLoading.current = nowLoading;
+    if (wasLoading && !nowLoading) {
+      refreshFiles();
+    }
+  }, [thread.isLoading, refreshFiles]);
 
   const { fileTreeOpen, setFileTreeOpen } = useArtifacts();
 
@@ -87,7 +102,11 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
       deselect();
     }
 
-    setArtifacts(thread.values.artifacts);
+    // Avoid unnecessary re-render: only update if artifacts actually changed
+    const newArtifacts = thread.values.artifacts;
+    if (JSON.stringify(newArtifacts) !== JSON.stringify(artifacts)) {
+      setArtifacts(newArtifacts);
+    }
 
     if (
       env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true" &&
@@ -200,7 +219,12 @@ const ChatBox: React.FC<{ children: React.ReactNode; threadId: string }> = ({
               files={files}
               selectedFile={selectedArtifact}
               onSelect={(filepath) => {
-                selectArtifact(filepath);
+                // 知识库文件 → 用 kb: 前缀标记，ArtifactFileDetail 会识别
+                if (kbOpen && sharedFiles && sharedFiles.files.includes(filepath)) {
+                  selectArtifact(`kb:${filepath}`);
+                } else {
+                  selectArtifact(filepath);
+                }
                 setArtifactsOpen(true);
               }}
               threadId={threadId}

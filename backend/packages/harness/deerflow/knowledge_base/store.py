@@ -20,15 +20,22 @@ def get_knowledge_base_config() -> Optional[dict]:
 
 
 def list_shared_files(base_path: str) -> list[str]:
-    """Recursively list all files in the shared directory."""
+    """Recursively list all files and empty directories in the shared directory."""
     path = Path(base_path)
     if not path.exists():
         return []
 
-    files = []
+    files: list[str] = []
+    dirs: set[str] = set()
     for f in sorted(path.rglob("*")):
+        rel = f.relative_to(path)
         if f.is_file():
-            # Return paths relative to the knowledge base root
-            rel = f.relative_to(path)
             files.append(rel.as_posix())
+        elif f.is_dir():
+            dirs.add(rel.as_posix())
+    # Include empty directories (folders with no files)
+    for d in sorted(dirs):
+        has_files = any(p.startswith(d + "/") for p in files)
+        if not has_files:
+            files.append(d + "/")
     return files
