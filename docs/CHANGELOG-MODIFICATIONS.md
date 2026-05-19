@@ -36,6 +36,7 @@
 26. [文件目录树完整功能](#26-文件目录树完整功能)
 27. [子任务状态同步修复](#27-子任务状态同步修复)
 28. [子代理孤立事件循环崩溃修复](#28-子代理孤立事件循环崩溃修复)
+29. [子代理无限重试导致超时修复](#29-子代理无限重试导致超时修复)
 
 ---
 
@@ -1583,4 +1584,41 @@ except FuturesTimeoutError:
 
 ```
 3beea403 fix: restart isolated subagent loop after timeout
+```
+
+---
+
+## 29. 子代理无限重试导致超时修复
+
+### 问题
+
+子代理在执行 `web_fetch` 等工具时遇到超时/错误，LLM 会反复重试失败的调用，直到耗尽 `timeout_seconds`（900s/1800s），既不放弃也完不成任务，白白浪费 Token。
+
+### 根因
+
+子代理的 system prompt 中没有错误处理指导。DeerFlow 的设计让 LLM 自行决定是否重试，这在网络不稳定环境下就成了灾难——LLM 会不断重试直到超时。
+
+### 修复
+
+在子代理的 system prompt 中注入错误处理规则：
+
+```python
+system_parts.append(
+    "## Error Handling Rules\n"
+    "- If a tool returns an error or times out, do NOT retry the same operation.\n"
+    "- Move on and use the information you already have.\n"
+    "- Aim to produce the best result with what you have.\n"
+)
+```
+
+### 涉及文件
+
+| 文件 | 修改类型 | 说明 |
+|------|---------|------|
+| `backend/packages/harness/deerflow/subagents/executor.py` | 修改 | 子代理 prompt 注入错误处理规则 |
+
+### 提交
+
+```
+cf7bf766 fix: prevent subagent infinite retry on failed tools
 ```
