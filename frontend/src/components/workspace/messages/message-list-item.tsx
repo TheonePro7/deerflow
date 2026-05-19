@@ -118,7 +118,7 @@ function FeedbackButtons({
   );
 }
 
-export function MessageListItem({
+const MessageListItemInner = ({
   className,
   message,
   isLoading,
@@ -134,7 +134,7 @@ export function MessageListItem({
   feedback?: FeedbackData | null;
   runId?: string;
   showCopyButton?: boolean;
-}) {
+}) => {
   const isHuman = message.type === "human";
   return (
     <AIElementMessage
@@ -208,6 +208,7 @@ function MessageImage({
   );
 }
 
+export const MessageListItem = memo(MessageListItemInner);
 function MessageContent_({
   className,
   message,

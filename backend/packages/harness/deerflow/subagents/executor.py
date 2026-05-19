@@ -764,6 +764,15 @@ class SubagentExecutor:
                     # Signal cooperative cancellation and cancel the future
                     result_holder.cancel_event.set()
                     execution_future.cancel()
+                    # Restart the isolated loop to prevent stale state from blocking
+                    # future subagent executions. A single timeout can corrupt the
+                    # shared event loop, causing all subsequent subagents to hang.
+                    logger.warning(f"[trace={self.trace_id}] Restarting isolated subagent loop after timeout")
+                    try:
+                        _shutdown_isolated_subagent_loop()
+                        _get_isolated_subagent_loop()  # re-creates fresh loop
+                    except Exception as loop_err:
+                        logger.error(f"[trace={self.trace_id}] Failed to restart isolated loop: {loop_err}")
             except Exception as e:
                 logger.exception(f"[trace={self.trace_id}] Subagent {self.config.name} async execution failed")
                 with _background_tasks_lock:
